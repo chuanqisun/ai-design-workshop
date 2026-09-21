@@ -4,7 +4,7 @@ A Computational Design Workshop for Humans and AI
 
 ## Intro
 
-Marina Abramović: The Artist Is Present
+Marina Abramović: [The Artist Is Present](https://www.moma.org/calendar/exhibitions/964)
 
 Question: is performance art still art? is generative design still design?
 
@@ -20,31 +20,31 @@ Look beyond the chatbots. What are the labs building today?
 
 - Trend 1: LLMs from token generation to semantic rendering
   - Demo: [Chat Jimmy](https://chatjimmy.ai/)
-  - Show also: Groq, Cerebras, TypeSafe AI
+  - Show also: [Groq](https://groq.com/), [Cerebras](https://cerebras.ai/), [TypeSafe AI](https://typesafe.ai/)
 - Trend 2: Voice from synthesis to affective enactment
-  - Demo: https://app.sesame.com/
-  - Show also: ElevenLabs, Gemini Live, GPT Realtime
+  - Demo: [Sesame App](https://app.sesame.com/)
+  - Show also: [ElevenLabs](https://elevenlabs.io/), [Gemini Live](https://gemini.google/overview/gemini-live/), [GPT Realtime](https://openai.com/index/introducing-gpt-live/)
   - Speech to text transcription is also realtime now
   - Demo: [MAI Transcribe](https://code.chuanqisun.com/half-duplex-transcription/)
 - Trend 3: Image from generating artifacts to editing readlity, or realtime rendering
   - Demo: Shelf builder
-  - Show examples from gpt-image 2.5, flux 3
-  - Show examples from krea.ai, also flux klein realtime and lucy 2.5 realtime
+  - Show examples from gpt-image 2.5, [flux 3](https://bfl.ai/)
+  - Show examples from [krea.ai](https://www.krea.ai/), also [flux klein realtime](https://fal.ai/models/fal-ai/flux-2/klein/realtime) and [lucy 2.5 realtime](https://lucy.decart.ai/)
 - Trend 4: Video generation is becoming main stream, and interactive
   - Show Gemini Omni
-  - Show Gemini Genie, World Labs Marble, HY World 2.0
+  - Show [Gemini Genie](https://deepmind.google/models/genie/), [World Labs Marble](https://www.worldlabs.ai/), [HY World 2.0](https://github.com/Tencent-Hunyuan/HY-World-2.0)
 - Trend 5: Computer Vision goes local and real-time
   - Demo: Realtime image segmentation
 
 ## Emerging Discpline
 
 - More than human
-  - Show Microsoft vs Anthropic debate
+  - Show [Microsoft](https://microsoft.ai/code-of-conduct/) vs [Anthropic](https://www.anthropic.com/research/exploring-model-welfare) debate
 - Spatial, embodied, physical systems
-  - Show: OpenAI Astra Announcement Video, put that there
+  - Show: [OpenAI Astra Announcement Video](https://openai.com/index/gpt-6-astra/), [put that there](https://youtu.be/RyBEUyEtxQo?si=W6NHnF4dMaWmfTVP)
   - Show: Tangible Prompting
 - Direct Agency
-  - Show: Pattie vs Ben debate
+  - Show: [Pattie vs Ben debate](https://dl.acm.org/doi/10.1145/267505.267514)
   - Show: My thesis cover, semantic sculpting
 
 ## New (Old) Ways to Design
@@ -52,11 +52,11 @@ Look beyond the chatbots. What are the labs building today?
 Simple formula: Generate -> Evaluate -> Curate
 
 Old idea 1: Why do we say "Quantity over quality"
-Art & Fear (1993) The anecdote was popularized in the classic book on the creative process, Art & Fear: Observations on the Perils (and Rewards) of Artmaking, written by David Bayles and Ted Orland:
+[Art & Fear](https://archive.org/details/artfearobservati0000bayl) (1993) The anecdote was popularized in the classic book on the creative process, [Art & Fear: Observations on the Perils (and Rewards) of Artmaking](https://archive.org/details/artfearobservati0000bayl), written by David Bayles and Ted Orland:
 
 - Generate
   - Combinatorial: force AI to think "wider"
-    - Cryptopunk
+    - [Cryptopunk](https://cryptopunks.app/)
   - Geometric Grounding (and hallucination)
     - Void shapes demo
   - Granola Grounding
@@ -66,8 +66,8 @@ Art & Fear (1993) The anecdote was popularized in the classic book on the creati
     - Demo my bibliography research for my master thesis
   - Simulation
 
-Old idea 2. Where did the double diamond come from?
-J.P. Guilford (1950s) & Alex Osborn (1953): Osborn (the father of brainstorming) and Guilford introduced the concepts of Divergent Thinking (generating a wide volume of non-judgmental options) followed by Convergent Thinking (critically analyzing, filtering, and organizing those options into a final decision).
+Old idea 2. Where did the [double diamond](https://www.designcouncil.org.uk/our-resources/framework-for-innovation/) come from?
+[J.P. Guilford (1950s) & Alex Osborn (1953)](https://archive.org/details/appliedimaginati00osbo): Osborn (the father of brainstorming) and Guilford introduced the concepts of Divergent Thinking (generating a wide volume of non-judgmental options) followed by Convergent Thinking (critically analyzing, filtering, and organizing those options into a final decision).
 
 - Evaluate
   - Quantification (design rubric)
@@ -82,7 +82,7 @@ Etymology: Curate comes from the Latin curare, meaning “to care for.”
 - Curate
   - Embedding based deduplication and clustering
   - Evidence based synthesis and theory making
-    - Grounded theory
+    - [Grounded theory](https://www.routledge.com/The-Discovery-of-Grounded-Theory-Strategies-for-Qualitative-Research/Glaser-Strauss/p/book/9780202302607)
   - Human preference loop
     - Demo: Text annotation tool
     - Demo: Idea generator tool
