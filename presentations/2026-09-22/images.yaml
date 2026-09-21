@@ -1,0 +1,210 @@
+# Re:design - Computational Design Workshop for Humans and AI
+# Image Asset Catalog & Metadata mapped to presentation outline (outline.md)
+
+images:
+  # ==========================================
+  # Intro & Philosophical Premise
+  # ==========================================
+  - filename: the-artist-is-present.webp
+    title: "The Artist Is Present"
+    section: "Intro"
+    source_url: "assets/the-artist-is-present.webp"
+    reference_url: "https://www.artway.eu/posts/marina-abramovic-the-artist-is-present"
+    alt_text: "Visual slide graphic illustrating Abramović's The Artist Is Present"
+    description: "Slide artwork exploring artistic presence and intentionality in human-AI creative collaboration."
+
+  - filename: ai-isnt-going-to-make-art.webp
+    title: "AI Isn't Going to Make Art"
+    section: "Intro"
+    source_url: "assets/ai-isnt-going-to-make-art.webp"
+    reference_url: "https://www.newyorker.com/culture/the-weekend-essay/why-ai-isnt-going-to-make-art"
+    alt_text: "Slide graphic highlighting the provocation on generative design vs human artistry"
+    description: "Introductory provocation examining the role of human agency versus automated generation."
+
+  - filename: ai-isnt-going-to-make-art-title.webp
+    title: "AI Isn't Going to Make Art - Title Graphic"
+    section: "Intro"
+    source_url: "assets/ai-isnt-going-to-make-art-title.webp"
+    alt_text: "Title visual for the opening workshop theme"
+    description: "Headline asset setting the foundation for computational design and human presence."
+
+  # ==========================================
+  # Trend 1: LLMs from Token Generation to Semantic Rendering
+  # ==========================================
+  - filename: groq-fast-inference-lpu.png
+    title: "Groq LPU Fast Inference Architecture"
+    section: "New Frontiers / Trend 1: LLMs"
+    source_url: "https://groq.com/images/og.png"
+    reference_url: "https://groq.com/"
+    alt_text: "Groq neocloud platform branding for ultra-low-latency LPU inference"
+    description: "Illustrates the leap from sluggish token-by-token streaming to near-instantaneous semantic responses."
+
+  - filename: cerebras-wafer-scale-engine.jpg
+    title: "Cerebras Wafer-Scale Fast AI Inference"
+    section: "New Frontiers / Trend 1: LLMs"
+    source_url: "https://cdn.sanity.io/images/e4qjo92p/production/21fa43f6d541115e57887beb1155bddc7541ae71-2400x1260.jpg"
+    reference_url: "https://cerebras.ai/"
+    alt_text: "Cerebras systems wafer-scale hardware for high-speed model computation"
+    description: "Highlights hardware-driven breakthroughs in real-time inference speed for interactive AI."
+
+  - filename: typesafe-jev-semantic-rendering.jpg
+    title: "TypeSafe AI - Jev Semantic Code Generation"
+    section: "New Frontiers / Trend 1: LLMs"
+    source_url: "https://framerusercontent.com/images/RtIGTDwO43jR4ZDilesXiR5znc.jpg"
+    reference_url: "https://typesafe.ai/"
+    alt_text: "TypeSafe AI Jev interface for structured semantic code rendering"
+    description: "Shows modern paradigms where LLMs render verified, type-safe structures rather than raw unstructured text."
+
+  # ==========================================
+  # Trend 2: Voice from Synthesis to Affective Enactment
+  # ==========================================
+  - filename: elevenlabs-voice-agents.png
+    title: "ElevenLabs Conversational AI & Expressive Voice Synthesis"
+    section: "New Frontiers / Trend 2: Voice"
+    source_url: "https://elevenlabs.io/cover.png"
+    reference_url: "https://elevenlabs.io/"
+    alt_text: "ElevenLabs platform banner showcasing voice agents and synthesis"
+    description: "Demonstrates high-fidelity speech synthesis transitioning into emotive, interactive conversational agents."
+
+  - filename: gemini-live-affective-voice.jpg
+    title: "Google Gemini Live Multi-Modal Voice Interface"
+    section: "New Frontiers / Trend 2: Voice"
+    source_url: "https://lh3.googleusercontent.com/1E500rkSh8Gqkz2l12tkrKkMgsDmbQot0h3afeiRukXNficphb2zEE8o6J3dSKkiDGOOCcQ8WtRYzEYudgiYK9FkoQeYg_SP92-C=e365-pa-nu-w1200-rj"
+    reference_url: "https://gemini.google/overview/gemini-live/"
+    alt_text: "Gemini Live conversational interface on mobile device"
+    description: "Shows bidirectional, interruptible audio interaction with emotional nuance and zero perceptible lag."
+
+  # ==========================================
+  # Trend 3: Image from Generating Artifacts to Realtime Rendering
+  # ==========================================
+  - filename: black-forest-labs-flux-image.png
+    title: "Black Forest Labs FLUX Frontier Image Generation"
+    section: "New Frontiers / Trend 3: Image"
+    source_url: "https://bfl.ai/opengraph-image-j8qpfc.png"
+    reference_url: "https://bfl.ai/"
+    alt_text: "Black Forest Labs FLUX banner showcasing high-fidelity generative imagery"
+    description: "State-of-the-art diffusion transformers advancing from passive image creation to real-time controllable canvas editing."
+
+  - filename: fal-flux-klein-realtime.png
+    title: "FLUX 2 [Klein] Realtime Image-to-Image API"
+    section: "New Frontiers / Trend 3: Image"
+    source_url: "https://fal.ai/api/models/thumbnail/fal-ai/flux-2/klein/realtime"
+    reference_url: "https://fal.ai/models/fal-ai/flux-2/klein/realtime"
+    alt_text: "Flux Klein real-time image synthesis preview thumbnail on fal.ai"
+    description: "Demonstrates sub-100ms real-time generative feedback loops for interactive sketching and spatial design."
+
+  # ==========================================
+  # Trend 4: Video Generation & Interactive World Models
+  # ==========================================
+  - filename: world-labs-marble-spatial-intelligence.png
+    title: "World Labs Marble - Spatial Intelligence"
+    section: "New Frontiers / Trend 4: Video & World Models"
+    source_url: "https://www.worldlabs.ai/opengraph-image.png"
+    reference_url: "https://www.worldlabs.ai/"
+    alt_text: "World Labs visual branding for spatial intelligence and 3D world modeling"
+    description: "Represents Fei-Fei Li's World Labs initiative generating interactive, physically-grounded 3D worlds."
+
+  - filename: tencent-hunyuan-hy-world.png
+    title: "Tencent Hunyuan HY-World 2.0 World Simulator"
+    section: "New Frontiers / Trend 4: Video & World Models"
+    source_url: "https://opengraph.githubassets.com/19646ff9e5461a7613ae52f14b91d469d0b01769902e34e81830e6cb6669ea6c/Tencent-Hunyuan/HY-World-2.0"
+    reference_url: "https://github.com/Tencent-Hunyuan/HY-World-2.0"
+    alt_text: "HY-World 2.0 GitHub card highlighting multi-modal interactive virtual world generation"
+    description: "Illustrates open-source progress in controllable, multi-modal generative world environments."
+
+  # ==========================================
+  # Emerging Discipline: More than Human & Spatial Systems
+  # ==========================================
+  - filename: microsoft-humanist-ai-code-of-conduct.jpg
+    title: "Microsoft Humanist AI Code of Conduct"
+    section: "Emerging Discipline / More than human"
+    source_url: "https://microsoft.ai/wp-content/uploads/2026/09/social.jpg"
+    reference_url: "https://microsoft.ai/code-of-conduct/"
+    alt_text: "Microsoft Humanist AI Code of Conduct social banner"
+    description: "Examines ethical governance, relational design, and boundaries between human dignity and autonomous intelligence."
+
+  - filename: anthropic-exploring-model-welfare.png
+    title: "Anthropic - Exploring Model Welfare"
+    section: "Emerging Discipline / More than human"
+    source_url: "https://cdn.sanity.io/images/4zrzovbb/website/22123ca35830d33778466f80c42387a51ef49f22-2401x1261.png"
+    reference_url: "https://www.anthropic.com/research/exploring-model-welfare"
+    alt_text: "Anthropic research report hero on model welfare and agency"
+    description: "Presents Anthropic's research exploring ethical considerations and philosophical models of AI entity welfare."
+
+  - filename: openai-gpt6-astra-spatial.png
+    title: "OpenAI Astra - Multimodal Spatial Assistant"
+    section: "Emerging Discipline / Spatial, embodied, physical systems"
+    source_url: "https://images.ctfassets.net/kftzwdyauwt9/6ibCaqsoO7F6XCNCIO8zaZ/9475cdebc1f0af100414f1c85860fc4c/Hero_16x9.png"
+    reference_url: "https://openai.com/index/gpt-6-astra/"
+    alt_text: "Hero image of OpenAI Astra spatial computing and contextual intelligence"
+    description: "Visualizes the shift from chatbot boxes to embodied, real-time spatial vision and environmental awareness."
+
+  - filename: mit-put-that-there-bolt-1980.jpg
+    title: "MIT Architecture Machine Group: Put That There (Richard A. Bolt, 1980)"
+    section: "Emerging Discipline / Spatial, embodied, physical systems"
+    source_url: "https://i.ytimg.com/vi/RyBEUyEtxQo/hqdefault.jpg"
+    reference_url: "https://youtu.be/RyBEUyEtxQo?si=W6NHnF4dMaWmfTVP"
+    alt_text: "Still frame from Richard Bolt's 1980 MIT Media Lab 'Put-That-There' demonstration"
+    description: "Seminal MIT interaction milestone uniting spatial pointing gestures with natural voice commands at graphical displays."
+
+  # ==========================================
+  # Direct Agency: Shneiderman vs. Maes Debate
+  # ==========================================
+  - filename: ben-shneiderman-direct-manipulation.jpg
+    title: "Ben Shneiderman - Direct Manipulation Advocate"
+    section: "Emerging Discipline / Direct Agency"
+    source_url: "https://upload.wikimedia.org/wikipedia/commons/3/3d/Ben_Shneiderman_at_UNCC_%283x4_cropped%29.jpg"
+    reference_url: "https://dl.acm.org/doi/10.1145/267505.267514"
+    alt_text: "Portrait of computer scientist Ben Shneiderman"
+    description: "Key figure in the 1997 ACM debate defending direct manipulation, predictability, user control, and semantic sculpting."
+
+  - filename: pattie-maes-interface-agents.jpg
+    title: "Pattie Maes - Autonomous Interface Agents Pioneer"
+    section: "Emerging Discipline / Direct Agency"
+    source_url: "https://upload.wikimedia.org/wikipedia/commons/c/c3/Dubai_Future_Forum_2024_-_Pattie_Maes.jpg"
+    reference_url: "https://dl.acm.org/doi/10.1145/267505.267514"
+    alt_text: "Portrait of MIT Media Lab professor Pattie Maes"
+    description: "Key figure in the 1997 ACM debate championing intelligent software agents that act proactively on the user's behalf."
+
+  # ==========================================
+  # New (Old) Ways to Design: Generate -> Evaluate -> Curate
+  # ==========================================
+  - filename: art-and-fear-quantity-over-quality.jpg
+    title: "Art & Fear: Observations on the Perils (and Rewards) of Artmaking (1993)"
+    section: "New Ways to Design / Generate"
+    source_url: "https://archive.org/services/img/artfearobservati0000bayl"
+    reference_url: "https://archive.org/details/artfearobservati0000bayl"
+    alt_text: "Book cover of Art & Fear by David Bayles and Ted Orland"
+    description: "Origin of the famous ceramics grading experiment: producing volume (quantity) leads directly to mastery (quality) in iterative generation."
+
+  - filename: cryptopunks-combinatorial-design.png
+    title: "CryptoPunks - Combinatorial Generative Design"
+    section: "New Ways to Design / Generate"
+    source_url: "https://cryptopunks.app/images/cryptopunks/shareimage.png"
+    reference_url: "https://cryptopunks.app/"
+    alt_text: "CryptoPunks banner showing pixel art characters generated through combinatorial attribute rules"
+    description: "Exemplar of combinatorial exploration forcing the generative system to think wider across feature spaces."
+
+  - filename: applied-imagination-alex-osborn.jpg
+    title: "Applied Imagination (Alex Osborn, 1953)"
+    section: "New Ways to Design / Evaluate"
+    source_url: "https://archive.org/services/img/appliedimaginati00osbo"
+    reference_url: "https://archive.org/details/appliedimaginati00osbo"
+    alt_text: "Historical book cover of Applied Imagination by Alex Osborn"
+    description: "Foundational text introducing brainstorming, alongside J.P. Guilford's framework of Divergent Thinking followed by Convergent Thinking."
+
+  - filename: design-council-double-diamond.png
+    title: "Design Council Double Diamond Innovation Framework"
+    section: "New Ways to Design / Evaluate"
+    source_url: "https://upload.wikimedia.org/wikipedia/commons/6/65/Double_Diamond_by_the_Design_Council.png"
+    reference_url: "https://www.designcouncil.org.uk/our-resources/framework-for-innovation/"
+    alt_text: "Diagram of the Double Diamond design process showing Discover, Define, Develop, Deliver phases"
+    description: "The classic design framework mapping divergent exploration and convergent synthesis across problem and solution spaces."
+
+  - filename: grounded-theory-glaser-strauss.jpg
+    title: "The Discovery of Grounded Theory (Glaser & Strauss, 1967)"
+    section: "New Ways to Design / Curate"
+    source_url: "https://images.routledge.com/common/jackets/crclarge/978020230/9780202302607.jpg"
+    reference_url: "https://www.routledge.com/The-Discovery-of-Grounded-Theory-Strategies-for-Qualitative-Research/Glaser-Strauss/p/book/9780202302607"
+    alt_text: "Book cover of The Discovery of Grounded Theory by Barney Glaser and Anselm Strauss"
+    description: "Methodological anchor for the Curate phase: evidence-based synthesis, inductive clustering, and systematic theory formulation."
