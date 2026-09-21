@@ -208,3 +208,94 @@ images:
     reference_url: "https://www.routledge.com/The-Discovery-of-Grounded-Theory-Strategies-for-Qualitative-Research/Glaser-Strauss/p/book/9780202302607"
     alt_text: "Book cover of The Discovery of Grounded Theory by Barney Glaser and Anselm Strauss"
     description: "Methodological anchor for the Curate phase: evidence-based synthesis, inductive clustering, and systematic theory formulation."
+
+  # ==========================================
+  # Logos
+  # ==========================================
+  - filename: groq-logo.svg
+    title: "Groq Logo"
+    section: "Logos"
+    source_url: "https://groq.com/favicon.svg"
+    reference_url: "https://groq.com/"
+    alt_text: "Groq vector logo"
+    description: "High-quality vector logomark for Groq LPU inference neocloud."
+
+  - filename: cerebras-logo.jpg
+    title: "Cerebras Logo"
+    section: "Logos"
+    source_url: "https://cdn.sanity.io/images/e4qjo92p/production/21fa43f6d541115e57887beb1155bddc7541ae71-2400x1260.jpg"
+    reference_url: "https://cerebras.ai/"
+    alt_text: "Cerebras Systems branding and logomark"
+    description: "High-resolution branding and wafer-scale hardware logomark for Cerebras Systems."
+
+  - filename: typesafe-ai-logo.jpg
+    title: "TypeSafe AI Logo"
+    section: "Logos"
+    source_url: "https://framerusercontent.com/images/RtIGTDwO43jR4ZDilesXiR5znc.jpg"
+    reference_url: "https://typesafe.ai/"
+    alt_text: "TypeSafe AI brand logomark and interface graphic"
+    description: "High-resolution brand asset for TypeSafe AI structured semantic code generation."
+
+  - filename: elevenlabs-logo.svg
+    title: "ElevenLabs Logo"
+    section: "Logos"
+    source_url: "https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/elevenlabs.svg"
+    reference_url: "https://elevenlabs.io/"
+    alt_text: "ElevenLabs vector logo"
+    description: "High-quality vector logomark for ElevenLabs conversational voice and audio synthesis."
+
+  - filename: google-gemini-logo.svg
+    title: "Google Gemini Logo"
+    section: "Logos"
+    source_url: "https://upload.wikimedia.org/wikipedia/commons/8/8a/Google_Gemini_logo.svg"
+    reference_url: "https://gemini.google/"
+    alt_text: "Google Gemini four-point sparkle vector logo"
+    description: "High-quality vector logomark for Google Gemini multi-modal AI models and Live audio."
+
+  - filename: black-forest-labs-logo.png
+    title: "Black Forest Labs Logo"
+    section: "Logos"
+    source_url: "https://bfl.ai/opengraph-image-j8qpfc.png"
+    reference_url: "https://bfl.ai/"
+    alt_text: "Black Forest Labs FLUX brand logo"
+    description: "High-resolution brand banner and logomark for Black Forest Labs (creators of FLUX)."
+
+  - filename: world-labs-logo.png
+    title: "World Labs Logo"
+    section: "Logos"
+    source_url: "https://www.worldlabs.ai/opengraph-image.png"
+    reference_url: "https://www.worldlabs.ai/"
+    alt_text: "World Labs spatial intelligence brand logo"
+    description: "High-resolution brand asset for Fei-Fei Li's World Labs spatial intelligence platform."
+
+  - filename: tencent-hunyuan-logo.svg
+    title: "Tencent AI / Hunyuan Logo"
+    section: "Logos"
+    source_url: "https://hunyuan-blog-web-prod-1258344703.cos.ap-guangzhou.myqcloud.com/logo.svg"
+    reference_url: "https://hunyuan.tencent.com/"
+    alt_text: "Tencent Hunyuan AI vector logo"
+    description: "High-quality vector logomark for Tencent AI Lab and Hunyuan foundational models."
+
+  - filename: microsoft-ai-logo.svg
+    title: "MAI (Microsoft AI) Logo"
+    section: "Logos"
+    source_url: "https://upload.wikimedia.org/wikipedia/commons/9/96/Microsoft_logo_%282012%29.svg"
+    reference_url: "https://microsoft.ai/"
+    alt_text: "Microsoft AI vector logo"
+    description: "High-quality vector logomark for Microsoft AI (MAI)."
+
+  - filename: openai-logo.svg
+    title: "OpenAI Logo"
+    section: "Logos"
+    source_url: "https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/openai.svg"
+    reference_url: "https://openai.com/"
+    alt_text: "OpenAI vector logo"
+    description: "High-quality vector logomark for OpenAI models and ChatGPT."
+
+  - filename: anthropic-logo.svg
+    title: "Anthropic Logo"
+    section: "Logos"
+    source_url: "https://upload.wikimedia.org/wikipedia/commons/7/78/Anthropic_logo.svg"
+    reference_url: "https://www.anthropic.com/"
+    alt_text: "Anthropic vector logo"
+    description: "High-quality vector logomark for Anthropic AI and Claude foundational models."
