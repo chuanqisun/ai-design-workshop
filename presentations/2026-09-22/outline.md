@@ -20,7 +20,7 @@ Look beyond the chatbots. What are the labs building today?
 
 - Trend 1: LLMs from token generation to semantic rendering
   - Demo: [Chat Jimmy](https://chatjimmy.ai/)
-  - Show also: Grok, Cerebras, TypeSafe AI
+  - Show also: Groq, Cerebras, TypeSafe AI
 - Trend 2: Voice from synthesis to affective enactment
   - Demo: https://app.sesame.com/
   - Show also: ElevenLabs, Gemini Live, GPT Realtime
@@ -86,3 +86,47 @@ Etymology: Curate comes from the Latin curare, meaning “to care for.”
   - Human preference loop
     - Demo: Text annotation tool
     - Demo: Idea generator tool
+
+## Hands-on practice
+
+For groups of 3
+
+Design a new interaction for you to communicate with AI, avoid the familiar chat bot interface.
+
+Consider:
+
+- Interview yourself, ground the ideas with your lived experience.
+- Use literature review to navigate towards original ideas.
+- Quantify, evaluate, rank, and iterate.
+- Build a virtual prototype and website announce the project.
+
+## References
+
+- Chat Jimmy: https://chatjimmy.ai/
+- Sesame App: https://app.sesame.com/
+- Cerebras Systems (Fast LLM Inference): https://cerebras.ai/
+- Groq: https://groq.com/
+- Jev by TypeSafe AI: https://typesafe.ai/
+- ElevenLabs (Voice Synthesis & Conversational AI): https://elevenlabs.io/
+- Gemini Live: https://gemini.google/overview/gemini-live/
+- OpenAI Live: https://openai.com/index/introducing-gpt-live/
+- Krea AI (Realtime Generation): https://www.krea.ai/
+- Black Forest Labs / FLUX: https://bfl.ai/
+- OpenAI Astra Announcment: https://openai.com/index/gpt-6-astra/
+- Google DeepMind Genie (Interactive World Models): https://deepmind.google/models/genie/
+- World Labs (Spatial Intelligence & Marble): https://www.worldlabs.ai/
+- CryptoPunks (Combinatorial Generative Design): https://cryptopunks.app/
+- Design Council Framework for Innovation (Double Diamond): https://www.designcouncil.org.uk/our-resources/framework-for-innovation/
+- Direct Manipulation vs. Interface Agents (Ben Shneiderman & Pattie Maes, ACM Interactions 1997): https://dl.acm.org/doi/10.1145/267505.267514
+- MAI Transcribe: https://code.chuanqisun.com/half-duplex-transcription/
+- Marina Abramović: _The Artist Is Present_ (MoMA, 2010 exhibition): https://www.moma.org/calendar/exhibitions/964
+- Richard A. Bolt: _"Put-That-There": Voice and Gesture at the Graphics Interface_ (MIT Architecture Machine Group, ACM SIGGRAPH 1980): https://youtu.be/RyBEUyEtxQo?si=W6NHnF4dMaWmfTVP
+- David Bayles and Ted Orland: _Art & Fear: Observations on the Perils (and Rewards) of Artmaking_ (1993) — "Quantity over Quality" ceramics experiment: https://archive.org/details/artfearobservati0000bayl
+- Alex Osborn: _Applied Imagination_ (1953) & J.P. Guilford (1950s) — Foundations of Divergent & Convergent Thinking: https://archive.org/details/appliedimaginati00osbo
+- Barney Glaser and Anselm Strauss: _The Discovery of Grounded Theory_ (1967) — Grounded Theory methodology for qualitative synthesis: https://www.routledge.com/The-Discovery-of-Grounded-Theory-Strategies-for-Qualitative-Research/Glaser-Strauss/p/book/9780202302607
+- Tencent Hunyuan: HY World / Hunyuan3D (Interactive 3D/World Generation): https://github.com/Tencent-Hunyuan/HY-World-2.0
+- Lucy 2.5 Realtime: https://lucy.decart.ai/
+- Flux Klein Realtime models: https://fal.ai/models/fal-ai/flux-2/klein/realtime
+- Microsoft vs. Anthropic Debates on AI Agency and Human-AI Interaction:
+  - Anthropic: https://www.anthropic.com/research/exploring-model-welfare
+  - Microsoft: https://microsoft.ai/code-of-conduct/
