@@ -50,7 +50,18 @@
         color: var(--paper);
       }
 
-      /* ---------- Slide frame ---------- */
+      /* ---------- Deck stage & Slide frame ---------- */
+      #deck {
+        position: absolute;
+        inset: 0;
+      }
+      body.is-locked {
+        background: #000;
+      }
+      body.is-locked #deck {
+        inset: auto;
+        overflow: hidden;
+      }
       .slide {
         position: absolute;
         inset: 0;
@@ -58,6 +69,7 @@
         flex-direction: column;
         padding: calc(var(--header-height) + var(--rule)) var(--gap) var(--gap) var(--gap);
         border: var(--rule) solid var(--ink);
+        background: var(--paper);
         overflow: hidden;
       }
       .slide.is-active {
@@ -91,7 +103,7 @@
         flex: 0 0 35%;
       }
 
-      /* Adaptive for portrait / narrow viewports */
+      /* Adaptive for portrait / narrow viewports and 1:1 locked ratio */
       @media (max-aspect-ratio: 11/10), (max-width: 768px) {
         .slide__main.row,
         .row {
@@ -114,6 +126,27 @@
           flex: 0 1 auto;
           max-height: 38vh;
         }
+      }
+      body[data-ratio="1:1"] .slide__main.row,
+      body[data-ratio="1:1"] .row {
+        flex-direction: column;
+        justify-content: center;
+      }
+      body[data-ratio="1:1"] .slide__main.row > *,
+      body[data-ratio="1:1"] .row > * {
+        flex: 1 1 auto;
+        min-height: 0;
+      }
+      body[data-ratio="1:1"] .slide__main.row > figure,
+      body[data-ratio="1:1"] .row > figure {
+        flex: 1 1 0;
+        min-height: 0;
+        max-height: 52%;
+      }
+      body[data-ratio="1:1"] .slide__main.row > .narrow,
+      body[data-ratio="1:1"] .row > .narrow {
+        flex: 0 1 auto;
+        max-height: 38%;
       }
 
       /* ---------- Typography ---------- */
@@ -536,7 +569,7 @@
 
       /* ---------- Chrome ---------- */
       .hud {
-        position: fixed;
+        position: absolute;
         right: calc(var(--gap) + var(--rule));
         top: calc(var(--rule) + 8px);
         font-family: var(--mono);
@@ -575,7 +608,7 @@
         display: none;
       }
       .help {
-        position: fixed;
+        position: absolute;
         left: calc(var(--gap) + var(--rule));
         top: calc(var(--rule) + 8px);
         font-family: var(--mono);
@@ -589,9 +622,6 @@
     </style>
   </head>
   <body>
-    <div class="help">←→ / ↑↓ NAVIGATE · N NOTES</div>
-    <div class="hud" id="hud"></div>
-
     <!-- =====================================================================
      CONTENT LAYER (HTML) — edit freely.
      Conventions:
@@ -602,6 +632,9 @@
        <iframe data-src>         loaded only when the slide is shown
      ===================================================================== -->
     <main id="deck">
+      <div class="help">←→ / ↑↓ NAVIGATE · N NOTES · A RATIO</div>
+      <div class="hud" id="hud"></div>
+
       <!-- 1. TITLE -->
       <section class="slide">
         <div class="slide__main">
@@ -1613,10 +1646,73 @@
      ===================================================================== -->
     <script>
       (() => {
+        const deck = document.getElementById("deck");
         const slides = [...document.querySelectorAll("#deck .slide")];
         const hud = document.getElementById("hud");
         const notesPanel = document.getElementById("notesPanel");
         let cur = -1;
+
+        /* --- aspect ratio management --- */
+        const RATIOS = ["responsive", "1:1", "4:3", "16:9"];
+        let currentRatio = "responsive";
+        try {
+          const params = new URLSearchParams(location.search);
+          const r = params.get("ratio");
+          if (RATIOS.includes(r)) {
+            currentRatio = r;
+          } else {
+            const saved = sessionStorage.getItem("aspect-ratio");
+            if (RATIOS.includes(saved)) currentRatio = saved;
+          }
+        } catch (_) {}
+
+        function applyAspectRatio() {
+          if (currentRatio === "responsive") {
+            document.body.classList.remove("is-locked");
+            document.body.removeAttribute("data-ratio");
+            deck.style.left = "";
+            deck.style.top = "";
+            deck.style.width = "";
+            deck.style.height = "";
+          } else {
+            document.body.classList.add("is-locked");
+            document.body.setAttribute("data-ratio", currentRatio);
+            const [rw, rh] = currentRatio.split(":").map(Number);
+            const targetRatio = rw / rh;
+            const winW = window.innerWidth;
+            const winH = window.innerHeight;
+            let deckW, deckH;
+            if (winW / winH > targetRatio) {
+              deckH = winH;
+              deckW = Math.round(winH * targetRatio);
+            } else {
+              deckW = winW;
+              deckH = Math.round(winW / targetRatio);
+            }
+            const left = Math.round((winW - deckW) / 2);
+            const top = Math.round((winH - deckH) / 2);
+            deck.style.left = `${left}px`;
+            deck.style.top = `${top}px`;
+            deck.style.width = `${deckW}px`;
+            deck.style.height = `${deckH}px`;
+          }
+          if (cur >= 0 && slides[cur]) {
+            const s = slides[cur];
+            const ratioTag = currentRatio !== "responsive" ? `  ·  ${currentRatio}` : "";
+            hud.textContent = `${String(cur + 1).padStart(2, "0")} / ${String(slides.length).padStart(2, "0")}  ·  ${visibleCount(s)}/${fragmentsOf(s).length}${ratioTag}`;
+            fitSlide(s);
+          }
+        }
+
+        function cycleAspectRatio(dir = 1) {
+          const idx = RATIOS.indexOf(currentRatio);
+          const nextIdx = (idx + dir + RATIOS.length) % RATIOS.length;
+          currentRatio = RATIOS[nextIdx];
+          try {
+            sessionStorage.setItem("aspect-ratio", currentRatio);
+          } catch (_) {}
+          applyAspectRatio();
+        }
 
         /* --- favicons: inject into every link inside .links and .cards --- */
         document.querySelectorAll(".links a, .cards a").forEach((a) => {
@@ -1684,7 +1780,8 @@
 
         function render() {
           const s = slides[cur];
-          hud.textContent = `${String(cur + 1).padStart(2, "0")} / ${String(slides.length).padStart(2, "0")}  ·  ${visibleCount(s)}/${fragmentsOf(s).length}`;
+          const ratioTag = currentRatio !== "responsive" ? `  ·  ${currentRatio}` : "";
+          hud.textContent = `${String(cur + 1).padStart(2, "0")} / ${String(slides.length).padStart(2, "0")}  ·  ${visibleCount(s)}/${fragmentsOf(s).length}${ratioTag}`;
           const notes = s.querySelector(".notes");
           notesPanel.innerHTML = notes ? notes.innerHTML : "<ul><li>(no notes)</li></ul>";
           const chart = s.querySelector(".chart");
@@ -1702,7 +1799,7 @@
         }
 
         window.addEventListener("resize", () => {
-          if (cur >= 0 && slides[cur]) fitSlide(slides[cur]);
+          applyAspectRatio();
         });
 
         function goTo(index, fragCount = 0) {
@@ -1802,12 +1899,20 @@
             case "N":
               document.body.classList.toggle("show-notes");
               break;
+            case "a":
+            case "A":
+              if (!e.repeat && !e.ctrlKey && !e.metaKey && !e.altKey) {
+                e.preventDefault();
+                cycleAspectRatio(e.shiftKey ? -1 : 1);
+              }
+              break;
           }
         });
 
         /* --- start from URL hash: #slide.fragments --- */
         const m = location.hash.match(/#(\d+)(?:\.(\d+))?/);
         goTo(m ? +m[1] - 1 : 0, m && m[2] ? +m[2] : 0);
+        applyAspectRatio();
       })();
     </script>
   </body>

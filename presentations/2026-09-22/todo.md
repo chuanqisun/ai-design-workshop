@@ -11,6 +11,6 @@
 9. Check each ref link
 10. Quantity over quality. Pick the right highlight word
 
-# TBD
+# Done
 
-2. Cycle aspect ratio by "A" key, allow locking to 1:1, 4:3, 16:9 and responsive
+- Cycle aspect ratio by "A" key, allow locking to 1:1, 4:3, 16:9 and responsive (with black padding for extra space)
