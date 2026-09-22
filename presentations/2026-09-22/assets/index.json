@@ -1,63 +1,60 @@
 {
   "ai-isnt-going-to-make-art-title.webp": {
+    "title": "Why A.I. Isn't Going to Make Art Title",
     "width": 867,
     "height": 469,
     "aspectRatio": 1.8486,
     "aspectRatioFormatted": "867:469",
     "orientation": "landscape",
-    "type": "image",
-    "format": "webp",
-    "fileSize": 32204
+    "type": "image"
+  },
+  "annotated-bib.html": {
+    "type": "html"
   },
   "art-and-fear.webp": {
+    "title": "Art & Fear Book Cover",
     "width": 976,
     "height": 1500,
     "aspectRatio": 0.6507,
     "aspectRatioFormatted": "976:1500",
     "orientation": "portrait",
-    "type": "image",
-    "format": "webp",
-    "fileSize": 168362
+    "type": "image"
   },
   "class-notes.webp": {
+    "title": "Handwritten Parsing Lecture Notes",
     "width": 1104,
     "height": 1472,
     "aspectRatio": 0.75,
     "aspectRatioFormatted": "3:4",
     "orientation": "portrait",
-    "type": "image",
-    "format": "webp",
-    "fileSize": 163292
+    "type": "image"
   },
   "crypto-punk.webp": {
+    "title": "CryptoPunks Generative Grid",
     "width": 3292,
     "height": 1996,
     "aspectRatio": 1.6493,
     "aspectRatioFormatted": "3292:1996",
     "orientation": "landscape",
-    "type": "image",
-    "format": "webp",
-    "fileSize": 728006
+    "type": "image"
   },
   "dm-vs-agent.webp": {
+    "title": "Direct Manipulation vs Interface Agents",
     "width": 1366,
     "height": 768,
     "aspectRatio": 1.7786,
     "aspectRatioFormatted": "~16:9",
     "orientation": "landscape",
-    "type": "image",
-    "format": "webp",
-    "fileSize": 57564
+    "type": "image"
   },
   "double-diamond.webp": {
+    "title": "Double Diamond Design Process",
     "width": 1299,
     "height": 800,
     "aspectRatio": 1.6238,
     "aspectRatioFormatted": "1299:800",
     "orientation": "landscape",
-    "type": "image",
-    "format": "webp",
-    "fileSize": 42020
+    "type": "image"
   },
   "gemini-omni-demo.mp4": {
     "width": 720,
@@ -66,180 +63,164 @@
     "aspectRatioFormatted": "1:1",
     "orientation": "square",
     "type": "video",
-    "format": "mp4",
-    "fileSize": 829386,
     "duration": 4.7
   },
   "industrial-sketch-01.webp": {
+    "title": "Tangible Puck Workflow Sketches",
     "width": 809,
     "height": 452,
     "aspectRatio": 1.7898,
     "aspectRatioFormatted": "~16:9",
     "orientation": "landscape",
-    "type": "image",
-    "format": "webp",
-    "fileSize": 54198
+    "type": "image"
   },
   "kyle-fish copy.webp": {
+    "title": "Portrait of Kyle Fish",
     "width": 800,
     "height": 766,
     "aspectRatio": 1.0444,
     "aspectRatioFormatted": "800:766",
     "orientation": "landscape",
-    "type": "image",
-    "format": "webp",
-    "fileSize": 46070
+    "type": "image"
   },
   "kyle-fish.webp": {
+    "title": "Portrait of Kyle Fish",
     "width": 800,
     "height": 766,
     "aspectRatio": 1.0444,
     "aspectRatioFormatted": "800:766",
     "orientation": "landscape",
-    "type": "image",
-    "format": "webp",
-    "fileSize": 46070
+    "type": "image"
+  },
+  "lecture-notes-04-parsing-2.html": {
+    "type": "html"
   },
   "manga-gpt.mp4": {
+    "title": "Live demo recording using Gemini Omni to add manga styled speech bubble",
     "width": 406,
     "height": 720,
     "aspectRatio": 0.5639,
     "aspectRatioFormatted": "~9:16",
     "orientation": "portrait",
     "type": "video",
-    "format": "mp4",
-    "fileSize": 1484980,
     "duration": 9.7
   },
   "mustafa-suleyman.webp": {
+    "title": "Portrait of Mustafa Suleyman",
     "width": 1280,
     "height": 1600,
     "aspectRatio": 0.8,
     "aspectRatioFormatted": "4:5",
     "orientation": "portrait",
-    "type": "image",
-    "format": "webp",
-    "fileSize": 87552
+    "type": "image"
   },
   "puck-photo-blue.webp": {
+    "title": "Blue Tangible Puck Top View",
     "width": 833,
     "height": 736,
     "aspectRatio": 1.1318,
     "aspectRatioFormatted": "833:736",
     "orientation": "landscape",
-    "type": "image",
-    "format": "webp",
-    "fileSize": 24354
+    "type": "image"
   },
   "puck-photo-pink.webp": {
+    "title": "Pink Tangible Puck Top View",
     "width": 741,
     "height": 736,
     "aspectRatio": 1.0068,
     "aspectRatioFormatted": "~1:1",
     "orientation": "landscape",
-    "type": "image",
-    "format": "webp",
-    "fileSize": 25666
+    "type": "image"
   },
   "puck-rendered.webp": {
+    "title": "Tangible Puck Interaction Modes",
     "width": 762,
     "height": 1365,
     "aspectRatio": 0.5582,
     "aspectRatioFormatted": "~9:16",
     "orientation": "portrait",
-    "type": "image",
-    "format": "webp",
-    "fileSize": 38266
+    "type": "image"
   },
   "puck-sketch.webp": {
+    "title": "Tangible Puck Hand-Drawn Sketches",
     "width": 1171,
     "height": 736,
     "aspectRatio": 1.591,
     "aspectRatioFormatted": "1171:736",
     "orientation": "landscape",
-    "type": "image",
-    "format": "webp",
-    "fileSize": 77938
+    "type": "image"
   },
   "richard-feynman.webp": {
+    "title": "Richard Feynman at Chalkboard",
     "width": 684,
     "height": 684,
     "aspectRatio": 1,
     "aspectRatioFormatted": "1:1",
     "orientation": "square",
-    "type": "image",
-    "format": "webp",
-    "fileSize": 58760
+    "type": "image"
   },
   "semantic-sculpting.webp": {
+    "title": "Semantic Sculpting: Direct Manipulation of Generative Media",
     "width": 1835,
     "height": 2446,
     "aspectRatio": 0.7502,
     "aspectRatioFormatted": "~3:4",
     "orientation": "portrait",
-    "type": "image",
-    "format": "webp",
-    "fileSize": 294092
+    "type": "image"
   },
   "tangible-rag.mp4": {
+    "title": "Demo recording showing image segmentation and hand tracking in realtime",
     "width": 406,
     "height": 720,
     "aspectRatio": 0.5639,
     "aspectRatioFormatted": "~9:16",
     "orientation": "portrait",
     "type": "video",
-    "format": "mp4",
-    "fileSize": 826536,
     "duration": 14.53
   },
   "ted-chiang.webp": {
+    "title": "Portrait of Ted Chiang",
     "width": 1850,
     "height": 1850,
     "aspectRatio": 1,
     "aspectRatioFormatted": "1:1",
     "orientation": "square",
-    "type": "image",
-    "format": "webp",
-    "fileSize": 141652
+    "type": "image"
   },
   "the-artist-is-present.webp": {
+    "title": "Marina Abramović: The Artist Is Present",
     "width": 1500,
     "height": 1000,
     "aspectRatio": 1.5,
     "aspectRatioFormatted": "3:2",
     "orientation": "landscape",
-    "type": "image",
-    "format": "webp",
-    "fileSize": 70788
+    "type": "image"
   },
   "the-vanishing-designer.webp": {
+    "title": "The Vanishing Designer Article Header",
     "width": 2875,
     "height": 1453,
     "aspectRatio": 1.9787,
     "aspectRatioFormatted": "2875:1453",
     "orientation": "landscape",
-    "type": "image",
-    "format": "webp",
-    "fileSize": 77022
+    "type": "image"
   },
   "tim-ingold.webp": {
+    "title": "Portrait of Tim Ingold",
     "width": 1920,
     "height": 1080,
     "aspectRatio": 1.7778,
     "aspectRatioFormatted": "16:9",
     "orientation": "landscape",
-    "type": "image",
-    "format": "webp",
-    "fileSize": 193780
+    "type": "image"
   },
   "xkcd.webp": {
+    "title": "XKCD Comic: Depth Perception",
     "width": 740,
     "height": 946,
     "aspectRatio": 0.7822,
     "aspectRatioFormatted": "740:946",
     "orientation": "portrait",
-    "type": "image",
-    "format": "webp",
-    "fileSize": 113706
+    "type": "image"
   }
 }
