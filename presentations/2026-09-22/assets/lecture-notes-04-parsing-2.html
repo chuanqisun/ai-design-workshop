@@ -1,0 +1,1016 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Top-Down Parsing — Interactive Explainer</title>
+    <style>
+      :root {
+        --line: #ddd;
+        --bg: #fafafa;
+        --hl: #ffe9a8;
+        --ok: #1a7f37;
+        --bad: #b3261e;
+        --dim: #777;
+      }
+      body {
+        font:
+          16px/1.55 -apple-system,
+          Segoe UI,
+          Roboto,
+          Helvetica,
+          Arial,
+          sans-serif;
+        max-width: 860px;
+        margin: 0 auto;
+        padding: 24px;
+        color: #222;
+      }
+      h1 {
+        font-size: 26px;
+        margin-bottom: 4px;
+      }
+      h2 {
+        font-size: 20px;
+        margin-top: 40px;
+        border-bottom: 2px solid var(--line);
+        padding-bottom: 4px;
+      }
+      h3 {
+        font-size: 16px;
+        margin-bottom: 6px;
+      }
+      section {
+        margin-bottom: 8px;
+      }
+      code,
+      pre,
+      .mono {
+        font-family: ui-monospace, Menlo, Consolas, monospace;
+      }
+      pre {
+        background: var(--bg);
+        border: 1px solid var(--line);
+        padding: 10px;
+        overflow-x: auto;
+        font-size: 13px;
+      }
+      .panel {
+        border: 1px solid var(--line);
+        background: var(--bg);
+        padding: 12px;
+        border-radius: 6px;
+        margin: 12px 0;
+      }
+      .cols {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+      .cols > div {
+        flex: 1 1 240px;
+      }
+      button {
+        font: inherit;
+        padding: 5px 10px;
+        border: 1px solid #bbb;
+        background: #fff;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      button:hover:not(:disabled) {
+        background: #f0f0f0;
+      }
+      button:disabled {
+        opacity: 0.45;
+        cursor: not-allowed;
+      }
+      .sym {
+        display: inline-block;
+        padding: 2px 7px;
+        margin: 2px;
+        border: 1px solid #bbb;
+        border-radius: 4px;
+        background: #fff;
+        font-family: ui-monospace, monospace;
+        font-size: 14px;
+      }
+      .nt {
+        border-color: #3b6fb6;
+        color: #1e4b86;
+        font-weight: 600;
+      }
+      .t {
+        border-color: #999;
+        color: #444;
+      }
+      .leftmost {
+        background: var(--hl);
+        box-shadow: 0 0 0 2px #e8b93a;
+      }
+      .consumed {
+        opacity: 0.3;
+        text-decoration: line-through;
+      }
+      ul.tree,
+      ul.tree ul {
+        list-style: none;
+        margin: 0;
+        padding-left: 18px;
+        border-left: 1px dotted #bbb;
+      }
+      ul.tree {
+        padding-left: 0;
+        border: none;
+      }
+      ul.tree li {
+        margin: 2px 0;
+      }
+      .new {
+        animation: flash 1s ease-out;
+      }
+      @keyframes flash {
+        from {
+          background: var(--hl);
+        }
+        to {
+          background: transparent;
+        }
+      }
+      .label {
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: var(--dim);
+        margin-bottom: 4px;
+      }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        font-size: 14px;
+      }
+      th,
+      td {
+        border: 1px solid var(--line);
+        padding: 6px 8px;
+        text-align: left;
+        vertical-align: top;
+      }
+      th {
+        background: #f0f0f0;
+      }
+      .good {
+        color: var(--ok);
+        font-weight: 600;
+      }
+      .bad {
+        color: var(--bad);
+        font-weight: 600;
+      }
+      .note {
+        font-size: 14px;
+        color: #444;
+      }
+      details {
+        margin: 8px 0;
+      }
+      summary {
+        cursor: pointer;
+        font-weight: 600;
+      }
+      input[type="text"] {
+        font: inherit;
+        font-family: ui-monospace, monospace;
+        padding: 5px;
+        border: 1px solid #bbb;
+        border-radius: 4px;
+      }
+      .trace {
+        font-size: 13px;
+        white-space: pre;
+        line-height: 1.4;
+        max-height: 280px;
+        overflow: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Top-Down Parsing</h1>
+    <p class="note">
+      Recursive descent, leftmost derivations, and how we massage a grammar until a parser can decide <em>which production to apply</em> without guessing.
+    </p>
+
+    <!-- ============================================= -->
+    <h2>1. Where we are: characters → words → sentences</h2>
+    <div class="panel">
+      <p>The lexer already ran. Parsing starts from a <strong>token stream</strong>, not raw text.</p>
+      <pre>
+source:  2 - 2 * 2
+lexer:   Int(2)  -  Int(2)  *  Int(2)
+parser:  ??? → parse tree</pre
+      >
+      <p class="note">
+        Tokens: <code>{ + , - , * , / , Int }</code> where <code>Int = [0-9]+</code>. Terminals = tokens. Non-terminals = the names on the left-hand side of
+        productions.
+      </p>
+    </div>
+
+    <h3>Today's grammar</h3>
+    <pre>
+1)  Start -> Expr
+2)  Expr  -> Expr + Term
+3)  Expr  -> Expr - Term
+4)  Expr  -> Term
+5)  Term  -> Term * Int
+6)  Term  -> Term / Int
+7)  Term  -> Int</pre
+    >
+    <p class="note">
+      The two-level split (<code>Expr</code> over <code>Term</code>) is not decoration — it is how <strong>precedence</strong> gets baked into the grammar.
+      <code>*</code> and <code>/</code> live deeper in the tree, so they bind tighter.
+    </p>
+
+    <!-- ============================================= -->
+    <h2>2. Two directions: recognition vs. generation</h2>
+    <div class="panel">
+      <div class="cols">
+        <div>
+          <div class="label">Recognition (bottom-up)</div>
+          <p class="note">
+            Start at the <strong>string</strong>. Match a right-hand side, replace it with the left-hand side. Repeat until you reach <code>Start</code>.
+            Productions applied <em>in reverse</em>.
+          </p>
+          <pre>
+Int - Int * Int
+Term - Int * Int
+Expr - Int * Int
+      ...
+Expr
+Start   ✓ in the language</pre
+          >
+        </div>
+        <div>
+          <div class="label">Generation (top-down)</div>
+          <p class="note">
+            Start at the <strong>start symbol</strong>. Match a left-hand side, rewrite it to its right-hand side. Repeat until only terminals remain — then
+            compare to the input.
+          </p>
+          <pre>
+Start
+Expr
+Expr - Term
+Term - Term
+      ...
+Int - Int * Int  ✓ matches</pre
+          >
+        </div>
+      </div>
+      <p class="note">
+        Either way, the sequence of productions used <em>is</em> the derivation, and the derivation <em>is</em> the parse tree. Today we implement the
+        generative direction: <strong>top-down / recursive descent</strong>.
+      </p>
+    </div>
+
+    <details>
+      <summary>Check yourself: why is <code>Expr -> Term</code> a bad first choice for input <code>2 - 2 * 2</code>?</summary>
+      <p class="note">
+        Because from <code>Term</code> you can only ever generate <code>Int (* | /) Int ...</code> — no <code>-</code> can ever appear. You'd consume the whole
+        derivation with input left over and get stuck. <strong>The choice of production is a policy decision, and bad policies dead-end.</strong>
+      </p>
+    </details>
+
+    <!-- ============================================= -->
+    <h2>3. Leftmost derivation, step by step</h2>
+    <p>The rule the parser follows on every single step:</p>
+    <pre>
+look at the LEFTMOST symbol of the sentential form
+  non-terminal → choose a production and apply it (rewrite)
+  terminal     → match it against the next input token (eat it)
+done when sentential form is empty AND input is empty</pre
+    >
+
+    <p class="note">
+      A <strong>sentential form</strong> is just any sequence of terminals and non-terminals produced along the way. The parser keeps three pieces of state, and
+      each has a different personality:
+    </p>
+    <table>
+      <tr>
+        <th>State</th>
+        <th>Behaviour</th>
+      </tr>
+      <tr>
+        <td>Parse tree</td>
+        <td><strong>Additive</strong> — only ever grows, top-down</td>
+      </tr>
+      <tr>
+        <td>Sentential form</td>
+        <td><strong>Mutable</strong> — rewritten in place at each expansion</td>
+      </tr>
+      <tr>
+        <td>Remaining input</td>
+        <td><strong>Subtractive</strong> — a pointer marching left to right</td>
+      </tr>
+    </table>
+
+    <div class="panel">
+      <div class="label">Input</div>
+      <div id="inputRow" style="margin-bottom: 10px"></div>
+
+      <div class="label">Sentential form</div>
+      <div id="sfRow" style="margin-bottom: 10px; min-height: 32px"></div>
+
+      <div class="label">Action taken</div>
+      <div id="actionRow" class="mono" style="margin-bottom: 12px; min-height: 22px"></div>
+
+      <div class="label">Parse tree</div>
+      <div id="treeRow" style="margin-bottom: 12px"></div>
+
+      <button id="btnBack">◀ Back</button>
+      <button id="btnNext">Step ▶</button>
+      <button id="btnAuto">Auto-run</button>
+      <button id="btnReset">Reset</button>
+      <span class="mono" id="counter" style="margin-left: 8px; color: var(--dim)"></span>
+      <div id="status" style="margin-top: 10px"></div>
+    </div>
+
+    <p class="note">
+      Notice what changes at each step. An <em>expand</em> touches the tree and the sentential form but <strong>never</strong> the input pointer. A
+      <em>match</em> touches the sentential form and the input pointer but adds nothing new to the tree. That asymmetry is the whole algorithm.
+    </p>
+
+    <!-- ============================================= -->
+    <h2>4. The policy problem — and the left-recursion trap</h2>
+    <p>
+      How does the parser <em>know</em> to pick rule 3 rather than rule 2 or 4? Naive answer: <strong>backtracking search</strong>. Try one, and if it fails,
+      back up and try another.
+    </p>
+
+    <div class="panel">
+      <p class="note">
+        Any search needs three components — a <strong>space</strong>, an <strong>algorithm</strong>, and a <strong>goal</strong> — and two desiderata: it must
+        <em>find the goal</em> and it must <em>terminate</em>. Top-down parsing of this grammar fails the second one. Watch:
+      </p>
+
+      <div class="label">Sentential form (expanding leftmost <code>Term</code> via <code>Term -> Term * Int</code>)</div>
+      <div id="loopRow" style="margin: 8px 0; min-height: 32px"></div>
+      <div class="label">Input consumed</div>
+      <div class="mono" id="loopInput" style="margin-bottom: 10px">0 tokens — nothing ever gets eaten</div>
+      <button id="btnLoop">Expand leftmost Term</button>
+      <button id="btnLoopReset">Reset</button>
+      <div id="loopMsg" style="margin-top: 10px"></div>
+    </div>
+
+    <p class="note">
+      <strong>Diagnosis:</strong> the production <code>Term -> Term * Int</code> is <em>left recursive</em> — the leftmost symbol of the right-hand side is the
+      same non-terminal we started with. A recursive-descent parser calls <code>parseTerm()</code>, which immediately calls <code>parseTerm()</code>, having
+      consumed zero tokens. Infinite recursion. Stack overflow. Not a policy problem we can search our way out of — we must
+      <strong>rewrite the grammar</strong>.
+    </p>
+
+    <!-- ============================================= -->
+    <h2>5. Eliminating left recursion</h2>
+    <div class="panel">
+      <p>The general transformation pattern:</p>
+      <div class="cols">
+        <div>
+          <div class="label">Left recursive</div>
+          <pre>
+A -> A α
+A -> β</pre
+          >
+          <p class="note">(α, β do not start with A)</p>
+        </div>
+        <div>
+          <div class="label">Right recursive equivalent</div>
+          <pre>
+A  -> β R
+R  -> α R
+R  -> ε</pre
+          >
+          <p class="note">Same language. Now every path begins by consuming β.</p>
+        </div>
+      </div>
+      <p class="note">
+        Intuition: the original generates <code>β α α α …</code>. The new one produces exactly that, but builds it left-to-right instead of by peeling recursion
+        off the left edge.
+      </p>
+
+      <div style="margin-top: 14px">
+        <span class="label" style="display: inline">Try it — pick a rule set:</span>
+        <button class="txBtn" data-k="term">Term</button>
+        <button class="txBtn" data-k="expr">Expr</button>
+        <button class="txBtn" data-k="generic">Generic A</button>
+      </div>
+      <div class="cols" style="margin-top: 8px">
+        <div>
+          <div class="label">Before</div>
+          <pre id="txBefore"></pre>
+        </div>
+        <div>
+          <div class="label">After</div>
+          <pre id="txAfter"></pre>
+        </div>
+      </div>
+      <div id="txNote" class="note"></div>
+    </div>
+
+    <h3>"Why not just write <code>Term -> Int * Term</code>?"</h3>
+    <div class="panel">
+      <p class="note">
+        It <em>does</em> remove the left recursion. But it silently changes the shape of the tree — and therefore the meaning. Compare on
+        <code>8 / 4 / 2</code>:
+      </p>
+      <div class="cols">
+        <div>
+          <div class="label">Left recursive (correct: left-associative)</div>
+          <pre>Term -> Term / Int
+
+    ( (8 / 4) / 2 )  =  <span class="good">1</span></pre>
+        </div>
+        <div>
+          <div class="label">Naive right recursion (wrong)</div>
+          <pre>Term -> Int / Term
+
+    ( 8 / (4 / 2) )  =  <span class="bad">4</span></pre>
+        </div>
+      </div>
+      <button id="btnAssoc">Show both parse trees</button>
+      <div id="assocOut" class="cols" style="margin-top: 10px"></div>
+      <p class="note" style="margin-top: 8px">
+        The <code>β R</code> / <code>R -> α R</code> transformation avoids this: the recursion is right-recursive in the <em>grammar</em>, but the parser builds
+        the tree left-associatively as it loops, so semantics are preserved.
+      </p>
+    </div>
+
+    <!-- ============================================= -->
+    <h2>6. The transformed grammar</h2>
+    <pre>
+Start -> Expr
+
+Expr  -> Term Expr'
+Expr' -> + Term Expr'
+      -> - Term Expr'
+      -> ε
+
+Term  -> Int Term'
+Term' -> * Int Term'
+      -> / Int Term'
+      -> ε</pre
+    >
+    <p class="note">
+      No left recursion anywhere. Every production either consumes a token immediately or is ε. Now the second half of the policy problem:
+      <em>which</em> alternative of <code>Expr'</code> do we take?
+    </p>
+
+    <!-- ============================================= -->
+    <h2>7. Look-ahead → predictive parsing</h2>
+    <p>
+      Peek at <strong>one</strong> upcoming token. Each alternative starts with a distinct terminal (or is ε), so the look-ahead uniquely determines the choice.
+      No backtracking, no search. This is <strong>LL(1)</strong>.
+    </p>
+
+    <table>
+      <tr>
+        <th>Non-terminal</th>
+        <th>Look-ahead</th>
+        <th>Production</th>
+      </tr>
+      <tr>
+        <td rowspan="3"><code>Expr'</code></td>
+        <td><code>+</code></td>
+        <td><code>+ Term Expr'</code></td>
+      </tr>
+      <tr>
+        <td><code>-</code></td>
+        <td><code>- Term Expr'</code></td>
+      </tr>
+      <tr>
+        <td>anything else / EOF</td>
+        <td><code>ε</code></td>
+      </tr>
+      <tr>
+        <td rowspan="3"><code>Term'</code></td>
+        <td><code>*</code></td>
+        <td><code>* Int Term'</code></td>
+      </tr>
+      <tr>
+        <td><code>/</code></td>
+        <td><code>/ Int Term'</code></td>
+      </tr>
+      <tr>
+        <td>anything else</td>
+        <td><code>ε</code></td>
+      </tr>
+    </table>
+
+    <div class="panel">
+      <div class="label">Run the real predictive parser</div>
+      <input type="text" id="ppInput" value="2 - 2 * 2" size="30" />
+      <button id="btnParse">Parse</button>
+      <button class="ex" data-s="1 + 2 + 3">1 + 2 + 3</button>
+      <button class="ex" data-s="8 / 4 / 2">8 / 4 / 2</button>
+      <button class="ex" data-s="1 + 2 * 3 - 4">1 + 2 * 3 - 4</button>
+      <button class="ex" data-s="2 * * 3">2 * * 3 (error)</button>
+      <div id="ppResult" style="margin-top: 12px"></div>
+      <div class="label" style="margin-top: 12px">Call trace (look-ahead → decision)</div>
+      <div id="ppTrace" class="trace mono panel" style="background: #fff"></div>
+      <div class="label" style="margin-top: 8px">Resulting tree</div>
+      <div id="ppTree"></div>
+    </div>
+
+    <!-- ============================================= -->
+    <h2>8. From grammar to code</h2>
+    <p>The payoff: once the grammar is non-left-recursive and LL(1), the parser almost writes itself.</p>
+    <table>
+      <tr>
+        <th>Grammar element</th>
+        <th>Code element</th>
+      </tr>
+      <tr>
+        <td>Each non-terminal</td>
+        <td>One function, returning a parse-tree node</td>
+      </tr>
+      <tr>
+        <td>Each alternative production</td>
+        <td>An <code>if</code> branch keyed on the look-ahead token</td>
+      </tr>
+      <tr>
+        <td>A terminal on the RHS</td>
+        <td><code>match(tok)</code> — consume and advance the input pointer</td>
+      </tr>
+      <tr>
+        <td>A non-terminal on the RHS</td>
+        <td>A recursive call to that non-terminal's function</td>
+      </tr>
+      <tr>
+        <td>Tail-recursive <code>X'</code> rule</td>
+        <td>A <code>while</code> loop (builds left-associative trees)</td>
+      </tr>
+      <tr>
+        <td><code>ε</code> production</td>
+        <td>The fall-through / loop exit</td>
+      </tr>
+    </table>
+
+    <pre>
+Token  cur;                      // parser state: current look-ahead
+Token  nextToken();              // helper: pull the next token from the stream
+
+Node parseExpr() {               // Expr -> Term Expr'
+    Node left = parseTerm();
+    while (cur == '+' || cur == '-') {      // Expr' -> (+|-) Term Expr'
+        Token op = cur; cur = nextToken();
+        Node right = parseTerm();
+        left = new Node(op, left, right);   // left-assoc: fold as we go
+    }
+    return left;                            // Expr' -> ε
+}
+
+Node parseTerm() {               // Term -> Int Term'
+    if (cur != INT) error("expected integer");
+    Node left = new Node(cur); cur = nextToken();
+    while (cur == '*' || cur == '/') {      // Term' -> (*|/) Int Term'
+        Token op = cur; cur = nextToken();
+        if (cur != INT) error("expected integer");
+        Node right = new Node(cur); cur = nextToken();
+        left = new Node(op, left, right);
+    }
+    return left;                            // Term' -> ε
+}</pre
+    >
+
+    <p class="note">
+      <strong>Recap of the arc:</strong> generative top-down parsing needs a policy for choosing productions → naive backtracking search doesn't terminate on
+      left recursion → rewrite the grammar to kill left recursion (carefully, preserving associativity) → add one token of look-ahead to make the choice
+      deterministic → the resulting grammar maps mechanically onto a hand-written recursive descent parser.
+    </p>
+
+    <script>
+      /* ============ shared helpers ============ */
+      const NTS = new Set(["Start", "Expr", "Term", "Expr'", "Term'"]);
+      function symSpan(label, cls) {
+        const s = document.createElement("span");
+        s.className = "sym " + (NTS.has(label) ? "nt" : "t") + (cls ? " " + cls : "");
+        s.textContent = label;
+        return s;
+      }
+
+      /* ============ Section 3: leftmost derivation walkthrough ============ */
+      const TOKENS = [
+        { t: "Int", v: "2" },
+        { t: "-", v: "-" },
+        { t: "Int", v: "2" },
+        { t: "*", v: "*" },
+        { t: "Int", v: "2" },
+      ];
+
+      // steps reference nodes by name; nodes are created lazily as children of expansions
+      const STEPS = [
+        { type: "expand", node: "n0", rule: "Start -> Expr", kids: [["n1", "Expr"]] },
+        {
+          type: "expand",
+          node: "n1",
+          rule: "Expr -> Expr - Term",
+          kids: [
+            ["n2", "Expr"],
+            ["n3", "-"],
+            ["n4", "Term"],
+          ],
+        },
+        { type: "expand", node: "n2", rule: "Expr -> Term", kids: [["n5", "Term"]] },
+        { type: "expand", node: "n5", rule: "Term -> Int", kids: [["n6", "Int"]] },
+        { type: "match", node: "n6", tok: 0, rule: 'match Int with input "2"' },
+        { type: "match", node: "n3", tok: 1, rule: 'match - with input "-"' },
+        {
+          type: "expand",
+          node: "n4",
+          rule: "Term -> Term * Int",
+          kids: [
+            ["n7", "Term"],
+            ["n8", "*"],
+            ["n9", "Int"],
+          ],
+        },
+        { type: "expand", node: "n7", rule: "Term -> Int", kids: [["n10", "Int"]] },
+        { type: "match", node: "n10", tok: 2, rule: 'match Int with input "2"' },
+        { type: "match", node: "n8", tok: 3, rule: 'match * with input "*"' },
+        { type: "match", node: "n9", tok: 4, rule: 'match Int with input "2"' },
+      ];
+
+      let stepIdx = 0,
+        autoTimer = null;
+
+      function buildState(k) {
+        const nodes = {};
+        const root = { name: "n0", label: "Start", children: null, consumed: false, born: -1 };
+        nodes.n0 = root;
+        let consumedCount = 0,
+          lastAction = "(initial state: sentential form = Start)",
+          lastTouched = [];
+        for (let i = 0; i < k; i++) {
+          const s = STEPS[i];
+          lastTouched = [];
+          if (s.type === "expand") {
+            const p = nodes[s.node];
+            p.children = s.kids.map(([nm, lbl]) => {
+              const n = { name: nm, label: lbl, children: null, consumed: false, born: i };
+              nodes[nm] = n;
+              lastTouched.push(nm);
+              return n;
+            });
+            lastAction = "EXPAND  " + s.rule;
+          } else {
+            nodes[s.node].consumed = true;
+            consumedCount++;
+            lastTouched.push(s.node);
+            lastAction = "MATCH   " + s.rule;
+          }
+        }
+        return { root, nodes, consumedCount, lastAction, lastTouched, stepNo: k };
+      }
+
+      function frontier(node, out) {
+        // leaves in left-to-right order
+        if (!node.children) {
+          out.push(node);
+          return out;
+        }
+        node.children.forEach((c) => frontier(c, out));
+        return out;
+      }
+
+      function renderTree(node, lastTouched) {
+        const ul = document.createElement("ul");
+        ul.className = "tree";
+        (function walk(n, parentEl) {
+          const li = document.createElement("li");
+          const cls = (n.consumed ? "consumed " : "") + (lastTouched.includes(n.name) ? "new" : "");
+          li.appendChild(symSpan(n.label, cls.trim()));
+          if (n.children) {
+            const sub = document.createElement("ul");
+            n.children.forEach((c) => walk(c, sub));
+            li.appendChild(sub);
+          }
+          parentEl.appendChild(li);
+        })(node, ul);
+        return ul;
+      }
+
+      function renderDerivation() {
+        const st = buildState(stepIdx);
+
+        // input row
+        const ir = document.getElementById("inputRow");
+        ir.innerHTML = "";
+        TOKENS.forEach((tk, i) => {
+          const done = i < st.consumedCount;
+          const isNext = i === st.consumedCount;
+          ir.appendChild(symSpan(tk.v, (done ? "consumed" : "") + (isNext ? " leftmost" : "")));
+        });
+        const eof = symSpan("EOF", st.consumedCount >= TOKENS.length ? "leftmost" : "");
+        eof.style.opacity = 0.6;
+        ir.appendChild(eof);
+
+        // sentential form = un-consumed frontier leaves
+        const sf = frontier(st.root, []).filter((n) => !n.consumed);
+        const sr = document.getElementById("sfRow");
+        sr.innerHTML = "";
+        if (sf.length === 0) {
+          const e = document.createElement("span");
+          e.className = "mono";
+          e.style.color = "var(--dim)";
+          e.textContent = "(empty — nothing left to derive)";
+          sr.appendChild(e);
+        } else {
+          sf.forEach((n, i) => sr.appendChild(symSpan(n.label, i === 0 ? "leftmost" : "")));
+        }
+
+        document.getElementById("actionRow").textContent = st.lastAction;
+        const tr = document.getElementById("treeRow");
+        tr.innerHTML = "";
+        tr.appendChild(renderTree(st.root, st.lastTouched));
+        document.getElementById("counter").textContent = "step " + stepIdx + " / " + STEPS.length;
+
+        const stEl = document.getElementById("status");
+        if (sf.length === 0 && st.consumedCount === TOKENS.length) {
+          stEl.innerHTML =
+            '<span class="good">✓ Accepted.</span> ' +
+            '<span class="note">Sentential form empty and input exhausted — the tree built along the way <em>is</em> the parse tree.</span>';
+        } else if (sf.length) {
+          const lm = sf[0];
+          stEl.innerHTML =
+            '<span class="note">Leftmost symbol is <b>' +
+            lm.label +
+            "</b> — " +
+            (NTS.has(lm.label)
+              ? "a non-terminal, so <b>choose a production and expand</b> (input pointer will not move)."
+              : "a terminal, so <b>match it against the input</b> (tree will not grow).") +
+            "</span>";
+        } else stEl.textContent = "";
+
+        document.getElementById("btnBack").disabled = stepIdx === 0;
+        document.getElementById("btnNext").disabled = stepIdx === STEPS.length;
+      }
+
+      document.getElementById("btnNext").onclick = () => {
+        if (stepIdx < STEPS.length) stepIdx++;
+        renderDerivation();
+      };
+      document.getElementById("btnBack").onclick = () => {
+        if (stepIdx > 0) stepIdx--;
+        renderDerivation();
+      };
+      document.getElementById("btnReset").onclick = () => {
+        clearInterval(autoTimer);
+        autoTimer = null;
+        document.getElementById("btnAuto").textContent = "Auto-run";
+        stepIdx = 0;
+        renderDerivation();
+      };
+      document.getElementById("btnAuto").onclick = function () {
+        if (autoTimer) {
+          clearInterval(autoTimer);
+          autoTimer = null;
+          this.textContent = "Auto-run";
+          return;
+        }
+        this.textContent = "Pause";
+        const self = this;
+        autoTimer = setInterval(() => {
+          if (stepIdx >= STEPS.length) {
+            clearInterval(autoTimer);
+            autoTimer = null;
+            self.textContent = "Auto-run";
+            return;
+          }
+          stepIdx++;
+          renderDerivation();
+        }, 850);
+      };
+      renderDerivation();
+
+      /* ============ Section 4: left recursion loop ============ */
+      let loopSF = ["Term"],
+        loopN = 0;
+      function renderLoop() {
+        const r = document.getElementById("loopRow");
+        r.innerHTML = "";
+        loopSF.forEach((s, i) => r.appendChild(symSpan(s, i === 0 ? "leftmost" : "")));
+        document.getElementById("loopInput").textContent =
+          "0 tokens consumed after " + loopN + " expansion" + (loopN === 1 ? "" : "s") + " — nothing ever gets eaten";
+        const m = document.getElementById("loopMsg");
+        if (loopN >= 4) {
+          m.innerHTML =
+            '<span class="bad">Non-terminating.</span> <span class="note">The leftmost symbol is ' +
+            "<b>always</b> <code>Term</code> again, and no input is consumed, so no amount of backtracking helps — " +
+            "the search space is infinitely deep on the very first branch. In code this is " +
+            "<code>parseTerm()</code> calling <code>parseTerm()</code> as its first act.</span>";
+        } else m.textContent = "";
+      }
+      document.getElementById("btnLoop").onclick = () => {
+        loopSF = ["Term", "*", "Int"].concat(loopSF.slice(1));
+        loopN++;
+        renderLoop();
+      };
+      document.getElementById("btnLoopReset").onclick = () => {
+        loopSF = ["Term"];
+        loopN = 0;
+        renderLoop();
+      };
+      renderLoop();
+
+      /* ============ Section 5: transformation viewer ============ */
+      const TX = {
+        generic: {
+          before: "A -> A α\nA -> β",
+          after: "A -> β R\nR -> α R\nR -> ε",
+          note: 'The canonical pattern. α and β must not begin with A. Read it as: "an A is a β followed by zero or more αs."',
+        },
+        term: {
+          before: "Term -> Term * Int\nTerm -> Term / Int\nTerm -> Int",
+          after: "Term  -> Int Term'\nTerm' -> * Int Term'\nTerm' -> / Int Term'\nTerm' -> ε",
+          note: 'Here β = Int and there are two αs: "* Int" and "/ Int". Both fold into the same tail non-terminal Term\'.',
+        },
+        expr: {
+          before: "Expr -> Expr + Term\nExpr -> Expr - Term\nExpr -> Term",
+          after: "Expr  -> Term Expr'\nExpr' -> + Term Expr'\nExpr' -> - Term Expr'\nExpr' -> ε",
+          note: 'Same shape one level up: β = Term, αs are "+ Term" and "- Term". Precedence layering survives the transformation intact.',
+        },
+      };
+      function showTx(k) {
+        document.getElementById("txBefore").textContent = TX[k].before;
+        document.getElementById("txAfter").textContent = TX[k].after;
+        document.getElementById("txNote").textContent = TX[k].note;
+      }
+      document.querySelectorAll(".txBtn").forEach((b) => (b.onclick = () => showTx(b.dataset.k)));
+      showTx("term");
+
+      /* ============ Section 5b: associativity trees ============ */
+      document.getElementById("btnAssoc").onclick = () => {
+        const out = document.getElementById("assocOut");
+        if (out.innerHTML) {
+          out.innerHTML = "";
+          return;
+        }
+        const left = { label: "/", children: [{ label: "/", children: [{ label: "8" }, { label: "4" }] }, { label: "2" }] };
+        const right = { label: "/", children: [{ label: "8" }, { label: "/", children: [{ label: "4" }, { label: "2" }] }] };
+        function plain(n) {
+          const ul = document.createElement("ul");
+          ul.className = "tree";
+          (function w(x, p) {
+            const li = document.createElement("li");
+            li.appendChild(symSpan(x.label, ""));
+            if (x.children) {
+              const s = document.createElement("ul");
+              x.children.forEach((c) => w(c, s));
+              li.appendChild(s);
+            }
+            p.appendChild(li);
+          })(n, ul);
+          return ul;
+        }
+        const d1 = document.createElement("div");
+        d1.innerHTML = '<div class="label">Left-associative → 1 ✓</div>';
+        d1.appendChild(plain(left));
+        const d2 = document.createElement("div");
+        d2.innerHTML = '<div class="label">Right-associative → 4 ✗</div>';
+        d2.appendChild(plain(right));
+        out.appendChild(d1);
+        out.appendChild(d2);
+      };
+
+      /* ============ Section 7: real LL(1) predictive parser ============ */
+      function lex(src) {
+        const out = [];
+        let i = 0;
+        while (i < src.length) {
+          const c = src[i];
+          if (/\s/.test(c)) {
+            i++;
+            continue;
+          }
+          if (/[0-9]/.test(c)) {
+            let j = i;
+            while (j < src.length && /[0-9]/.test(src[j])) j++;
+            out.push({ t: "Int", v: src.slice(i, j) });
+            i = j;
+            continue;
+          }
+          if ("+-*/".includes(c)) {
+            out.push({ t: c, v: c });
+            i++;
+            continue;
+          }
+          throw new Error('lex error: unexpected character "' + c + '"');
+        }
+        out.push({ t: "EOF", v: "EOF" });
+        return out;
+      }
+
+      function predictiveParse(src) {
+        const toks = lex(src);
+        let p = 0,
+          trace = [],
+          depth = 0;
+        const peek = () => toks[p];
+        const log = (s) => trace.push("  ".repeat(depth) + s);
+        const eat = (tt) => {
+          if (peek().t !== tt) throw new Error("parse error: expected " + tt + ' but saw "' + peek().v + '"');
+          const tk = toks[p++];
+          log("match " + tt + ' → consumed "' + tk.v + '"');
+          return tk;
+        };
+
+        function parseTerm() {
+          log("parseTerm()  look-ahead = " + peek().v);
+          depth++;
+          log("predict: Term -> Int Term'");
+          const tk = eat("Int");
+          let node = { label: tk.v, val: Number(tk.v) };
+          while (peek().t === "*" || peek().t === "/") {
+            const op = peek().t;
+            log("look-ahead = '" + op + "'  → predict Term' -> " + op + " Int Term'");
+            eat(op);
+            const r = eat("Int");
+            node = { label: op, val: op === "*" ? node.val * Number(r.v) : node.val / Number(r.v), children: [node, { label: r.v, val: Number(r.v) }] };
+          }
+          log("look-ahead = '" + peek().v + "'  → predict Term' -> ε  (return)");
+          depth--;
+          return node;
+        }
+
+        function parseExpr() {
+          log("parseExpr()  look-ahead = " + peek().v);
+          depth++;
+          log("predict: Expr -> Term Expr'");
+          let node = parseTerm();
+          while (peek().t === "+" || peek().t === "-") {
+            const op = peek().t;
+            log("look-ahead = '" + op + "'  → predict Expr' -> " + op + " Term Expr'");
+            eat(op);
+            const r = parseTerm();
+            node = { label: op, val: op === "+" ? node.val + r.val : node.val - r.val, children: [node, r] };
+          }
+          log("look-ahead = '" + peek().v + "'  → predict Expr' -> ε  (return)");
+          depth--;
+          return node;
+        }
+
+        log("parseStart()  predict: Start -> Expr");
+        depth++;
+        const tree = parseExpr();
+        depth--;
+        if (peek().t !== "EOF") throw new Error('parse error: trailing input at "' + peek().v + '"');
+        log("EOF reached — accept");
+        return { tree, trace, value: tree.val };
+      }
+
+      function runParse() {
+        const src = document.getElementById("ppInput").value;
+        const res = document.getElementById("ppResult");
+        const tr = document.getElementById("ppTrace");
+        const tv = document.getElementById("ppTree");
+        tv.innerHTML = "";
+        try {
+          const r = predictiveParse(src);
+          res.innerHTML =
+            '<span class="good">✓ Accepted</span> <span class="note">— no backtracking required; ' +
+            "every production was chosen from a single token of look-ahead. Evaluated value: <b>" +
+            r.value +
+            "</b></span>";
+          tr.textContent = r.trace.join("\n");
+          const ul = document.createElement("ul");
+          ul.className = "tree";
+          (function w(n, p) {
+            const li = document.createElement("li");
+            li.appendChild(symSpan(n.label, ""));
+            if (n.children) {
+              const s = document.createElement("ul");
+              n.children.forEach((c) => w(c, s));
+              li.appendChild(s);
+            }
+            p.appendChild(li);
+          })(r.tree, ul);
+          tv.appendChild(ul);
+        } catch (e) {
+          res.innerHTML =
+            '<span class="bad">✗ ' +
+            e.message +
+            '</span> <span class="note">— the look-ahead matched ' +
+            "no alternative and no ε production applied, so the string is not in the language. " +
+            "Note it failed <em>immediately</em>, without exploring alternatives.</span>";
+          tr.textContent = "(parse aborted)";
+        }
+      }
+      document.getElementById("btnParse").onclick = runParse;
+      document.querySelectorAll(".ex").forEach(
+        (b) =>
+          (b.onclick = () => {
+            document.getElementById("ppInput").value = b.dataset.s.replace(" (error)", "");
+            runParse();
+          }),
+      );
+      runParse();
+    </script>
+  </body>
+</html>

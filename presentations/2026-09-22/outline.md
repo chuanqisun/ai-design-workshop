@@ -87,6 +87,12 @@ Etymology: Curate comes from the Latin curare, meaning “to care for.”
     - Demo: Text annotation tool
     - Demo: Idea generator tool
 
+## Can AI make design? Can AI make art?
+
+Ted Chiang, Tim Ingold.
+
+Richard Feyman
+
 ## Hands-on practice
 
 For groups of 3

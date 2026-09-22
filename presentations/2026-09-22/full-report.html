@@ -1,0 +1,1087 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Re:design — A Computational Design Workshop for Humans and AI</title>
+    <meta
+      name="description"
+      content="Comprehensive report and syllabus for Re:design: A Computational Design Workshop bridging classical design methodology, frontier foundation models, spatial interaction, and high-agency creative systems."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Fira+Code:wght@400;500&family=Inter:wght@300;400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400;1,6..72,500&display=swap"
+      rel="stylesheet"
+    />
+    <style></style>
+  </head>
+  <body>
+    <div class="app-layout">
+      <!-- Sticky Sidebar Navigation -->
+      <aside class="sidebar">
+        <div class="sidebar-brand">
+          <h2>Re:design</h2>
+          <p>Computational Design Workshop for Humans and AI</p>
+        </div>
+
+        <ul class="nav-sections">
+          <li>
+            <a href="#intro"><span class="nav-num">01</span> Philosophical Premise</a>
+          </li>
+          <li>
+            <a href="#about"><span class="nav-num">02</span> Pedagogical Intent</a>
+          </li>
+          <li>
+            <a href="#trend-1"><span class="nav-num">03</span> Trend 1: LLM Semantic Rendering</a>
+          </li>
+          <li>
+            <a href="#trend-2"><span class="nav-num">04</span> Trend 2: Affective Voice</a>
+          </li>
+          <li>
+            <a href="#trend-3"><span class="nav-num">05</span> Trend 3: Realtime Latent Image</a>
+          </li>
+          <li>
+            <a href="#trend-4"><span class="nav-num">06</span> Trend 4: Spatial World Models</a>
+          </li>
+          <li>
+            <a href="#trend-5"><span class="nav-num">07</span> Trend 5: Local Real-Time CV</a>
+          </li>
+          <li>
+            <a href="#emerging-discipline"><span class="nav-num">08</span> Emerging Disciplines</a>
+          </li>
+          <li>
+            <a href="#direct-agency"><span class="nav-num">09</span> The Direct Agency Debate</a>
+          </li>
+          <li>
+            <a href="#design-triad"><span class="nav-num">10</span> The Generative Triad</a>
+          </li>
+          <li>
+            <a href="#hands-on"><span class="nav-num">11</span> Hands-On Practice Pods</a>
+          </li>
+          <li>
+            <a href="#references"><span class="nav-num">12</span> Annotated References</a>
+          </li>
+        </ul>
+
+        <div class="sidebar-footer">
+          <div><strong>Date:</strong> Sept 22, 2026</div>
+          <div><strong>Curriculum:</strong> MIT / Computational Design</div>
+        </div>
+      </aside>
+
+      <!-- Main Content Body -->
+      <main class="main-content">
+        <div class="content-container">
+          <!-- Hero Header -->
+          <header class="hero-banner">
+            <div class="tag-badge">
+              <span class="dot"></span>
+              Workshop Report & Academic Framework
+            </div>
+            <h1 class="hero-title">Re:design — A Computational Design Workshop for Humans and AI</h1>
+            <p class="hero-subtitle">
+              Deconstructing the shift from chatbot conversationalism to semantic rendering, real-time latent manipulation, spatial world models, and
+              high-agency creative curation.
+            </p>
+
+            <div class="meta-ribbon">
+              <div class="meta-item">
+                <span class="meta-label">Workshop Date</span>
+                <span class="meta-value">September 22, 2026</span>
+              </div>
+              <div class="meta-item">
+                <span class="meta-label">Core Formula</span>
+                <span class="meta-value">Generate → Evaluate → Curate</span>
+              </div>
+              <div class="meta-item">
+                <span class="meta-label">Format</span>
+                <span class="meta-value">Hands-On Studio + Theoretical Seminar</span>
+              </div>
+              <div class="meta-item">
+                <span class="meta-label">Target Audience</span>
+                <span class="meta-value">Computational Designers & Engineers</span>
+              </div>
+            </div>
+          </header>
+
+          <!-- Section 1: Intro & Philosophical Premise -->
+          <section id="intro">
+            <h2 class="section-heading">
+              <span class="heading-num">01</span>
+              The Philosophical Premise: Is the Designer Present?
+            </h2>
+
+            <p>
+              In 2010, artist Marina Abramović sat silently in the atrium of the Museum of Modern Art for 736 hours and 30 minutes, inviting museum visitors to
+              sit opposite her in absolute silence. <em>The Artist Is Present</em> was not an exhibition of passive artifacts; it was a pure inquiry into
+              presence, relational vulnerability, and intentionality. The provocation that gripped the art world then now haunts computational design today:
+              <strong
+                >Is performance art still art when stripped of physical fabrication? Is generative design still design when machines manufacture the output in
+                milliseconds?</strong
+              >
+            </p>
+
+            <figure class="media-figure">
+              <div class="figure-image-wrapper">
+                <img src="assets/the-artist-is-present.webp" alt="Marina Abramović: The Artist Is Present (MoMA, 2010)" loading="lazy" />
+              </div>
+              <figcaption>
+                <div class="fig-caption-title">
+                  <span>Marina Abramović — The Artist Is Present (MoMA, 2010)</span>
+                  <a href="https://www.moma.org/calendar/exhibitions/964" target="_blank" class="fig-link">MoMA Archive ↗</a>
+                </div>
+                <p class="fig-caption-desc">
+                  Abramović's durational performance at MoMA examined the irreplaceable tension of human presence. In the age of generative models, we must ask
+                  whether the designer remains present or has abdicated agency to probabilistic autocomplete.
+                </p>
+              </figcaption>
+            </figure>
+
+            <p>
+              As generative AI systems flood the creative landscape with frictionless permutations, the danger is not that machines lack imagination—it is that
+              designers become spectator consumers in their own creative process. When a single prompt yields dozens of synthetic paintings, layouts, or
+              paragraphs, human intentionality is easily diluted into passive curation.
+            </p>
+
+            <div class="figure-split">
+              <figure class="media-figure" style="margin: 0">
+                <div class="figure-image-wrapper">
+                  <img src="assets/ai-isnt-going-to-make-art-title.webp" alt="Ted Chiang: Why A.I. Isn't Going to Make Art Title" loading="lazy" />
+                </div>
+                <figcaption>
+                  <div class="fig-caption-title">
+                    <span>The New Yorker Headline</span>
+                    <a href="https://www.newyorker.com/culture/the-weekend-essay/why-ai-isnt-going-to-make-art" target="_blank" class="fig-link"
+                      >Read Essay ↗</a
+                    >
+                  </div>
+                  <p class="fig-caption-desc">Ted Chiang's August 2024 cultural critique on artistic choice and artificial intelligence.</p>
+                </figcaption>
+              </figure>
+
+              <figure class="media-figure" style="margin: 0">
+                <div class="figure-image-wrapper">
+                  <img src="assets/ai-isnt-going-to-make-art.webp" alt="Ted Chiang Essay Illustration" loading="lazy" />
+                </div>
+                <figcaption>
+                  <div class="fig-caption-title">
+                    <span>The Micro-Choice Argument</span>
+                    <span class="fig-link">August 31, 2024</span>
+                  </div>
+                  <p class="fig-caption-desc">
+                    Artistic creation consists of thousands of conscious micro-choices fundamentally alien to token-prediction architectures.
+                  </p>
+                </figcaption>
+              </figure>
+            </div>
+
+            <div class="pull-quote">
+              "To create a novel or a painting, an artist makes choices that are fundamentally alien to artificial intelligence. Art is not a product of
+              effortless generation; it is the sum of ten thousand deliberate decisions, compromises, and points of resistance."
+              <span class="pull-quote-citation">— Ted Chiang, <em>Why A.I. Isn't Going to Make Art</em> (The New Yorker, 2024)</span>
+            </div>
+
+            <p>
+              This workshop is founded on the conviction that generative AI must not reduce design to conversational prompting. Rather, it must expand design
+              into a rigorous, high-leverage computational discipline where the human designer exercises heightened intentionality, geometric grounding, and
+              direct agency over machine substrates.
+            </p>
+          </section>
+
+          <!-- Section 2: About Me & Pedagogical Intent -->
+          <section id="about">
+            <h2 class="section-heading">
+              <span class="heading-num">02</span>
+              Pedagogical Intent: Becoming Exponentially Creative
+            </h2>
+
+            <p>
+              As an ex-software engineer and 2nd-year master's researcher who built over 50 experimental AI and computational design systems over the past year,
+              I designed this workshop to bridge the chasm between raw computer science research and expressive creative practice.
+            </p>
+
+            <div class="grid-3">
+              <div class="card">
+                <span class="card-badge">Objective I</span>
+                <div class="card-title">Escape the Chatbot Box</div>
+                <p class="card-body">
+                  Chat bubbles are an impoverished interface for design. We build spatial, gestural, voice-driven, and direct-manipulation tools that treat
+                  models as semantic rendering engines.
+                </p>
+              </div>
+
+              <div class="card">
+                <span class="card-badge">Objective II</span>
+                <div class="card-title">Ground Generative Volatility</div>
+                <p class="card-body">
+                  Move past prompt-luck by coupling generative models with deterministic constraints: ASTs, type systems, vector mathematics, and qualitative
+                  grounded theory.
+                </p>
+              </div>
+
+              <div class="card">
+                <span class="card-badge">Objective III</span>
+                <div class="card-title">More Than Human Agency</div>
+                <p class="card-body">
+                  Equip participants to develop their own software extensions, custom interactive agents, and tangible interfaces that expand what human-machine
+                  symbiosis can achieve.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Section 3: New Frontiers - Five Major Trends -->
+          <section id="new-frontiers">
+            <h2 class="section-heading">
+              <span class="heading-num">03</span>
+              New Frontiers: Beyond the Chatbot Paradigm
+            </h2>
+            <p>
+              To understand where interaction design is heading, we must look beyond commercial chat interfaces to what frontier research laboratories and
+              hardware architects are constructing. Five decisive technological shifts are redefining the creative substrate.
+            </p>
+
+            <!-- Trend 1: LLM Semantic Rendering -->
+            <div id="trend-1" style="margin-top: 40px">
+              <h3 class="sub-heading">
+                <span class="indicator"></span>
+                Trend 1: LLMs from Token Generation to Semantic Rendering
+              </h3>
+              <p>
+                The initial era of LLMs was characterized by slow, token-by-token character streaming inside isolated chat windows. Today, custom inference
+                hardware and typed grammar engines have transformed language models into near-instantaneous <strong>semantic compilers</strong>. Models no
+                longer merely emit prose; they render interactive UI widgets, abstract syntax trees (ASTs), and executable state machines in milliseconds.
+              </p>
+
+              <div class="logo-strip">
+                <span style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600">Hardware & Platforms:</span>
+                <div class="logo-chip">
+                  <img src="assets/groq-logo.svg" alt="Groq Logo" />
+                  <span>Groq LPU</span>
+                </div>
+                <div class="logo-chip">
+                  <img src="assets/cerebras-logo.webp" alt="Cerebras Logo" />
+                  <span>Cerebras Systems</span>
+                </div>
+                <div class="logo-chip">
+                  <img src="assets/typesafe-ai-logo.webp" alt="TypeSafe AI Logo" />
+                  <span>TypeSafe AI (Jev)</span>
+                </div>
+              </div>
+
+              <div class="figure-split">
+                <figure class="media-figure" style="margin: 0">
+                  <div class="figure-image-wrapper">
+                    <img src="assets/groq-fast-inference-lpu.webp" alt="Groq Fast LPU Inference" loading="lazy" />
+                  </div>
+                  <figcaption>
+                    <div class="fig-caption-title">
+                      <span>Groq Language Processing Units (LPUs)</span>
+                      <a href="https://groq.com/" target="_blank" class="fig-link">groq.com ↗</a>
+                    </div>
+                    <p class="fig-caption-desc">
+                      Deterministic tensor streaming enables sub-10ms token generation, making LLM responses feel as responsive as local graphics rendering.
+                    </p>
+                  </figcaption>
+                </figure>
+
+                <figure class="media-figure" style="margin: 0">
+                  <div class="figure-image-wrapper">
+                    <img src="assets/cerebras-wafer-scale-engine.webp" alt="Cerebras Wafer Scale Engine" loading="lazy" />
+                  </div>
+                  <figcaption>
+                    <div class="fig-caption-title">
+                      <span>Cerebras Wafer-Scale Engine</span>
+                      <a href="https://cerebras.ai/" target="_blank" class="fig-link">cerebras.ai ↗</a>
+                    </div>
+                    <p class="fig-caption-desc">
+                      Giant single-chip silicon architecture eliminates memory bandwidth bottlenecks for massive interactive model execution.
+                    </p>
+                  </figcaption>
+                </figure>
+              </div>
+
+              <figure class="media-figure">
+                <div class="figure-image-wrapper">
+                  <img src="assets/typesafe-jev-semantic-rendering.webp" alt="TypeSafe AI Jev Semantic Code Generation" loading="lazy" />
+                </div>
+                <figcaption>
+                  <div class="fig-caption-title">
+                    <span>TypeSafe AI — Jev Semantic UI & Code Rendering</span>
+                    <a href="https://typesafe.ai/" target="_blank" class="fig-link">typesafe.ai ↗</a>
+                  </div>
+                  <p class="fig-caption-desc">
+                    Instead of unstructured natural language, systems like Jev emit strongly typed, verifiable UI schemas directly into browser runtimes,
+                    bridging AI output with deterministic frontend architectures.
+                  </p>
+                </figcaption>
+              </figure>
+            </div>
+
+            <!-- Trend 2: Affective Voice -->
+            <div id="trend-2" style="margin-top: 56px">
+              <h3 class="sub-heading">
+                <span class="indicator"></span>
+                Trend 2: Voice from Synthesis to Affective Enactment
+              </h3>
+              <p>
+                Traditional Text-to-Speech (TTS) was robotic, monotonic, and unidirectional. The state of the art has transitioned to
+                <strong>affective voice enactment</strong>—bidirectional, low-latency audio models capable of real-time interruption, dynamic prosody, vocal
+                inflections, emotional calibration, and half/full-duplex transcription.
+              </p>
+
+              <div class="logo-strip">
+                <span style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600">Voice Intelligence:</span>
+                <div class="logo-chip">
+                  <img src="assets/elevenlabs-logo.svg" alt="ElevenLabs Logo" />
+                  <span>ElevenLabs</span>
+                </div>
+                <div class="logo-chip">
+                  <img src="assets/google-gemini-logo.svg" alt="Gemini Logo" />
+                  <span>Gemini Live</span>
+                </div>
+                <div class="logo-chip">
+                  <img src="assets/openai-logo.svg" alt="OpenAI Logo" />
+                  <span>GPT Realtime</span>
+                </div>
+              </div>
+
+              <div class="figure-split">
+                <figure class="media-figure" style="margin: 0">
+                  <div class="figure-image-wrapper">
+                    <img src="assets/elevenlabs-voice-agents.webp" alt="ElevenLabs Conversational Voice Agents" loading="lazy" />
+                  </div>
+                  <figcaption>
+                    <div class="fig-caption-title">
+                      <span>ElevenLabs Conversational Agents</span>
+                      <a href="https://elevenlabs.io/" target="_blank" class="fig-link">elevenlabs.io ↗</a>
+                    </div>
+                    <p class="fig-caption-desc">Sub-200ms expressive vocal synthesis with human-like breathing, hesitation, and emotional nuance.</p>
+                  </figcaption>
+                </figure>
+
+                <figure class="media-figure" style="margin: 0">
+                  <div class="figure-image-wrapper">
+                    <img src="assets/gemini-live-affective-voice.webp" alt="Google Gemini Live Multi-Modal Voice Interface" loading="lazy" />
+                  </div>
+                  <figcaption>
+                    <div class="fig-caption-title">
+                      <span>Google Gemini Live</span>
+                      <a href="https://gemini.google/overview/gemini-live/" target="_blank" class="fig-link">gemini.google ↗</a>
+                    </div>
+                    <p class="fig-caption-desc">
+                      Native audio-to-audio multimodal models that process tone, cadence, and ambient sound directly without intermediate text transcription.
+                    </p>
+                  </figcaption>
+                </figure>
+              </div>
+
+              <p>
+                In the workshop demos (e.g. <em>Time Travel Radio</em>), we exploit browser-native Web Speech synthesis and Web Audio DSP filters to modulate
+                vocal age, rate, pitch, and timbre dynamically as users navigate historical eras across the 20th and 21st centuries.
+              </p>
+            </div>
+
+            <!-- Trend 3: Realtime Latent Image Rendering -->
+            <div id="trend-3" style="margin-top: 56px">
+              <h3 class="sub-heading">
+                <span class="indicator"></span>
+                Trend 3: Image from Generating Artifacts to Realtime Canvas Rendering
+              </h3>
+              <p>
+                Diffusion models have escaped the "prompt-and-wait-30-seconds" paradigm. Through rectified flow matching and distilled architectures (such as
+                FLUX.1, FLUX.2 Klein, and SDXL Turbo), image synthesis now occurs at <strong>interactive 30–60 FPS speeds</strong>.
+              </p>
+
+              <div class="logo-strip">
+                <span style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600">Realtime Image Engines:</span>
+                <div class="logo-chip">
+                  <img src="assets/black-forest-labs-logo.webp" alt="BFL Logo" />
+                  <span>Black Forest Labs</span>
+                </div>
+                <div class="logo-chip">
+                  <img src="assets/fal-flux-klein-realtime.webp" alt="fal.ai Icon" style="border-radius: 4px" />
+                  <span>fal.ai Realtime</span>
+                </div>
+              </div>
+
+              <div class="figure-split">
+                <figure class="media-figure" style="margin: 0">
+                  <div class="figure-image-wrapper">
+                    <img src="assets/black-forest-labs-flux-image.webp" alt="Black Forest Labs FLUX Image Generation" loading="lazy" />
+                  </div>
+                  <figcaption>
+                    <div class="fig-caption-title">
+                      <span>Black Forest Labs (FLUX)</span>
+                      <a href="https://bfl.ai/" target="_blank" class="fig-link">bfl.ai ↗</a>
+                    </div>
+                    <p class="fig-caption-desc">
+                      State-of-the-art 12B parameter flow-transformer models providing unprecedented typographic precision and spatial fidelity.
+                    </p>
+                  </figcaption>
+                </figure>
+
+                <figure class="media-figure" style="margin: 0">
+                  <div class="figure-image-wrapper">
+                    <img src="assets/fal-flux-klein-realtime.webp" alt="fal.ai FLUX Klein Realtime" loading="lazy" />
+                  </div>
+                  <figcaption>
+                    <div class="fig-caption-title">
+                      <span>fal.ai / FLUX.2 [Klein] Realtime</span>
+                      <a href="https://fal.ai/models/fal-ai/flux-2/klein/realtime" target="_blank" class="fig-link">fal.ai ↗</a>
+                    </div>
+                    <p class="fig-caption-desc">
+                      Sub-100ms image-to-image feedback loops transform generative models into dynamic, brush-like interactive painting instruments.
+                    </p>
+                  </figcaption>
+                </figure>
+              </div>
+
+              <p>
+                When generative latency falls below 100 milliseconds, the human mind transitions from treating the tool as an asynchronous oracle to
+                experiencing it as a direct physical prosthetic—enabling fluid <em>semantic sculpting</em>.
+              </p>
+            </div>
+
+            <!-- Trend 4: Spatial World Models -->
+            <div id="trend-4" style="margin-top: 56px">
+              <h3 class="sub-heading">
+                <span class="indicator"></span>
+                Trend 4: Video Generation & Interactive Spatial World Models
+              </h3>
+              <p>
+                Beyond 2D pixel grids lies the frontier of <strong>Spatial Intelligence</strong>. Instead of generating flat video clips, foundational research
+                labs are training models to understand 3D geometry, object permanence, camera kinematics, and physical interaction.
+              </p>
+
+              <div class="logo-strip">
+                <span style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600">World Models & 3D:</span>
+                <div class="logo-chip">
+                  <img src="assets/world-labs-logo.webp" alt="World Labs Logo" />
+                  <span>World Labs (Marble)</span>
+                </div>
+                <div class="logo-chip">
+                  <img src="assets/tencent-hunyuan-logo.svg" alt="Tencent Hunyuan Logo" />
+                  <span>Tencent Hunyuan HY-World</span>
+                </div>
+                <div class="logo-chip">
+                  <img src="assets/google-gemini-logo.svg" alt="DeepMind Logo" />
+                  <span>DeepMind Genie</span>
+                </div>
+              </div>
+
+              <div class="figure-split">
+                <figure class="media-figure" style="margin: 0">
+                  <div class="figure-image-wrapper">
+                    <img src="assets/world-labs-marble-spatial-intelligence.webp" alt="World Labs Marble Spatial Intelligence" loading="lazy" />
+                  </div>
+                  <figcaption>
+                    <div class="fig-caption-title">
+                      <span>World Labs — Marble Spatial Intelligence</span>
+                      <a href="https://www.worldlabs.ai/" target="_blank" class="fig-link">worldlabs.ai ↗</a>
+                    </div>
+                    <p class="fig-caption-desc">
+                      Founded by Fei-Fei Li, World Labs develops Large World Models (LWMs) capable of generating persistent, physically-navigable 3D
+                      environments.
+                    </p>
+                  </figcaption>
+                </figure>
+
+                <figure class="media-figure" style="margin: 0">
+                  <div class="figure-image-wrapper">
+                    <img src="assets/tencent-hunyuan-hy-world.webp" alt="Tencent Hunyuan HY-World 2.0" loading="lazy" />
+                  </div>
+                  <figcaption>
+                    <div class="fig-caption-title">
+                      <span>Tencent Hunyuan — HY-World 2.0</span>
+                      <a href="https://github.com/Tencent-Hunyuan/HY-World-2.0" target="_blank" class="fig-link">GitHub ↗</a>
+                    </div>
+                    <p class="fig-caption-desc">
+                      Open-source multimodal world simulation platform modeling dynamic physics, object interactions, and 3D scenes.
+                    </p>
+                  </figcaption>
+                </figure>
+              </div>
+            </div>
+
+            <!-- Trend 5: Realtime Local Computer Vision -->
+            <div id="trend-5" style="margin-top: 56px">
+              <h3 class="sub-heading">
+                <span class="indicator"></span>
+                Trend 5: Computer Vision Goes Local and Real-Time
+              </h3>
+              <p>
+                By moving inference directly into the browser via WebAssembly (WASM), WebGPU, and Google MediaPipe, spatial tracking no longer depends on cloud
+                servers. Designers can now build high-frequency gestural interfaces that track 21 3D hand landmarks at 60 FPS locally with zero network latency
+                and complete user privacy.
+              </p>
+              <div class="card" style="margin: 20px 0">
+                <span class="card-badge">Workshop Demo Component</span>
+                <div class="card-title">Client-Side MediaPipe Gesture Matrix</div>
+                <p class="card-body">
+                  In our hands-on demo (<code>demos/hand-tracking/hand-tracking.html</code>), MediaPipe's client-side neural network maps pinching, pointing,
+                  and palm orientation to parameter vectors, allowing users to physically sculpt generative prompts in mid-air.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Section 4: Emerging Discipline -->
+          <section id="emerging-discipline">
+            <h2 class="section-heading">
+              <span class="heading-num">04</span>
+              Emerging Disciplines: More Than Human & Spatial Systems
+            </h2>
+
+            <p>
+              As AI entities gain agency, interaction design is forced to mature beyond traditional screen-bound usability rubrics. Two critical frontiers
+              define this emerging discipline:
+            </p>
+
+            <h3 class="sub-heading">
+              <span class="indicator"></span>
+              More Than Human: Relational Design & Entity Welfare
+            </h3>
+            <p>
+              How should human society relate to non-human cognitive systems? The industry is engaged in a profound debate between human-centric utilitarianism
+              and relational entity ethics.
+            </p>
+
+            <div class="logo-strip">
+              <span style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600">Governance & Ethics:</span>
+              <div class="logo-chip">
+                <img src="assets/microsoft-ai-logo.svg" alt="Microsoft AI Logo" />
+                <span>Microsoft AI</span>
+              </div>
+              <div class="logo-chip">
+                <img src="assets/anthropic-logo.svg" alt="Anthropic Logo" />
+                <span>Anthropic</span>
+              </div>
+              <div class="logo-chip">
+                <img src="assets/openai-logo.svg" alt="OpenAI Logo" />
+                <span>OpenAI</span>
+              </div>
+            </div>
+
+            <div class="figure-split">
+              <figure class="media-figure" style="margin: 0">
+                <div class="figure-image-wrapper">
+                  <img src="assets/microsoft-humanist-ai-code-of-conduct.webp" alt="Microsoft Humanist AI Code of Conduct" loading="lazy" />
+                </div>
+                <figcaption>
+                  <div class="fig-caption-title">
+                    <span>Microsoft AI — Humanist Code of Conduct</span>
+                    <a href="https://microsoft.ai/code-of-conduct/" target="_blank" class="fig-link">microsoft.ai ↗</a>
+                  </div>
+                  <p class="fig-caption-desc">Focuses on human flourishing, ethical alignment, user control, and preventing algorithmic deception.</p>
+                </figcaption>
+              </figure>
+
+              <figure class="media-figure" style="margin: 0">
+                <div class="figure-image-wrapper">
+                  <img src="assets/anthropic-exploring-model-welfare.webp" alt="Anthropic Exploring Model Welfare" loading="lazy" />
+                </div>
+                <figcaption>
+                  <div class="fig-caption-title">
+                    <span>Anthropic — Exploring Model Welfare</span>
+                    <a href="https://www.anthropic.com/research/exploring-model-welfare" target="_blank" class="fig-link">anthropic.com ↗</a>
+                  </div>
+                  <p class="fig-caption-desc">
+                    Pioneering philosophical and empirical frameworks evaluating whether advanced AI systems can possess morally relevant interests.
+                  </p>
+                </figcaption>
+              </figure>
+            </div>
+
+            <h3 class="sub-heading" style="margin-top: 48px">
+              <span class="indicator"></span>
+              Spatial, Embodied, and Physical Systems
+            </h3>
+            <p>
+              Modern multimodal spatial assistants, such as OpenAI's Astra, are the intellectual descendants of seminal spatial computing research conducted
+              over four decades ago at MIT.
+            </p>
+
+            <div class="figure-split">
+              <figure class="media-figure" style="margin: 0">
+                <div class="figure-image-wrapper">
+                  <img src="assets/openai-gpt6-astra-spatial.webp" alt="OpenAI Astra Spatial Assistant" loading="lazy" />
+                </div>
+                <figcaption>
+                  <div class="fig-caption-title">
+                    <span>OpenAI Astra (2024–2026)</span>
+                    <a href="https://openai.com/index/gpt-6-astra/" target="_blank" class="fig-link">openai.com ↗</a>
+                  </div>
+                  <p class="fig-caption-desc">Universal multimodal assistant observing ambient physical environments through real-time video feed.</p>
+                </figcaption>
+              </figure>
+
+              <figure class="media-figure" style="margin: 0">
+                <div class="figure-image-wrapper">
+                  <img src="assets/mit-put-that-there-bolt-1980.webp" alt="MIT Put That There Richard Bolt 1980" loading="lazy" />
+                </div>
+                <figcaption>
+                  <div class="fig-caption-title">
+                    <span>MIT "Put-That-There" (Richard A. Bolt, 1980)</span>
+                    <a href="https://youtu.be/RyBEUyEtxQo?si=W6NHnF4dMaWmfTVP" target="_blank" class="fig-link">Watch Archival Demo ↗</a>
+                  </div>
+                  <p class="fig-caption-desc">
+                    Seminal demonstration at the MIT Architecture Machine Group uniting deictic gesture pointing with natural voice commands.
+                  </p>
+                </figcaption>
+              </figure>
+            </div>
+          </section>
+
+          <!-- Section 5: The Direct Agency Debate -->
+          <section id="direct-agency">
+            <h2 class="section-heading">
+              <span class="heading-num">05</span>
+              Direct Agency: The Shneiderman vs. Maes Debate Reconciled
+            </h2>
+
+            <p>
+              At the 1997 ACM Conference on Human Factors in Computing Systems (CHI), computer scientists <strong>Ben Shneiderman</strong> and
+              <strong>Pattie Maes</strong> engaged in one of the most foundational debates in interface history:
+              <em>Direct Manipulation versus Autonomous Interface Agents</em>.
+            </p>
+
+            <div class="comparison-container">
+              <div class="compare-card left">
+                <div class="compare-header">
+                  <img src="assets/ben-shneiderman-direct-manipulation.webp" alt="Ben Shneiderman" class="avatar" />
+                  <div>
+                    <div class="compare-name">Ben Shneiderman</div>
+                    <div class="compare-sub">Direct Manipulation Pioneer</div>
+                  </div>
+                </div>
+                <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 12px">
+                  <strong>The Stance:</strong> Users demand mastery, predictability, visual feedback, and direct tactile control over system objects. Autonomous
+                  agents introduce opacity, unpredictability, and loss of human agency.
+                </p>
+                <div class="card-badge" style="color: var(--accent-blue); background: rgba(59, 130, 246, 0.1); border-color: rgba(59, 130, 246, 0.25)">
+                  Principle: Tactile Mastery & Visual Scaffolding
+                </div>
+              </div>
+
+              <div class="compare-card right">
+                <div class="compare-header">
+                  <img src="assets/pattie-maes-interface-agents.webp" alt="Pattie Maes" class="avatar" />
+                  <div>
+                    <div class="compare-name">Pattie Maes</div>
+                    <div class="compare-sub">MIT Media Lab Agent Pioneer</div>
+                  </div>
+                </div>
+                <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 12px">
+                  <strong>The Stance:</strong> As system complexity explodes, direct manipulation becomes a tedious bottleneck. Users require intelligent,
+                  autonomous agents that learn user habits, anticipate intent, and execute high-level tasks.
+                </p>
+                <div class="card-badge" style="color: var(--accent-purple); background: rgba(168, 85, 247, 0.1); border-color: rgba(168, 85, 247, 0.25)">
+                  Principle: Delegated Autonomy & Adaptive Assistance
+                </div>
+              </div>
+            </div>
+
+            <div
+              class="card"
+              style="background: linear-gradient(135deg, rgba(0, 210, 196, 0.08) 0%, rgba(24, 29, 36, 0.9) 100%); border-color: rgba(0, 210, 196, 0.3)"
+            >
+              <div class="card-title" style="color: var(--accent-cyan)">The Modern Synthesis: Semantic Sculpting & Direct Agency</div>
+              <p class="card-body" style="color: var(--text-primary)">
+                In our computational design framework, we reconcile Shneiderman and Maes. We reject opaque autonomous black boxes (Maes taken to extreme) and
+                tedious manual micro-drawing (Shneiderman without AI). Instead, we build <strong>Direct Agency Interfaces</strong>: the AI agent supplies
+                infinite generative substrate and semantic understanding, while the human designer wields high-bandwidth continuous controls (gestures, sliders,
+                rubrics, spatial anchors) to sculpt that latent substrate with total authorial precision.
+              </p>
+            </div>
+          </section>
+
+          <!-- Section 6: The Generative Triad -->
+          <section id="design-triad">
+            <h2 class="section-heading">
+              <span class="heading-num">06</span>
+              New (Old) Ways to Design: The Generative Triad
+            </h2>
+
+            <p>How do we structure a rigorous creative workflow with generative systems? We anchor computational design in a time-tested formula:</p>
+
+            <div class="triad-flow">
+              <div class="triad-step">
+                <div class="triad-step-num">STAGE 01</div>
+                <div class="triad-step-title">Generate</div>
+                <div class="triad-step-desc">
+                  Divergent exploration, combinatorial permutations, high-volume production, and semantic hallucination under loose constraints.
+                </div>
+              </div>
+
+              <div class="triad-step">
+                <div class="triad-step-num">STAGE 02</div>
+                <div class="triad-step-title">Evaluate</div>
+                <div class="triad-step-desc">
+                  Convergent critique, programmatic quantification, design rubrics, multidimensional sorting, and virtual prototyping.
+                </div>
+              </div>
+
+              <div class="triad-step">
+                <div class="triad-step-num">STAGE 03</div>
+                <div class="triad-step-title">Curate</div>
+                <div class="triad-step-desc">
+                  Embedding clustering, grounded theory synthesis, active human preference steering, and intentional theoretical assembly.
+                </div>
+              </div>
+            </div>
+
+            <!-- Phase 1: Generate -->
+            <h3 class="sub-heading" style="margin-top: 48px">
+              <span class="indicator"></span>
+              Phase 1: Generate — Why Quantity Unlocks Quality
+            </h3>
+            <p>
+              In their classic 1993 book <em>Art & Fear</em>, David Bayles and Ted Orland recount the legendary ceramics grading experiment: a ceramics teacher
+              divided the class into two halves. Half the students were graded strictly on the <strong>weight</strong> of clay produced (quantity), while the
+              other half were graded on a single perfect pot (quality). When grading day arrived, a curious fact emerged:
+              <em>the works of highest quality were all produced by the group being graded for quantity</em>. While the quantity group churned out pots and
+              learned from every mistake, the quality group sat theorizing and produced little more than grand plans and mediocre clay.
+            </p>
+
+            <div class="figure-split">
+              <figure class="media-figure" style="margin: 0">
+                <div class="figure-image-wrapper">
+                  <img src="assets/art-and-fear-quantity-over-quality.webp" alt="Art and Fear Book Cover" loading="lazy" />
+                </div>
+                <figcaption>
+                  <div class="fig-caption-title">
+                    <span>Art & Fear (Bayles & Orland, 1993)</span>
+                    <a href="https://archive.org/details/artfearobservati0000bayl" target="_blank" class="fig-link">Archive.org ↗</a>
+                  </div>
+                  <p class="fig-caption-desc">The seminal text on creative resistance and the empirical supremacy of volume over perfectionism.</p>
+                </figcaption>
+              </figure>
+
+              <figure class="media-figure" style="margin: 0">
+                <div class="figure-image-wrapper">
+                  <img src="assets/cryptopunks-combinatorial-design.webp" alt="CryptoPunks Combinatorial Generative Matrix" loading="lazy" />
+                </div>
+                <figcaption>
+                  <div class="fig-caption-title">
+                    <span>CryptoPunks (Larva Labs, 2017)</span>
+                    <a href="https://cryptopunks.app/" target="_blank" class="fig-link">cryptopunks.app ↗</a>
+                  </div>
+                  <p class="fig-caption-desc">
+                    Combinatorial design matrix forcing algorithmic generation across orthogonal trait dimensions (hair, eyewear, accessories).
+                  </p>
+                </figcaption>
+              </figure>
+            </div>
+
+            <h4 class="topic-heading">Six Practical Generation Techniques:</h4>
+            <div class="grid-2">
+              <div class="card">
+                <div class="card-title">1. Combinatorial Exploration</div>
+                <p class="card-body">Force models to cross orthogonal parameter vectors (e.g. style, era, constraint, medium) to prevent mode collapse.</p>
+              </div>
+              <div class="card">
+                <div class="card-title">2. Geometric & Parametric Grounding</div>
+                <p class="card-body">Constrain LLM outputs to parametric bounding boxes, void shapes, or strict 3D scene graphs rather than raw text.</p>
+              </div>
+              <div class="card">
+                <div class="card-title">3. Granola / Artifact Grounding</div>
+                <p class="card-body">Feed the system authentic, lived-experience data: raw audio logs, messy sketchbook transcriptions, and personal notes.</p>
+              </div>
+              <div class="card">
+                <div class="card-title">4. Self-Interview (Reverse Prompting)</div>
+                <p class="card-body">Instruct the AI to interview you as an inquisitive journalist to extract latent intentions before generating solutions.</p>
+              </div>
+              <div class="card">
+                <div class="card-title">5. Annotated Bibliography Grounding</div>
+                <p class="card-body">
+                  Anchor idea generation in academic literature reviews to navigate away from derivative clichés and towards original frontiers.
+                </p>
+              </div>
+              <div class="card">
+                <div class="card-title">6. Synthetic Multi-Agent Simulation</div>
+                <p class="card-body">Spawn multiple simulated user personas with conflicting goals to stress-test concepts in simulated environments.</p>
+              </div>
+            </div>
+
+            <!-- Phase 2: Evaluate -->
+            <h3 class="sub-heading" style="margin-top: 56px">
+              <span class="indicator"></span>
+              Phase 2: Evaluate — Divergent & Convergent Thinking
+            </h3>
+            <p>
+              Where did the iconic <strong>Double Diamond</strong> innovation model originate? In the 1950s, psychologist J.P. Guilford and advertising pioneer
+              Alex Osborn (author of the 1953 classic <em>Applied Imagination</em>) introduced the cognitive framework of
+              <strong>Divergent Thinking</strong> (broad, non-judgmental option generation) followed by <strong>Convergent Thinking</strong> (critical
+              analytical evaluation and sorting). This was later formalized by the UK Design Council into the Double Diamond.
+            </p>
+
+            <div class="figure-split">
+              <figure class="media-figure" style="margin: 0">
+                <div class="figure-image-wrapper">
+                  <img src="assets/applied-imagination-alex-osborn.webp" alt="Applied Imagination Alex Osborn 1953" loading="lazy" />
+                </div>
+                <figcaption>
+                  <div class="fig-caption-title">
+                    <span>Applied Imagination (Alex Osborn, 1953)</span>
+                    <a href="https://archive.org/details/appliedimaginati00osbo" target="_blank" class="fig-link">Archive.org ↗</a>
+                  </div>
+                  <p class="fig-caption-desc">Foundational text establishing brainstorming and formalizing divergent versus convergent ideation cycles.</p>
+                </figcaption>
+              </figure>
+
+              <figure class="media-figure" style="margin: 0">
+                <div class="figure-image-wrapper">
+                  <img src="assets/design-council-double-diamond.webp" alt="Design Council Double Diamond Innovation Framework" loading="lazy" />
+                </div>
+                <figcaption>
+                  <div class="fig-caption-title">
+                    <span>Design Council Double Diamond (2004)</span>
+                    <a href="https://www.designcouncil.org.uk/our-resources/framework-for-innovation/" target="_blank" class="fig-link">Design Council ↗</a>
+                  </div>
+                  <p class="fig-caption-desc">
+                    The four-phase innovation framework: Discover (diverge), Define (converge), Develop (diverge), Deliver (converge).
+                  </p>
+                </figcaption>
+              </figure>
+            </div>
+
+            <h4 class="topic-heading">Evaluation Methodologies in AI Design:</h4>
+            <ul style="padding-left: 24px; margin-bottom: 20px; color: var(--text-secondary)">
+              <li style="margin-bottom: 8px">
+                <strong>Quantification & Programmatic Rubrics:</strong> Scoring generated variants against multi-attribute matrices (feasibility, novelty,
+                semantic alignment, user friction).
+              </li>
+              <li style="margin-bottom: 8px">
+                <strong>Data Visualization & Vector Distance:</strong> Projecting candidate embeddings onto 2D UMAP/t-SNE maps to identify clusters, outliers,
+                and unexplored white space.
+              </li>
+              <li style="margin-bottom: 8px">
+                <strong>Virtual Prototyping:</strong> Building interactive, throwaway Web micro-apps (e.g. <em>Time Travel Radio</em>) to evaluate auditory and
+                tactile ergonomics before writing production code.
+              </li>
+            </ul>
+
+            <!-- Phase 3: Curate -->
+            <h3 class="sub-heading" style="margin-top: 56px">
+              <span class="indicator"></span>
+              Phase 3: Curate — Theory-Making & The Ethics of Care
+            </h3>
+            <p>
+              The word <strong>Curate</strong> originates from the Latin <em>curare</em>, meaning "to care for." Curation is not passive filtering; it is an act
+              of deep synthesis, intellectual stewardship, and framework formulation.
+            </p>
+
+            <figure class="media-figure">
+              <div class="figure-image-wrapper">
+                <img
+                  src="assets/grounded-theory-glaser-strauss.webp"
+                  alt="The Discovery of Grounded Theory Barney Glaser and Anselm Strauss 1967"
+                  loading="lazy"
+                />
+              </div>
+              <figcaption>
+                <div class="fig-caption-title">
+                  <span>The Discovery of Grounded Theory (Glaser & Strauss, 1967)</span>
+                  <a
+                    href="https://www.routledge.com/The-Discovery-of-Grounded-Theory-Strategies-for-Qualitative-Research/Glaser-Strauss/p/book/9780202302607"
+                    target="_blank"
+                    class="fig-link"
+                    >Routledge ↗</a
+                  >
+                </div>
+                <p class="fig-caption-desc">
+                  Sociological methodology for deriving theories inductively from qualitative evidence—the theoretical foundation for organizing unstructured AI
+                  outputs into coherent design frameworks.
+                </p>
+              </figcaption>
+            </figure>
+
+            <p>
+              By applying Grounded Theory methods—open coding, axial clustering, and selective integration—designers synthesize hundreds of raw generative
+              fragments into durable design systems and grounded conceptual theories.
+            </p>
+          </section>
+
+          <!-- Section 7: Hands-on Practice -->
+          <section id="hands-on">
+            <h2 class="section-heading">
+              <span class="heading-num">07</span>
+              Hands-On Studio Practice: Pod Challenge
+            </h2>
+
+            <div class="card" style="border-left: 4px solid var(--accent-warm); margin-bottom: 28px">
+              <div class="card-title" style="font-size: 1.25rem">The Challenge: Beyond the Chatbot Box</div>
+              <p class="card-body">
+                Working in <strong>groups of 3</strong>, design a radically new interaction modality for communicating with AI.
+                <em>You are strictly forbidden from building a standard conversational chat bubble interface.</em>
+              </p>
+            </div>
+
+            <div class="grid-2">
+              <div class="card">
+                <span class="card-badge">Step 1: Ground Intent</span>
+                <div class="card-title">Self-Interview & Lived Experience</div>
+                <p class="card-body">
+                  Interview your pod members. Extract personal, tangible design problems from your daily workflow. Avoid generic AI use cases.
+                </p>
+              </div>
+
+              <div class="card">
+                <span class="card-badge">Step 2: Literature Grounding</span>
+                <div class="card-title">Navigate Away from Clichés</div>
+                <p class="card-body">
+                  Perform rapid annotated bibliography research. Find at least two prior academic interaction paradigms (e.g. Bolt's <em>Put-That-There</em>).
+                </p>
+              </div>
+
+              <div class="card">
+                <span class="card-badge">Step 3: Generate & Evaluate</span>
+                <div class="card-title">Combinatorial Matrix & Rubric</div>
+                <p class="card-body">Generate 30+ concept permutations across sensory modalities. Quantify and rank them using a shared design rubric.</p>
+              </div>
+
+              <div class="card">
+                <span class="card-badge">Step 4: Prototype & Announce</span>
+                <div class="card-title">Virtual Prototype & Live Page</div>
+                <p class="card-body">
+                  Build a functional browser prototype using Web Speech, MediaPipe hand tracking, or real-time Canvas, accompanied by a public launch webpage.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Section 8: References -->
+          <section id="references">
+            <h2 class="section-heading">
+              <span class="heading-num">08</span>
+              Exhaustive Annotated References & Bibliography
+            </h2>
+
+            <div class="reference-list">
+              <div class="ref-entry">
+                <div class="ref-title">Marina Abramović: The Artist Is Present (2010)</div>
+                <div class="ref-details">Museum of Modern Art (MoMA) Exhibition Retrospective. Curated by Klaus Biesenbach.</div>
+                <a href="https://www.moma.org/calendar/exhibitions/964" target="_blank" class="ref-link">https://www.moma.org/calendar/exhibitions/964</a>
+              </div>
+
+              <div class="ref-entry">
+                <div class="ref-title">Ted Chiang: "Why A.I. Isn't Going to Make Art" (2024)</div>
+                <div class="ref-details">The New Yorker (The Weekend Essay, August 31, 2024). Cultural critique on art, labor, and intent.</div>
+                <a href="https://www.newyorker.com/culture/the-weekend-essay/why-ai-isnt-going-to-make-art" target="_blank" class="ref-link"
+                  >https://www.newyorker.com/culture/the-weekend-essay/why-ai-isnt-going-to-make-art</a
+                >
+              </div>
+
+              <div class="ref-entry">
+                <div class="ref-title">Richard A. Bolt: "Put-That-There": Voice and Gesture at the Graphics Interface (1980)</div>
+                <div class="ref-details">MIT Architecture Machine Group. ACM SIGGRAPH Computer Graphics, 14(3), 262–270.</div>
+                <a href="https://youtu.be/RyBEUyEtxQo?si=W6NHnF4dMaWmfTVP" target="_blank" class="ref-link">https://youtu.be/RyBEUyEtxQo?si=W6NHnF4dMaWmfTVP</a>
+              </div>
+
+              <div class="ref-entry">
+                <div class="ref-title">Ben Shneiderman & Pattie Maes: Direct Manipulation vs. Interface Agents (1997)</div>
+                <div class="ref-details">ACM Interactions, 4(6), 42–61. The seminal debate on autonomy vs. direct human control.</div>
+                <a href="https://dl.acm.org/doi/10.1145/267505.267514" target="_blank" class="ref-link">https://dl.acm.org/doi/10.1145/267505.267514</a>
+              </div>
+
+              <div class="ref-entry">
+                <div class="ref-title">David Bayles & Ted Orland: Art & Fear: Observations on the Perils (and Rewards) of Artmaking (1993)</div>
+                <div class="ref-details">Capra Press / Image Continuum. Origin of the quantity-over-quality ceramics experiment.</div>
+                <a href="https://archive.org/details/artfearobservati0000bayl" target="_blank" class="ref-link"
+                  >https://archive.org/details/artfearobservati0000bayl</a
+                >
+              </div>
+
+              <div class="ref-entry">
+                <div class="ref-title">Alex F. Osborn: Applied Imagination: Principles and Procedures of Creative Thinking (1953)</div>
+                <div class="ref-details">Charles Scribner's Sons. Introduced brainstorming and formalized divergent/convergent ideation.</div>
+                <a href="https://archive.org/details/appliedimaginati00osbo" target="_blank" class="ref-link"
+                  >https://archive.org/details/appliedimaginati00osbo</a
+                >
+              </div>
+
+              <div class="ref-entry">
+                <div class="ref-title">Barney G. Glaser & Anselm L. Strauss: The Discovery of Grounded Theory (1967)</div>
+                <div class="ref-details">Aldine Publishing Company. Methodological foundation for qualitative synthesis and theory formulation.</div>
+                <a
+                  href="https://www.routledge.com/The-Discovery-of-Grounded-Theory-Strategies-for-Qualitative-Research/Glaser-Strauss/p/book/9780202302607"
+                  target="_blank"
+                  class="ref-link"
+                  >https://www.routledge.com/The-Discovery-of-Grounded-Theory-Strategies-for-Qualitative-Research/Glaser-Strauss/p/book/9780202302607</a
+                >
+              </div>
+
+              <div class="ref-entry">
+                <div class="ref-title">Design Council: Framework for Innovation (The Double Diamond) (2004)</div>
+                <div class="ref-details">UK Design Council methodology for structured innovation across Discover, Define, Develop, Deliver.</div>
+                <a href="https://www.designcouncil.org.uk/our-resources/framework-for-innovation/" target="_blank" class="ref-link"
+                  >https://www.designcouncil.org.uk/our-resources/framework-for-innovation/</a
+                >
+              </div>
+
+              <div class="ref-entry">
+                <div class="ref-title">Anthropic: Exploring Model Welfare (2024–2026)</div>
+                <div class="ref-details">Anthropic Research on AI entity welfare, consciousness evaluation, and ethical AI development.</div>
+                <a href="https://www.anthropic.com/research/exploring-model-welfare" target="_blank" class="ref-link"
+                  >https://www.anthropic.com/research/exploring-model-welfare</a
+                >
+              </div>
+
+              <div class="ref-entry">
+                <div class="ref-title">Microsoft AI: Humanist AI Code of Conduct (2026)</div>
+                <div class="ref-details">Microsoft AI ethical charter on human agency, relational system bounds, and alignment.</div>
+                <a href="https://microsoft.ai/code-of-conduct/" target="_blank" class="ref-link">https://microsoft.ai/code-of-conduct/</a>
+              </div>
+
+              <div class="ref-entry">
+                <div class="ref-title">World Labs: Large World Models & Spatial Intelligence (2024–2026)</div>
+                <div class="ref-details">Fei-Fei Li et al. Developing 3D world models with persistent physical simulation.</div>
+                <a href="https://www.worldlabs.ai/" target="_blank" class="ref-link">https://www.worldlabs.ai/</a>
+              </div>
+
+              <div class="ref-entry">
+                <div class="ref-title">Tencent Hunyuan: HY-World 2.0 World Simulator (2025–2026)</div>
+                <div class="ref-details">Tencent AI Lab open-source interactive 3D world generation framework.</div>
+                <a href="https://github.com/Tencent-Hunyuan/HY-World-2.0" target="_blank" class="ref-link">https://github.com/Tencent-Hunyuan/HY-World-2.0</a>
+              </div>
+
+              <div class="ref-entry">
+                <div class="ref-title">Black Forest Labs: FLUX Diffusion Transformers (2024–2026)</div>
+                <div class="ref-details">Frontier 12B parameter flow matching architectures for high-speed generative synthesis.</div>
+                <a href="https://bfl.ai/" target="_blank" class="ref-link">https://bfl.ai/</a>
+              </div>
+
+              <div class="ref-entry">
+                <div class="ref-title">Groq & Cerebras Systems: Ultra-Low Latency Inference Infrastructure</div>
+                <div class="ref-details">Hardware breakthroughs in LPU tensor streaming and Wafer-Scale Engine processing.</div>
+                <a href="https://groq.com/" target="_blank" class="ref-link">https://groq.com/</a> |
+                <a href="https://cerebras.ai/" target="_blank" class="ref-link">https://cerebras.ai/</a>
+              </div>
+            </div>
+          </section>
+
+          <!-- Footer -->
+          <footer
+            style="
+              margin-top: 80px;
+              padding-top: 32px;
+              border-top: 1px solid var(--border-subtle);
+              font-size: 0.85rem;
+              color: var(--text-muted);
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              flex-wrap: wrap;
+              gap: 16px;
+            "
+          >
+            <div>Re:design Workshop © 2026. MIT Computational Design & Human-AI Collaboration.</div>
+            <div>Built for humans and machines.</div>
+          </footer>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>
