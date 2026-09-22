@@ -225,6 +225,21 @@
       .slide.slide--swapped .media--swap img:last-child {
         display: block;
       }
+      .quote--swap {
+        display: grid;
+        align-items: center;
+      }
+      .quote--swap > * {
+        grid-area: 1 / 1;
+      }
+      .quote--swap > :first-child {
+        transition: opacity 0.12s steps(1);
+      }
+      .slide:has(.is-visible) .quote--swap > :first-child,
+      .slide.slide--swapped .quote--swap > :first-child {
+        opacity: 0;
+        pointer-events: none;
+      }
       figcaption {
         font-family: var(--mono);
         font-size: clamp(10px, min(1.1vw, 1.4vh), 14px);
@@ -1395,20 +1410,22 @@
             </div>
           </figure>
 
-          <div style="display: flex; flex-direction: column; justify-content: center; gap: 1em">
-            <h2 class="headline">“What I cannot <span class="invert" style="background: #fff; color: #000">make, </span></h2>
-            <h2 class="headline">I did not <span class="invert" style="background: #fff; color: #000">understand.</span>”</h3>
-          </div>
+          <div class="quote--swap">
+            <div style="display: flex; flex-direction: column; justify-content: center; gap: 1em">
+              <h2 class="headline">“What I cannot <span class="invert" style="background: #fff; color: #000">create,</span></h2>
+              <h2 class="headline">I do not <span class="invert" style="background: #fff; color: #000">understand.</span>”</h2>
+            </div>
 
-          <div style="display: flex; flex-direction: column; justify-content: center; gap: 1em">
-            <h2 class="headline">“What I did not <span class="invert" style="background: #fff; color: #000">decide,</span></h2>
-            <h2 class="headline">I never <span class="invert" style="background: #fff; color: #000">made.</span>”</h2>
+            <div class="fragment" style="display: flex; flex-direction: column; justify-content: center; gap: 1em">
+              <h2 class="headline">“What I did not <span class="invert" style="background: #fff; color: #000">decide,</span></h2>
+              <h2 class="headline">I never <span class="invert" style="background: #fff; color: #000">made.</span>”</h2>
+            </div>
           </div>
         </div>
         <aside class="notes">
           <ul>
             <li>Inverting Richard Feynman’s famous chalkboard dictum: “What I did not decide, I cannot create.”</li>
-            <li>Resolving the cliffhanger: The designer is authentically present wherever deliberate human choices and curation occur.</li>
+            <li>Resolving the opening question: The designer is authentically present wherever deliberate human choices and curation occur.</li>
           </ul>
         </aside>
       </section>
@@ -1428,7 +1445,7 @@
         </aside>
       </section>
 
-      <!-- 17b. EXERCISE: TECHNIQUES + QR -->
+      <!-- 17b. EXERCISE: TECHNIQUES + SHORT URL -->
       <section class="slide">
         <div class="slide__main row">
           <div style="display: flex; flex-direction: column; justify-content: center">
@@ -1448,15 +1465,56 @@
               >
             </p>
           </div>
-          <figure class="narrow fragment">
-            <div class="media">
-              <img src="./assets/figjam-qr.svg" alt="QR code to FigJam board" />
+          <figure class="narrow fragment" style="flex: 0 0 clamp(340px, 42%, 620px)">
+            <div
+              class="media media--framed"
+              style="
+                flex-direction: column;
+                justify-content: center;
+                align-items: flex-start;
+                padding: clamp(24px, 3.5vmin, 44px);
+                gap: clamp(14px, 2vh, 22px);
+                background: var(--paper);
+              "
+            >
+              <p class="kicker">Share your designs · FigJam</p>
+              <div style="display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.6em 1.2em; width: 100%">
+                <a
+                  href="https://tinyurl.com/redesign-workshop"
+                  target="_blank"
+                  rel="noopener"
+                  style="
+                    font-family: var(--mono);
+                    font-size: clamp(16px, min(1.8vw, 2.4vh), 24px);
+                    font-weight: 800;
+                    letter-spacing: -0.02em;
+                    text-decoration: underline;
+                    text-decoration-thickness: 2px;
+                    text-underline-offset: 4px;
+                    word-break: break-all;
+                  "
+                  >https://tinyurl.com/redesign-workshop</a
+                >
+                <span
+                  style="
+                    display: inline-flex;
+                    align-items: baseline;
+                    gap: 0.45em;
+                    font-family: var(--mono);
+                    font-size: clamp(14px, min(1.6vw, 2.1vh), 21px);
+                    white-space: nowrap;
+                  "
+                >
+                  <span style="font-weight: 500">Password:</span>
+                  <span class="invert" style="font-weight: 800; padding: 0.12em 0.45em; letter-spacing: 0.05em">tangible</span>
+                </span>
+              </div>
             </div>
             <figcaption>Share your designs · FigJam</figcaption>
           </figure>
         </div>
         <nav class="links">
-          <a href="https://www.figma.com/figjam/">FigJam board</a>
+          <a href="https://tinyurl.com/redesign-workshop" target="_blank" rel="noopener">FigJam board</a>
           <a href="https://antigravity.google/">Google Antigravity</a>
           <a href="https://openai.com/index/openai-codex/">OpenAI Codex</a>
           <a href="https://docs.anthropic.com/en/docs/agents-and-tools/claude-code">Anthropic Claude Code</a>
@@ -1468,7 +1526,10 @@
               Recommended agentic tools: Google Antigravity (deep agentic customization & workflows), OpenAI Codex (integrated code execution), and Anthropic
               Claude Code (agentic terminal pair programming).
             </li>
-            <li>Post your prototypes, prompts, and interface explorations to the FigJam board for sharing.</li>
+            <li>
+              Post your prototypes, prompts, and interface explorations to the FigJam board for sharing: https://tinyurl.com/redesign-workshop (Password:
+              tangible).
+            </li>
           </ul>
         </aside>
       </section>
@@ -1476,11 +1537,11 @@
       <!-- 18a. CONTRIBUTIONS -->
       <section class="slide">
         <div class="slide__main">
-          <p class="kicker">Contributions</p>
+          <p class="kicker">Takeaway</p>
           <ol class="biglist">
-            <li class="fragment">Surveyed five frontiers <small>semantic rendering · affective voice · reality editing · world models · edge vision</small></li>
+            <li class="fragment">Surveyed frontiers <small>semantic rendering · affective voice · reality editing · world models · edge vision</small></li>
             <li class="fragment">Examined three disciplines <small>more‑than‑human · spatial/physical · direct agency</small></li>
-            <li class="fragment">Generate → Evaluate → Curate</li>
+            <li class="fragment">Generate > Evaluate > Curate</li>
             <li class="fragment">Built something, together</li>
           </ol>
         </div>
@@ -1497,8 +1558,8 @@
       <!-- 18b. SALUTE -->
       <section class="slide slide--section">
         <div class="slide__main">
-          <h2 class="display">I salute you.</h2>
-          <p class="lede lede--wide fragment">For your attention — and for the work you’re about to make.</p>
+          <h2 class="display">Thank you</h2>
+          <p class="lede lede--wide fragment">for the <span class="invert" style="background: #fff; color: #000">human</span> work you’re about to make.</p>
         </div>
         <aside class="notes">
           <ul>
@@ -1596,7 +1657,7 @@
             const jimmyVisible = s.querySelector(".chart__row--overflow.is-visible");
             chart.classList.toggle("chart--scaled", !!jimmyVisible);
           }
-          const swap = s.querySelector(".media--swap");
+          const swap = s.querySelector(".media--swap, .quote--swap");
           if (swap) {
             s.classList.toggle("slide--swapped", visibleCount(s) > 0);
           }
