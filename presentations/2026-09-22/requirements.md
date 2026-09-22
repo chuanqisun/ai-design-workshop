@@ -4,7 +4,7 @@
 4. Use splash image to deliver impact.
 5. At the bottom of the slides, display all the links and demos (unless they are already in the main area of the slide)
 6. Links should be prefixed with favicon, served from google, src="https://www.google.com/s2/favicons?domain=example.com&sz=32"
-7. Carefully reason about asset image aspect ratio. Use contain if needed but avoid overcropping.
+7. Carefully reason about asset image based on their content and aspect ratio, using metadata from assets/index.json. Your art direction must be stunning. Use avoid overcropping.
 8. Optimize for aspect radio between 4:3 and 16:9
 9. Left/Up and right/Down arrow navigate the slides. Break content into multiple steps if progressive disclosure is necessary to keep audience focused. Do NOT use too many sub steps though.
 10. "N" to toggle presentor nodes (high level bullet points only)
