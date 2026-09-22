@@ -1,89 +1,1691 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Re:design Workshop Presentation Wireframe</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Re:design — A Computational Design Workshop for Humans and AI</title>
+
+    <!-- =====================================================================
+     PRESENTATION LAYER (CSS)
+     Components:
+       .slide            one screen, flex column: [main] [footer links]
+       .slide--splash    full-bleed image with overlays
+       .slide--section   giant divider text
+       .fragment         progressively revealed by ← →
+       .media            image/video/iframe box, contain-fit, never scrolls
+       .grid             equal columns for side-by-side media
+       .cards            big link tiles used as "demo menus"
+       .chart            brutalist bar chart
+       .links            footer link strip (favicons injected by JS)
+       .notes            presenter notes, toggled with N
+     ===================================================================== -->
     <style>
-      /* Base Wireframe Styles */
+      :root {
+        --ink: #000;
+        --paper: #fff;
+        --rule: 5px;
+        --gap: clamp(14px, min(2.5vw, 3vh), 40px);
+        --header-height: clamp(30px, 4.8vh, 46px);
+        --font: "Helvetica Neue", Helvetica, Arial, "Inter", sans-serif;
+        --mono: "SF Mono", Menlo, Consolas, monospace;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
       body {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        line-height: 1.6;
-        background-color: #f9f9f9;
-        color: #222;
+        height: 100%;
         margin: 0;
-        padding: 40px 20px;
+        overflow: hidden;
+        background: var(--paper);
+        color: var(--ink);
+        font-family: var(--font);
+      }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+      ::selection {
+        background: var(--ink);
+        color: var(--paper);
       }
 
-      /* Slide Container representation */
+      /* ---------- Slide frame ---------- */
       .slide {
-        background: #fff;
-        max-width: 800px;
-        margin: 0 auto 40px auto;
-        padding: 40px;
-        border: 1px solid #e0e0e0;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+        position: absolute;
+        inset: 0;
+        display: none;
+        flex-direction: column;
+        padding: calc(var(--header-height) + var(--rule)) var(--gap) var(--gap) var(--gap);
+        border: var(--rule) solid var(--ink);
+        overflow: hidden;
+      }
+      .slide.is-active {
+        display: flex;
+      }
+      .slide__main {
+        flex: 1 1 auto;
+        min-height: 0;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: clamp(10px, 2vh, var(--gap));
+        transition: transform 0.15s ease-out;
+      }
+      .slide__main.row,
+      .row {
+        display: flex;
+        flex-direction: row;
+        align-items: stretch;
+        gap: clamp(10px, 2vh, var(--gap));
+      }
+      .slide__main.row > *,
+      .row > * {
+        flex: 1 1 0;
+        min-width: 0;
+        min-height: 0;
+      }
+      .slide__main.row > .narrow,
+      .row > .narrow {
+        flex: 0 0 35%;
       }
 
-      /* Typography */
-      h1 {
-        margin-top: 0;
-        font-size: 2.5rem;
+      /* Adaptive for portrait / narrow viewports */
+      @media (max-aspect-ratio: 11/10), (max-width: 768px) {
+        .slide__main.row,
+        .row {
+          flex-direction: column;
+          justify-content: center;
+        }
+        .slide__main.row > *,
+        .row > * {
+          flex: 1 1 auto;
+          min-height: 0;
+        }
+        .slide__main.row > figure,
+        .row > figure {
+          flex: 1 1 0;
+          min-height: 0;
+          max-height: 52vh;
+        }
+        .slide__main.row > .narrow,
+        .row > .narrow {
+          flex: 0 1 auto;
+          max-height: 38vh;
+        }
       }
-      h2 {
-        margin-top: 0;
-        font-size: 1.8rem;
-        border-bottom: 2px solid #eee;
-        padding-bottom: 8px;
-      }
-      h3 {
-        margin-top: 0;
-        color: #666;
-        font-weight: normal;
-      }
-      ul {
-        padding-left: 24px;
-      }
-      li {
-        margin-bottom: 8px;
-      }
+
+      /* ---------- Typography ---------- */
+      h1,
+      h2,
+      h3,
       p {
-        margin-top: 0;
+        margin: 0;
+      }
+      .kicker {
+        font-family: var(--mono);
+        font-size: clamp(11px, min(1.2vw, 1.6vh), 15px);
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        line-height: 1.25;
+      }
+      .display {
+        font-size: clamp(36px, min(9.5vw, 13vh), 130px);
+        line-height: 1.15;
+        font-weight: 800;
+        letter-spacing: -0.04em;
+      }
+      .display--mid {
+        font-size: clamp(28px, min(6.5vw, 9vh), 92px);
+        line-height: 1.15;
+      }
+      .headline {
+        font-size: clamp(22px, min(3.8vw, 5.2vh), 54px);
+        line-height: 1.14;
+        font-weight: 800;
+        letter-spacing: -0.025em;
+      }
+      .lede {
+        font-size: clamp(15px, min(2vw, 2.8vh), 28px);
+        line-height: 1.28;
+        font-weight: 500;
+        max-width: 32ch;
+      }
+      .lede--wide {
+        max-width: 44ch;
+      }
+      .invert {
+        background: var(--ink);
+        color: var(--paper);
+        padding: 0.04em 0.22em;
+        box-decoration-break: clone;
+        -webkit-box-decoration-break: clone;
+        display: inline;
+      }
+      .arrow {
+        display: inline-block;
+        transform: translateY(-0.05em);
       }
 
-      /* Wireframe Table */
-      table {
+      /* ---------- Fragments ---------- */
+      .fragment {
+        opacity: 0;
+        transition: opacity 0.12s steps(1);
+      }
+      .fragment.is-visible {
+        opacity: 1;
+      }
+
+      /* ---------- Media ---------- */
+      .media {
+        flex: 1 1 auto;
+        min-height: 0;
+        min-width: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--paper);
+        overflow: hidden;
+      }
+      .media img,
+      .media video {
+        max-width: 100%;
+        max-height: 100%;
+        width: auto;
+        height: auto;
+        object-fit: contain;
+        display: block;
+        border: var(--rule) solid var(--ink);
+      }
+      .media--bleed img,
+      .media--bleed video {
+        border: 0;
+      }
+      .media iframe {
         width: 100%;
-        border-collapse: collapse;
-        margin-top: 16px;
+        height: 100%;
+        border: var(--rule) solid var(--ink);
+        background: var(--paper);
       }
-      th,
-      td {
-        text-align: left;
-        padding: 12px;
-        border: 1px solid #ccc;
-        vertical-align: top;
-        font-size: 0.95rem;
+      .media--framed {
+        border: var(--rule) solid var(--ink);
       }
-      th {
-        background-color: #f0f0f0;
+      .media--framed iframe {
+        border: 0;
+      }
+      figcaption {
+        font-family: var(--mono);
+        font-size: clamp(10px, min(1.1vw, 1.4vh), 14px);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        margin-top: 6px;
+      }
+      figure {
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+        min-width: 0;
+        flex: 1 1 auto;
+      }
+      figure .media {
+        flex: 1 1 auto;
       }
 
-      /* Highlight block for specific workshop notes */
-      .callout {
-        background-color: #fafafa;
-        border-left: 4px solid #333;
-        padding: 16px;
-        margin-top: 20px;
+      .grid {
+        display: grid;
+        gap: var(--gap);
+        flex: 1 1 auto;
+        min-height: 0;
+        min-width: 0;
+      }
+      .grid--2 {
+        grid-template-columns: 1fr 1fr;
+      }
+      .grid--3 {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      .grid > * {
+        min-height: 0;
+        min-width: 0;
+      }
+      .stack {
+        display: grid;
+        gap: var(--gap);
+        grid-template-rows: 1fr 1fr;
+        min-height: 0;
+      }
+
+      /* ---------- Splash ---------- */
+      .slide--splash {
+        padding: 0;
+      }
+      .slide--splash .splash {
+        position: absolute;
+        inset: 0;
+        background: var(--ink);
+      }
+      .slide--splash .splash img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+      .slide--splash .overlay {
+        position: absolute;
+        left: var(--gap);
+        right: var(--gap);
+      }
+      .slide--splash .overlay--top {
+        top: calc(var(--header-height) + var(--rule) + 6px);
+      }
+      .slide--splash .overlay--top p {
+        display: inline-block;
+        background: rgba(0, 0, 0, 0.85);
+        padding: 4px 10px;
+      }
+      .slide--splash .overlay--center {
+        top: 50%;
+        transform: translateY(-50%);
+        text-align: center;
+      }
+      .slide--splash .overlay--bottom {
+        bottom: calc(var(--gap) + clamp(42px, 6.5vh, 64px));
+      }
+      .slide--splash .links {
+        position: absolute;
+        left: var(--gap);
+        right: var(--gap);
+        bottom: var(--gap);
+        border-color: var(--paper);
+        color: var(--paper);
+        background: rgba(0, 0, 0, 0.85);
+        padding: 6px 12px;
+      }
+
+      /* ---------- Section divider ---------- */
+      .slide--section {
+        background: var(--ink);
+        color: var(--paper);
+        border-color: var(--paper);
+      }
+      .slide--section .links {
+        border-color: var(--paper);
+      }
+      .slide--section .media {
+        background: transparent;
+      }
+
+      /* ---------- Big list ---------- */
+      .biglist {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        counter-reset: n;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        width: 100%;
+        min-height: 0;
+      }
+      .biglist li {
+        counter-increment: n;
+        display: grid;
+        grid-template-columns: 3.5ch 1fr;
+        grid-template-rows: auto auto;
+        column-gap: 0.8em;
+        row-gap: 0.1em;
+        align-items: baseline;
+        font-size: clamp(16px, min(2.4vw, 3.4vh), 36px);
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        line-height: 1.12;
+        padding: clamp(3px, 0.7vh, 10px) 0;
+        border-top: var(--rule) solid currentColor;
+      }
+      .biglist li:last-child {
+        border-bottom: var(--rule) solid currentColor;
+      }
+      .biglist li::before {
+        content: counter(n, decimal-leading-zero);
+        font-family: var(--mono);
+        font-weight: 400;
+        font-size: 0.52em;
+        grid-column: 1;
+        grid-row: 1;
+      }
+      .biglist li small {
+        grid-column: 2;
+        grid-row: 2;
+        display: block;
+        font-family: var(--font);
+        font-size: clamp(11px, min(1.1vw, 1.5vh), 15px);
+        font-weight: 400;
+        letter-spacing: 0;
+        line-height: 1.3;
+        opacity: 0.75;
+        margin-top: 2px;
+      }
+
+      @media (max-height: 800px) {
+        .biglist li {
+          font-size: clamp(14px, min(2.2vw, 3vh), 28px);
+          padding: clamp(2px, 0.5vh, 6px) 0;
+        }
+      }
+
+      /* ---------- Cards (demo menu) ---------- */
+      .cards {
+        display: grid;
+        gap: 0;
+        grid-template-columns: repeat(auto-fit, minmax(clamp(150px, 16vw, 220px), 1fr));
+        border: var(--rule) solid var(--ink);
+        width: 100%;
+      }
+      @media (min-width: 960px) {
+        .cards:has(> :nth-child(5):last-child) {
+          grid-template-columns: repeat(5, 1fr);
+        }
+      }
+      .cards a {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 0.6em;
+        padding: clamp(10px, 1.6vmin, 24px);
+        min-height: clamp(70px, 14vh, 160px);
+        font-size: clamp(15px, min(1.9vw, 2.6vh), 28px);
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        line-height: 1.08;
+        outline: var(--rule) solid var(--ink);
+        outline-offset: calc(-1 * var(--rule) / 2);
+        word-break: break-word;
+      }
+      .cards a:hover {
+        background: var(--ink);
+        color: var(--paper);
+      }
+      .cards a img {
+        width: 24px;
+        height: 24px;
+        image-rendering: pixelated;
+        filter: grayscale(1);
+      }
+      .cards a:hover img {
+        filter: grayscale(1) invert(1);
+      }
+      .cards a span {
+        font-family: var(--mono);
+        font-size: clamp(9px, min(0.9vw, 1.2vh), 12px);
+        font-weight: 400;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      /* ---------- Chart ---------- */
+      .chart {
+        display: grid;
+        gap: clamp(6px, 1vh, 14px);
+        font-weight: 800;
+        width: 100%;
+      }
+      .chart__row {
+        display: grid;
+        grid-template-columns: minmax(10ch, 24ch) 1fr;
+        align-items: center;
+        gap: 1em;
+        font-size: clamp(12px, min(1.6vw, 2.2vh), 22px);
+        letter-spacing: -0.02em;
+      }
+      .chart__track {
+        position: relative;
+        height: clamp(18px, 3.4vh, 40px);
+        border: var(--rule) solid var(--ink);
+        overflow: hidden;
+      }
+      .chart__bar {
+        position: absolute;
+        inset: 0 auto 0 0;
+        background: var(--ink);
+        width: calc(var(--v) / 2000 * 100%);
+        transition: width 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+      .chart:has(.chart__row--overflow.is-visible) .chart__bar,
+      .chart.chart--scaled .chart__bar {
+        width: calc(var(--v) / 14000 * 100%);
+      }
+      .chart__row--overflow .chart__bar {
+        background: repeating-linear-gradient(-45deg, var(--ink) 0 12px, var(--paper) 12px 24px);
+      }
+      .chart__value {
+        position: absolute;
+        right: 0.5em;
+        top: 50%;
+        transform: translateY(-50%);
+        font-family: var(--mono);
+        font-weight: 400;
+        font-size: 0.7em;
+      }
+      .chart__row--overflow .chart__value {
+        background: var(--paper);
+        padding: 0 0.4em;
+      }
+
+      /* ---------- Footer links ---------- */
+      .links {
+        flex: 0 0 auto;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4em 1.4em;
+        padding-top: clamp(6px, 1.2vh, 12px);
+        margin-top: auto;
+        border-top: var(--rule) solid var(--ink);
+        font-family: var(--mono);
+        font-size: clamp(10px, min(1.05vw, 1.4vh), 14px);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        background: inherit;
+      }
+      .links a {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45em;
+      }
+      .links a img {
+        width: 14px;
+        height: 14px;
+        flex-shrink: 0;
+        filter: grayscale(1);
+      }
+      .slide--section .links a img,
+      .slide--splash .links a img {
+        filter: grayscale(1) invert(1);
+      }
+      .links a:hover {
+        text-decoration: underline;
+        text-decoration-thickness: 2px;
+      }
+
+      /* ---------- Chrome ---------- */
+      .hud {
+        position: fixed;
+        right: calc(var(--gap) + var(--rule));
+        top: calc(var(--rule) + 8px);
+        font-family: var(--mono);
+        font-size: clamp(10px, 1.1vmin, 13px);
+        mix-blend-mode: difference;
+        color: #fff;
+        z-index: 10;
+        letter-spacing: 0.1em;
+        pointer-events: none;
+      }
+      .notes {
+        display: none;
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 20;
+        max-height: 42vh;
+        overflow: auto;
+        background: #ff0;
+        color: #000;
+        border-top: var(--rule) solid #000;
+        padding: 16px var(--gap);
+        font-family: var(--mono);
+        font-size: clamp(13px, 1.4vw, 18px);
+        line-height: 1.4;
+      }
+      .notes ul {
+        margin: 0;
+        padding-left: 1.2em;
+      }
+      body.show-notes .notes.is-active {
+        display: block;
+      }
+      .slide > .notes {
+        display: none;
+      }
+      .help {
+        position: fixed;
+        left: calc(var(--gap) + var(--rule));
+        top: calc(var(--rule) + 8px);
+        font-family: var(--mono);
+        font-size: clamp(10px, 1.1vmin, 13px);
+        mix-blend-mode: difference;
+        color: #fff;
+        z-index: 10;
+        letter-spacing: 0.1em;
+        pointer-events: none;
       }
     </style>
   </head>
   <body>
-    <section class="slide">
-      <h1>AI Design Workshop</h1>
-      <p>This is an in-person workshop</p>
-      <p>Please bring your laptop and an AI chat tool (e.g. Gemini, ChatGPT, or Claude).</p>
-      <p>Workshop content will become available before the class.</p>
-    </section>
+    <div class="help">←→ / ↑↓ NAVIGATE · N NOTES</div>
+    <div class="hud" id="hud"></div>
+
+    <!-- =====================================================================
+     CONTENT LAYER (HTML) — edit freely.
+     Conventions:
+       <section class="slide">   one slide (order in DOM = order in deck)
+       class="fragment"          revealed in DOM order with →
+       <aside class="notes">     presenter notes (N)
+       <nav class="links">       plain <a href> — favicons are injected by JS
+       <iframe data-src>         loaded only when the slide is shown
+     ===================================================================== -->
+    <main id="deck">
+      <!-- 1. TITLE -->
+      <section class="slide">
+        <div class="slide__main">
+          <h1 class="display">Re:<span class="invert">design</span></h1>
+          <p class="lede lede--wide fragment">A computational design workshop for humans <em>and</em> AI.</p>
+        </div>
+        <aside class="notes">
+          <ul>
+            <li>Re:design — exploring how generative and real-time AI reshapes the computational design process.</li>
+            <li>Core question: How do we move beyond conventional chatbots to build expressive, human-centered computational design tools?</li>
+          </ul>
+        </aside>
+      </section>
+
+      <!-- 2. CLIFFHANGER -->
+      <section class="slide slide--splash">
+        <div class="splash"><img src="./assets/the-artist-is-present.webp" alt="Marina Abramović, The Artist Is Present" /></div>
+        <div class="overlay overlay--top fragment" style="color: #fff">
+          <p class="kicker">Marina Abramović · The Artist Is Present · MoMA 2010</p>
+        </div>
+        <div class="overlay overlay--center fragment">
+          <h2 class="headline" style="color: #fff"><span class="invert" style="background: #fff; color: #000">Is the designer present?</span></h2>
+        </div>
+        <nav class="links">
+          <a href="https://www.moma.org/calendar/exhibitions/964">MoMA · The Artist Is Present</a>
+        </nav>
+        <aside class="notes">
+          <ul>
+            <li>
+              Marina Abramović’s landmark 2010 MoMA performance, <em>The Artist Is Present</em>, foregrounds physical and emotional presence as the essence of
+              art.
+            </li>
+            <li>
+              In an era of instant generative synthesis, where is the designer present? What constitutes authentic creative authorship when execution is
+              automated?
+            </li>
+          </ul>
+        </aside>
+      </section>
+
+      <!-- 3a. ABOUT ME -->
+      <section class="slide">
+        <div class="slide__main row">
+          <figure>
+            <div class="media"><img src="./assets/the-vanishing-designer.webp" alt="The Vanishing Designer article header" /></div>
+            <figcaption>The Vanishing Designer · essay, written before generative AI</figcaption>
+          </figure>
+          <div class="narrow" style="display: flex; flex-direction: column; justify-content: center; gap: 1.2em">
+            <p class="kicker">Chuanqi Sun</p>
+            <p class="lede fragment">Ex‑software engineer.</p>
+            <p class="lede fragment">2nd‑year master’s student.</p>
+            <p class="lede fragment"><span class="invert">50+</span> design projects shipped last year. AI was instrumental.</p>
+          </div>
+        </div>
+        <nav class="links">
+          <!-- TODO: point to the essay URL -->
+          <a href="https://www.chuanqisun.com/">The Vanishing Designer</a>
+        </nav>
+        <aside class="notes">
+          <ul>
+            <li>Speaker background: Chuanqi Sun (software engineering, design research, 2nd-year master’s student).</li>
+            <li>
+              Shipped 50+ rapid design projects in one year by treating AI not as an autonomous agent, but as an interactive accelerator for human intent.
+            </li>
+          </ul>
+        </aside>
+      </section>
+
+      <!-- 3b. EMPOWERMENT PROMISE -->
+      <section class="slide">
+        <div class="slide__main">
+          <p class="kicker">By the end of today</p>
+          <h2 class="headline">You will have the frameworks, intuition, and code to build your own AI‑empowered tools.</h2>
+          <p class="lede fragment">More creative. More human. Perhaps <span class="invert">more‑than‑human.</span></p>
+        </div>
+        <aside class="notes">
+          <ul>
+            <li>Key takeaway: You will acquire the frameworks, intuition, and software primitives to design custom AI-empowered creative workflows.</li>
+            <li>Roadmap: 1) New Frontiers (labs & technology) 2) Emerging Disciplines 3) Framework (Generate → Evaluate → Curate) 4) Hands-on practice.</li>
+          </ul>
+        </aside>
+      </section>
+
+      <!-- 4a. SECTION: NEW FRONTIERS -->
+      <section class="slide slide--section">
+        <div class="slide__main">
+          <p class="kicker">Part 1</p>
+          <h2 class="display display--mid">New Frontiers</h2>
+          <ol class="biglist">
+            <li class="fragment">Semantic rendering</li>
+            <li class="fragment">Affective voice</li>
+            <li class="fragment">Reality editing</li>
+            <li class="fragment">Interactive worlds</li>
+            <li class="fragment">Local vision</li>
+          </ol>
+        </div>
+        <aside class="notes">
+          <ul>
+            <li>Five technological shifts moving AI beyond conversational text chat:</li>
+            <li>1) Semantic rendering 2) Affective voice 3) Reality editing 4) Interactive world models 5) Local edge vision.</li>
+          </ul>
+        </aside>
+      </section>
+
+      <!-- 4b. TREND 1: SPEED CHART -->
+      <section class="slide">
+        <div class="slide__main">
+          <p class="kicker">Trend 1 · From token generation to semantic rendering</p>
+          <div class="chart">
+            <div class="chart__row fragment">
+              <span>Claude Opus</span>
+              <div class="chart__track">
+                <div class="chart__bar" style="--v: 104"></div>
+                <span class="chart__value">104 tps</span>
+              </div>
+            </div>
+            <div class="chart__row fragment">
+              <span>OpenAI Sol</span>
+              <div class="chart__track">
+                <div class="chart__bar" style="--v: 112"></div>
+                <span class="chart__value">112 tps</span>
+              </div>
+            </div>
+            <div class="chart__row fragment">
+              <span>Gemini 3.8 Flash</span>
+              <div class="chart__track">
+                <div class="chart__bar" style="--v: 399"></div>
+                <span class="chart__value">399 tps</span>
+              </div>
+            </div>
+            <div class="chart__row fragment">
+              <span>Groq GPT‑OSS‑120B</span>
+              <div class="chart__track">
+                <div class="chart__bar" style="--v: 476"></div>
+                <span class="chart__value">476 tps</span>
+              </div>
+            </div>
+            <div class="chart__row fragment">
+              <span>Inception Mercury 2.5</span>
+              <div class="chart__track">
+                <div class="chart__bar" style="--v: 1107"></div>
+                <span class="chart__value">1,107 tps</span>
+              </div>
+            </div>
+            <div class="chart__row fragment">
+              <span>Cerebras</span>
+              <div class="chart__track">
+                <div class="chart__bar" style="--v: 1873"></div>
+                <span class="chart__value">1,873 tps</span>
+              </div>
+            </div>
+            <div class="chart__row chart__row--overflow fragment">
+              <span>Chat Jimmy</span>
+              <div class="chart__track">
+                <div class="chart__bar" style="--v: 14000"></div>
+                <span class="chart__value">14,000 tps</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <nav class="links">
+          <a href="https://chatjimmy.ai/">Chat Jimmy</a>
+          <a href="https://groq.com/">Groq</a>
+          <a href="https://inception.ai/">Inception Mercury 2.5</a>
+          <a href="https://cerebras.ai/">Cerebras</a>
+          <a href="https://typesafe.ai/">Jev by TypeSafe AI</a>
+        </nav>
+        <aside class="notes">
+          <ul>
+            <li>
+              Speed is a qualitative shift: when inference reaches 10,000+ tps (e.g. Chat Jimmy), roundtrip latency falls below human sensory perception
+              (<50ms).
+            </li>
+            <li>Rather than streaming conversational replies, models can render complete interactive interfaces and documents on every keystroke.</li>
+            <li>Designing for instantaneous models requires thinking in continuous reactive state rather than turn-taking chat.</li>
+          </ul>
+        </aside>
+      </section>
+
+      <!-- 5. TREND 2: VOICE -->
+      <section class="slide">
+        <div class="slide__main">
+          <p class="kicker">Trend 2 · Voice</p>
+          <h2 class="headline">From synthesis <br />to <span class="invert">affective enactment.</span></h2>
+          <div class="cards fragment">
+            <a href="https://app.sesame.com/"><span>Live demo</span>Sesame</a>
+            <a href="https://elevenlabs.io/"><span>Reference</span>ElevenLabs</a>
+            <a href="https://gemini.google/overview/gemini-live/"><span>Reference</span>Gemini Live</a>
+            <a href="https://openai.com/index/introducing-gpt-live/"><span>Reference</span>GPT Realtime</a>
+            <a href="https://code.chuanqisun.com/half-duplex-transcription/"><span>Live demo · STT</span>MAI Transcribe</a>
+          </div>
+        </div>
+        <aside class="notes">
+          <ul>
+            <li>
+              Voice AI is progressing from robotic TTS to affective enactment—inflecting speech with emotion, hesitation, and natural conversational cadence.
+            </li>
+            <li>Low-latency transcription (e.g. MAI Transcribe) enables true half-duplex spoken dialogue without rigid turn-taking.</li>
+          </ul>
+        </aside>
+      </section>
+
+      <!-- 6a. TREND 3: IMAGE — SKETCH -->
+      <section class="slide">
+        <div class="slide__main row">
+          <div class="narrow" style="display: flex; flex-direction: column; justify-content: center; gap: 1em">
+            <p class="kicker">Trend 3 · Image</p>
+            <h2 class="headline">From artifact generation to <span class="invert">reality editing.</span></h2>
+            <p class="lede fragment">Low‑fi in, real‑time out.</p>
+          </div>
+          <figure>
+            <div class="media"><img src="./assets/industrial-sketch-01.webp" alt="Tangible puck workflow sketches" /></div>
+            <figcaption>sh.elf · real‑time image‑to‑image</figcaption>
+          </figure>
+        </div>
+        <nav class="links">
+          <a href="https://code.chuanqisun.com/sh-elf/">sh.elf (Shelf Builder)</a>
+          <a href="https://bfl.ai/">FLUX 3</a>
+          <a href="https://www.krea.ai/realtime">Krea Realtime</a>
+          <a href="https://lucy.decart.ai/">Lucy 2.5 Realtime</a>
+        </nav>
+        <aside class="notes">
+          <ul>
+            <li>Real-time image-to-image (i2i) synthesis turns the design canvas into a continuous reactive surface.</li>
+            <li>Low-fidelity sketches and gestural inputs act as high-bandwidth spatial control signals, directing models much faster than text prompts.</li>
+          </ul>
+        </aside>
+      </section>
+
+      <!-- 6b. TREND 3: PUCKS BEFORE/AFTER -->
+      <section class="slide">
+        <div class="slide__main row">
+          <figure>
+            <div class="grid grid--2" style="flex: 1 1 auto">
+              <div class="media"><img src="./assets/puck-photo-blue.webp" alt="Blue puck photo" /></div>
+              <div class="media"><img src="./assets/puck-photo-pink.webp" alt="Pink puck photo" /></div>
+              <div class="media" style="grid-column: 1 / -1"><img src="./assets/puck-sketch.webp" alt="Puck hand-drawn sketches" /></div>
+            </div>
+            <figcaption>Before · photo + sketch</figcaption>
+          </figure>
+          <figure class="narrow fragment">
+            <div class="media"><img src="./assets/puck-rendered.webp" alt="Rendered puck interaction modes" /></div>
+            <figcaption>After · rendered interaction modes</figcaption>
+          </figure>
+        </div>
+        <nav class="links">
+          <a href="https://code.chuanqisun.com/sh-elf/">sh.elf</a>
+          <a href="https://fal.ai/">FLUX Klein Realtime via fal.ai</a>
+        </nav>
+        <aside class="notes">
+          <ul>
+            <li>
+              Multimodal sketching: combining physical objects, hand drawings, and generative rendering (e.g. FLUX Klein Realtime) to explore physical
+              interaction design rapidly.
+            </li>
+            <li>Enables designers to test form and affordances before committing to physical prototyping.</li>
+          </ul>
+        </aside>
+      </section>
+
+      <!-- 7a. TREND 4: WORLD / VIDEO -->
+      <section class="slide">
+        <div class="slide__main row">
+          <div class="narrow" style="display: flex; flex-direction: column; justify-content: center; gap: 1em">
+            <p class="kicker">Trend 4 · Video &amp; worlds</p>
+            <h2 class="headline">Slow, batch, offline <span class="arrow">→</span> <span class="invert">interactive &amp; spatial.</span></h2>
+          </div>
+          <figure class="fragment">
+            <div class="media"><video src="./assets/manga-gpt.mp4" muted loop playsinline></video></div>
+            <figcaption>Gemini Omni · manga speech bubble, live</figcaption>
+          </figure>
+          <figure class="fragment">
+            <div class="media"><video src="./assets/gemini-omni-demo.mp4" muted loop playsinline></video></div>
+            <figcaption>Gemini Omni · my test</figcaption>
+          </figure>
+        </div>
+        <nav class="links">
+          <a href="https://www.linkedin.com/feed/update/urn:li:activity:7462943325474549761/">Omni demo 1</a>
+          <a href="https://www.linkedin.com/feed/update/urn:li:activity:7466089877957312512/">Omni demo 2</a>
+          <a href="https://www.linkedin.com/posts/alexanderchen_omni-draw-i-quickly-vibe-coded-a-tool-ugcPost-7465493029412470784-M7Vf/">Omni Draw</a>
+          <a href="https://x.com/alexanderchen/status/2057925025915666673">@alexanderchen</a>
+        </nav>
+        <aside class="notes">
+          <ul>
+            <li>Generative video has evolved from slow batch generation into interactive, real-time spatial simulation.</li>
+            <li>Allows designers to prototype spatial flows, cinematic treatments, and environmental behaviors directly.</li>
+          </ul>
+        </aside>
+      </section>
+
+      <!-- 7b. TREND 4: WORLD MODELS -->
+      <section class="slide">
+        <div class="slide__main">
+          <p class="kicker">Trend 4 · Interactive world models</p>
+          <ol class="biglist">
+            <li class="fragment">Gemini Omni <small>Google</small></li>
+            <li class="fragment">Genie <small>Google DeepMind · interactive world models</small></li>
+            <li class="fragment">Marble <small>World Labs · spatial intelligence</small></li>
+            <li class="fragment">HY World 2.0 <small>Tencent Hunyuan · interactive 3D generation</small></li>
+          </ol>
+        </div>
+        <nav class="links">
+          <a href="https://deepmind.google/">DeepMind Genie</a>
+          <a href="https://www.worldlabs.ai/">World Labs</a>
+          <a href="https://3d.hunyuan.tencent.com/">Tencent HY World</a>
+        </nav>
+        <aside class="notes">
+          <ul>
+            <li>World models (Google Genie, World Labs Marble, Tencent HY World 2.0) build internal simulations of 3D geometry and physical dynamics.</li>
+            <li>Shifts design from rendering static frames to steering interactive, persistent virtual worlds.</li>
+          </ul>
+        </aside>
+      </section>
+
+      <!-- 8. TREND 5: LOCAL CV -->
+      <section class="slide">
+        <div class="slide__main row">
+          <div style="display: flex; flex-direction: column; justify-content: center; gap: 1em">
+            <p class="kicker">Trend 5 · Computer vision</p>
+            <h2 class="headline">On the edge. <br /><span class="invert">In real time.</span></h2>
+            <p class="lede fragment">Hand segmentation + desk‑surface object segmentation, running locally.</p>
+          </div>
+          <figure class="narrow fragment">
+            <div class="media"><video src="./assets/tangible-rag.mp4" muted loop playsinline></video></div>
+            <figcaption>Tangible RAG · my demo</figcaption>
+          </figure>
+        </div>
+        <nav class="links">
+          <a href="https://www.instagram.com/the.poet.engineer/">the.poet.engineer · TouchDesigner vision projects</a>
+        </nav>
+        <aside class="notes">
+          <ul>
+            <li>Edge computer vision: lightweight models run locally on consumer GPUs and NPUs with zero network latency and complete privacy.</li>
+            <li>Enables high-frequency sensor loops (60+ FPS hand and object segmentation) for tangible, physical-digital interaction.</li>
+          </ul>
+        </aside>
+      </section>
+
+      <!-- 9a. SECTION: EMERGING DISCIPLINES -->
+      <section class="slide slide--section">
+        <div class="slide__main">
+          <p class="kicker">Part 2</p>
+          <h2 class="display display--mid">Emerging Disciplines</h2>
+          <ol class="biglist">
+            <li class="fragment">More‑than‑human design</li>
+            <li class="fragment">Spatial, embodied, physical AI</li>
+            <li class="fragment">Direct agency</li>
+          </ol>
+        </div>
+        <aside class="notes">
+          <ul>
+            <li>Three emerging design paradigms reshaping interaction beyond traditional HCI:</li>
+            <li>1) More-than-human design 2) Spatial, embodied, physical AI 3) Direct agency.</li>
+          </ul>
+        </aside>
+      </section>
+
+      <!-- 9b. MODEL WELFARE DEBATE -->
+      <section class="slide">
+        <div class="slide__main">
+          <p class="kicker">More‑than‑human design</p>
+          <h2 class="headline">Do you say “please” and “thank you” to your AI?</h2>
+          <div class="row" style="flex: 1 1 auto; min-height: 0">
+            <figure class="fragment">
+              <div class="media"><img src="./assets/mustafa-suleyman.webp" alt="Mustafa Suleyman" /></div>
+              <figcaption>Mustafa Suleyman · Microsoft AI · “Seemingly conscious AI is a risk”</figcaption>
+            </figure>
+            <div class="narrow" style="display: flex; align-items: center; justify-content: center">
+              <span class="display fragment">VS</span>
+            </div>
+            <figure class="fragment">
+              <div class="media"><img src="./assets/kyle-fish.webp" alt="Kyle Fish" /></div>
+              <figcaption>Kyle Fish · Anthropic · Model welfare research</figcaption>
+            </figure>
+          </div>
+        </div>
+        <nav class="links">
+          <a href="https://microsoft.ai/code-of-conduct/">Microsoft AI code of conduct</a>
+          <a href="https://www.anthropic.com/research/exploring-model-welfare">Anthropic · Exploring model welfare</a>
+          <a href="https://designandposthumanism.org/archives/2097">More‑than‑human design</a>
+        </nav>
+        <aside class="notes">
+          <ul>
+            <li>Politeness toward AI highlights our instinctual attribution of agency and social dynamics to interactive models.</li>
+            <li>
+              Core debate: Mustafa Suleyman (Microsoft AI: avoid illusions of consciousness; AI should remain purely instrumental) vs. Kyle Fish (Anthropic:
+              research model welfare and machine sentience seriously).
+            </li>
+            <li>More-than-human design urges designers to engage non-human perspectives and machine agency.</li>
+          </ul>
+        </aside>
+      </section>
+
+      <!-- 9c. XKCD -->
+      <section class="slide">
+        <div class="slide__main row">
+          <div class="narrow" style="display: flex; flex-direction: column; justify-content: center; gap: 1em">
+            <p class="kicker">More‑than‑human design</p>
+            <h2 class="headline">What is it like to perceive as a <span class="invert">machine?</span></h2>
+          </div>
+          <figure>
+            <div class="media"><img src="./assets/xkcd.webp" alt="XKCD: Depth Perception" /></div>
+            <figcaption>xkcd · Depth Perception</figcaption>
+          </figure>
+        </div>
+        <nav class="links">
+          <a href="https://xkcd.com/941/">xkcd · Depth Perception</a>
+        </nav>
+        <aside class="notes">
+          <ul>
+            <li>
+              XKCD 941 (Depth Perception): Illustrates non-human perceptual experience (cameras miles apart interpreting distant clouds as small nearby
+              objects).
+            </li>
+            <li>More-than-human design treats computational sensory apparatus (embeddings, disparity, latent spaces) as distinct design materials.</li>
+          </ul>
+        </aside>
+      </section>
+
+      <!-- 10. SPATIAL / PHYSICAL AI -->
+      <section class="slide">
+        <div class="slide__main row">
+          <div class="narrow" style="display: flex; flex-direction: column; justify-content: center; gap: 1em">
+            <p class="kicker">Spatial · Embodied · Physical</p>
+            <h2 class="headline">“Put that <span class="invert">there.</span>”</h2>
+            <p class="lede fragment">Richard Bolt, MIT Architecture Machine Group, 1980.</p>
+            <p class="lede fragment">Forty‑five years later: OpenAI Astra, tangible prompting.</p>
+          </div>
+          <figure>
+            <div class="media media--framed">
+              <iframe data-src="https://www.youtube.com/embed/RyBEUyEtxQo" title="Put That There (1980)" allow="autoplay; fullscreen" allowfullscreen></iframe>
+            </div>
+            <figcaption>Put‑That‑There · voice and gesture at the graphics interface</figcaption>
+          </figure>
+        </div>
+        <nav class="links">
+          <a href="https://openai.com/index/gpt-6-astra/">OpenAI Astra</a>
+          <a href="https://youtu.be/RyBEUyEtxQo">Put That There (1980)</a>
+          <a href="https://dl.acm.org/doi/10.1145/3802974.3810894">Tangible Co‑ideation · Quincy &amp; Lucy</a>
+        </nav>
+        <aside class="notes">
+          <ul>
+            <li>Richard Bolt’s 1980 MIT Architecture Machine Group demo ("Put-That-There") founded multimodal spatial input combining voice and pointing.</li>
+            <li>
+              Modern frontiers like OpenAI Astra and Tangible Prompting extend this foundation: physical affordances merge with real-time spatial AI perception.
+            </li>
+          </ul>
+        </aside>
+      </section>
+
+      <!-- 11a. DIRECT AGENCY: DEBATE -->
+      <section class="slide">
+        <div class="slide__main">
+          <p class="kicker">Direct agency · my thesis</p>
+          <figure>
+            <div class="media"><img src="./assets/dm-vs-agent.webp" alt="Direct Manipulation vs Interface Agents" /></div>
+            <figcaption>Shneiderman (direct manipulation) vs Maes (interface agents) · CHI 1997</figcaption>
+          </figure>
+        </div>
+        <nav class="links">
+          <a href="https://dl.acm.org/doi/10.1145/267505.267514">Shneiderman vs Maes · Interactions 1997</a>
+        </nav>
+        <aside class="notes">
+          <ul>
+            <li>
+              The classic HCI debate: Direct Manipulation (Ben Shneiderman — continuous representation, immediate feedback, user control) vs. Autonomous Agents
+              (Pattie Maes — delegation, background automation).
+            </li>
+            <li>Direct Agency synthesizes the two: retaining tactile, continuous control while wielding the power of generative agentic models.</li>
+          </ul>
+        </aside>
+      </section>
+
+      <!-- 11b. DIRECT AGENCY: SEMANTIC SCULPTING -->
+      <section class="slide">
+        <div class="slide__main row">
+          <figure>
+            <div class="media"><img src="./assets/semantic-sculpting.webp" alt="Semantic Sculpting" /></div>
+            <figcaption>Semantic sculpting · direct manipulation of generative media</figcaption>
+          </figure>
+          <div class="narrow" style="display: flex; flex-direction: column; justify-content: center; gap: 1em">
+            <h2 class="headline fragment">Semantic <span class="invert">sculpting.</span></h2>
+            <p class="lede fragment">A teaser. To be continued.</p>
+          </div>
+        </div>
+        <aside class="notes">
+          <ul>
+            <li>Semantic Sculpting: Applying direct manipulation techniques to high-dimensional latent and semantic spaces.</li>
+            <li>Allows designers to feel and steer generative parameters with continuous controls instead of text prompts.</li>
+          </ul>
+        </aside>
+      </section>
+
+      <!-- 12. FRAMEWORK -->
+      <section class="slide slide--section">
+        <div class="slide__main">
+          <p class="kicker">Part 3 · New [old] ways to design</p>
+          <h2 class="display display--mid">
+            <span class="fragment">Generate</span><br />
+            <span class="fragment"><span class="arrow">→</span> Evaluate</span><br />
+            <span class="fragment"><span class="arrow">→</span> Curate</span>
+          </h2>
+        </div>
+        <aside class="notes">
+          <ul>
+            <li>The core computational design loop: Generate → Evaluate → Curate.</li>
+            <li>Provides a repeatable method for pairing human creative intent with generative algorithmic engines.</li>
+          </ul>
+        </aside>
+      </section>
+
+      <!-- 13a. GENERATE: CRYPTOPUNKS SPLASH -->
+      <section class="slide slide--splash">
+        <div class="splash"><img src="./assets/crypto-punk.webp" alt="CryptoPunks generative grid" /></div>
+        <div class="overlay overlay--top"><p class="kicker" style="color: #fff">Step 1 · Generate</p></div>
+        <div class="overlay overlay--center fragment">
+          <h2 class="display" style="color: #fff"><span class="invert" style="background: #fff; color: #000">Combinatorial</span></h2>
+        </div>
+        <nav class="links">
+          <a href="https://cryptopunks.app/">CryptoPunks</a>
+        </nav>
+        <aside class="notes">
+          <ul>
+            <li>Combinatorial exploration (exemplified by CryptoPunks): exploring vast design spaces by combining discrete attributes and generative rules.</li>
+            <li>Broad divergence forces generative models outside their narrow default assumptions.</li>
+          </ul>
+        </aside>
+      </section>
+
+      <!-- 13b. GENERATE: ART & FEAR -->
+      <section class="slide">
+        <div class="slide__main row">
+          <figure class="narrow">
+            <div class="media"><img src="./assets/art-and-fear.webp" alt="Art & Fear book cover" /></div>
+            <figcaption>Bayles &amp; Orland · Art &amp; Fear · 1993</figcaption>
+          </figure>
+          <div style="display: flex; flex-direction: column; justify-content: center; gap: 1em">
+            <h2 class="headline">Quantity over <span class="invert">quality.</span></h2>
+            <p class="lede fragment">The ceramics class: the group graded on volume produced the best pots.</p>
+          </div>
+        </div>
+        <nav class="links">
+          <a href="https://archive.org/details/artfearobservati0000bayl">Art &amp; Fear</a>
+        </nav>
+        <aside class="notes">
+          <ul>
+            <li>
+              Bayles & Orland’s ceramics parable from <em>Art & Fear</em>: The group graded solely on quantity produced higher quality work because they learned
+              iteratively through rapid output.
+            </li>
+            <li>With generative AI, generation cost approaches zero—use volume and rapid variation to discover unexpected solutions.</li>
+          </ul>
+        </aside>
+      </section>
+
+      <!-- 13c. GENERATE: GRANOLA GROUNDING -->
+      <section class="slide">
+        <div class="slide__main row">
+          <figure class="narrow">
+            <div class="media"><img src="./assets/class-notes.webp" alt="Handwritten parsing lecture notes" /></div>
+            <figcaption>Input · handwritten notes + lecture audio</figcaption>
+          </figure>
+          <figure class="fragment">
+            <div class="media media--framed">
+              <iframe data-src="./assets/lecture-notes-04-parsing-2.html" title="Generated interactive study guide"></iframe>
+            </div>
+            <figcaption>Output · interactive study guide</figcaption>
+          </figure>
+        </div>
+        <nav class="links">
+          <a href="https://granola.ai/">Granola</a>
+        </nav>
+        <aside class="notes">
+          <ul>
+            <li>
+              "Granola grounding": Grounding models with raw, multi-modal personal data (handwritten notes, lecture audio) rather than relying on abstract
+              prompts.
+            </li>
+            <li>Anchors generation in authentic personal context, transforming generative synthesis into a structured learning artifact.</li>
+          </ul>
+        </aside>
+      </section>
+
+      <!-- 13d. GENERATE: LITERATURE REVIEW -->
+      <section class="slide">
+        <div class="slide__main">
+          <p class="kicker">Algorithmic literature review · my thesis pipeline</p>
+          <div class="media media--framed"><iframe data-src="./assets/annotated-bib.html" title="Annotated bibliography"></iframe></div>
+        </div>
+        <aside class="notes">
+          <ul>
+            <li>Algorithmic literature review: systematically mapping research landscapes and generating annotated bibliographies.</li>
+            <li>Use AI to index, cross-reference, and surface unaddressed whitespace—not to bypass deep critical reading.</li>
+          </ul>
+        </aside>
+      </section>
+
+      <!-- 13e. GENERATE: TECHNIQUES + DEMO -->
+      <section class="slide">
+        <div class="slide__main">
+          <p class="kicker">Step 1 · Generate · techniques</p>
+          <ol class="biglist">
+            <li class="fragment">Combinatorial exploration</li>
+            <li class="fragment">Geometric grounding <small>life.config / Void Shapes — hallucination as a feature</small></li>
+            <li class="fragment">Contextual grounding <small>Granola</small></li>
+            <li class="fragment">Reverse prompting <small>let the AI interview you</small></li>
+            <li class="fragment">Algorithmic literature review</li>
+            <li class="fragment">Life &amp; experience simulation <small>personas with soul</small></li>
+          </ol>
+        </div>
+        <nav class="links">
+          <a href="https://chuanqisun.github.io/mugen-ai/">Demo · mugen.ai</a>
+          <a href="https://youtube.com/shorts/anRJ_aQzfRQ">Re:Connections NYC · simulated photography</a>
+        </nav>
+        <aside class="notes">
+          <ul>
+            <li>
+              Key generation techniques: Combinatorial exploration, Geometric grounding, Reverse prompting (self-interview questionnaires to overcome writer’s
+              block), and Experiential simulation.
+            </li>
+            <li>Self-interviews extract implicit, lived experience to seed models with genuine originality.</li>
+          </ul>
+        </aside>
+      </section>
+
+      <!-- 14a. EVALUATE: DOUBLE DIAMOND -->
+      <section class="slide">
+        <div class="slide__main">
+          <p class="kicker">Step 2 · Evaluate</p>
+          <figure>
+            <div class="media"><img src="./assets/double-diamond.webp" alt="Double Diamond design process" /></div>
+            <figcaption>Double Diamond · Design Council · after Osborn (1953) and Guilford</figcaption>
+          </figure>
+        </div>
+        <nav class="links">
+          <a href="https://archive.org/details/appliedimaginati00osbo">Osborn · Applied Imagination</a>
+        </nav>
+        <aside class="notes">
+          <ul>
+            <li>
+              The Double Diamond design framework (Guilford & Osborn): Alternating divergence (broad ideation) with convergence (rigorous evaluation and focus).
+            </li>
+            <li>Having diverged in generation, evaluation provides the critical filter needed to refine concepts.</li>
+          </ul>
+        </aside>
+      </section>
+
+      <!-- 14b. EVALUATE: TECHNIQUES -->
+      <section class="slide">
+        <div class="slide__main">
+          <p class="kicker">Step 2 · Evaluate · techniques</p>
+          <ol class="biglist">
+            <li class="fragment">Quantification <small>design rubrics → scores → sort, rank, filter</small></li>
+            <li class="fragment">Semantic axis sorting <small>embedding distance to polar attributes: practical ↔ speculative</small></li>
+            <li class="fragment">Interactive data visualization <small>LLM‑generated views of large solution spaces</small></li>
+            <li class="fragment">Virtual prototyping <small>Time Travel Radio · Tangible Media Group</small></li>
+          </ol>
+        </div>
+        <nav class="links">
+          <a href="https://thesephist.com/posts/prism/">Prism · thesephist</a>
+          <a href="https://thesephist.com/posts/spc/">Seeing with language models · thesephist</a>
+        </nav>
+        <aside class="notes">
+          <ul>
+            <li>Evaluation techniques:</li>
+            <li>1) Quantification: translating design rubrics into numerical scores to rank and filter candidates.</li>
+            <li>2) Semantic distance: using embeddings to map ideas across conceptual spectra (e.g. practical vs. speculative).</li>
+            <li>3) Virtual prototyping: building quick software simulations (e.g. Time Travel Radio) to validate interactions before physical fabrication.</li>
+          </ul>
+        </aside>
+      </section>
+
+      <!-- 14c. EVALUATE: DEMO -->
+      <section class="slide">
+        <div class="slide__main">
+          <p class="kicker">Demo · Answering Machine</p>
+          <div class="media media--framed"><iframe data-src="https://code.chuanqisun.com/answering-machine/" title="Answering Machine demo"></iframe></div>
+        </div>
+        <nav class="links">
+          <a href="https://code.chuanqisun.com/answering-machine/">Answering Machine</a>
+        </nav>
+        <aside class="notes">
+          <ul>
+            <li>Live demonstration: Answering Machine evaluating multimodal feedback heuristics and ranking responses interactively.</li>
+          </ul>
+        </aside>
+      </section>
+
+      <!-- 15a. CURATE: ETYMOLOGY -->
+      <section class="slide">
+        <div class="slide__main">
+          <p class="kicker">Step 3 · Curate</p>
+          <h2 class="display">curare</h2>
+          <p class="lede fragment">Latin: <span class="invert">to care for.</span></p>
+          <p class="lede lede--wide fragment">Selection is intent. Selection is the human act.</p>
+        </div>
+        <aside class="notes">
+          <ul>
+            <li>Etymology: <em>Curate</em> originates from the Latin <em>curare</em>, meaning "to care for."</li>
+            <li>Curation is where personal judgment, taste, ethics, and lived experience guide the final design outcome.</li>
+          </ul>
+        </aside>
+      </section>
+
+      <!-- 15b. CURATE: TECHNIQUES -->
+      <section class="slide">
+        <div class="slide__main">
+          <p class="kicker">Step 3 · Curate · techniques</p>
+          <ol class="biglist">
+            <li class="fragment">Embedding deduplication &amp; clustering</li>
+            <li class="fragment">Evidence‑based synthesis <small>grounded theory · Glaser &amp; Strauss</small></li>
+            <li class="fragment">Human‑in‑the‑loop annotation <small>multi‑cursor, inline comments</small></li>
+            <li class="fragment">Infinite ideation loops <small>select · prune · branch</small></li>
+            <li class="fragment">Personal knowledge base <small>Zettelkasten</small></li>
+          </ol>
+        </div>
+        <nav class="links">
+          <a href="https://en.wikipedia.org/wiki/Grounded_theory">Grounded theory</a>
+          <a href="https://elicit.com/">Elicit</a>
+          <a href="https://en.wikipedia.org/wiki/Zettelkasten">Zettelkasten</a>
+        </nav>
+        <aside class="notes">
+          <ul>
+            <li>Curation techniques: Embedding-based deduplication and clustering, grounded theory synthesis, and human-in-the-loop annotation.</li>
+            <li>Curation closes the loop: human selections and annotations feed directly into subsequent generative iterations.</li>
+          </ul>
+        </aside>
+      </section>
+
+      <!-- 15c. CURATE: DEMOS -->
+      <section class="slide">
+        <div class="slide__main">
+          <p class="kicker">Step 3 · Curate · demos</p>
+          <div class="cards">
+            <a class="fragment" href="https://github.com/users/chuanqisun/projects/7/views/1"><span>Knowledge base</span>GitHub DB</a>
+            <a class="fragment" href="https://github.com/chuanqisun/memo/blob/master/README.md"><span>Notes</span>Memo</a>
+            <a class="fragment" href="https://chuanqisun.github.io/issue-graph/?owner=chuanqisun&repo=paper-db"><span>Clustering</span>Graph Idea Generator</a>
+            <a class="fragment" href="https://code.chuanqisun.com/annotator/"><span>Human in the loop</span>Annotator</a>
+            <a class="fragment" href="https://chuanqisun.github.io/idea-garden/index.html"><span>Infinite loop</span>Idea Garden</a>
+          </div>
+        </div>
+        <aside class="notes">
+          <ul>
+            <li>
+              Curation tools in practice: Memo, Graph Idea Generator, Annotator, and Idea Garden (evolutionary loop combining automated clustering with human
+              curation).
+            </li>
+          </ul>
+        </aside>
+      </section>
+
+      <!-- 16a. CAN AI MAKE ART? THREE THINKERS -->
+      <section class="slide">
+        <div class="slide__main">
+          <p class="kicker">Return to the cliffhanger · Is the designer present?</p>
+          <div class="grid grid--3">
+            <figure class="fragment">
+              <div class="media"><img src="./assets/ted-chiang.webp" alt="Ted Chiang" /></div>
+              <figcaption>Ted Chiang · art is countless deliberate choices</figcaption>
+            </figure>
+            <figure class="fragment">
+              <div class="media"><img src="./assets/tim-ingold.webp" alt="Tim Ingold" /></div>
+              <figcaption>Tim Ingold · making is a dialogue with material</figcaption>
+            </figure>
+            <figure class="fragment">
+              <div class="media"><img src="./assets/richard-feynman.webp" alt="Richard Feynman" /></div>
+              <figcaption>Feynman · “What I cannot create, I do not understand”</figcaption>
+            </figure>
+          </div>
+        </div>
+        <nav class="links">
+          <a href="https://web.archive.org/web/20240925214558/https://www.newyorker.com/culture/the-weekend-essay/why-ai-isnt-going-to-make-art"
+            >Chiang · Why AI Isn’t Going to Make Art</a
+          >
+          <a href="https://jimmyzhengart.com/wp-content/uploads/2025/05/ingold-2009-textility-of-making-1.pdf">Ingold · The Textility of Making</a>
+        </nav>
+        <aside class="notes">
+          <ul>
+            <li>
+              Ted Chiang (<em>Why AI Isn’t Going to Make Art</em>): Art is defined by thousands of intentional choices; automating generation bypasses those
+              crucial micro-decisions.
+            </li>
+            <li>
+              Tim Ingold (<em>The Textility of Making</em>): Making is an ongoing dialogue with materials—you discover your intent through the process of
+              making.
+            </li>
+            <li>
+              Synthesis: Curation is the ultimate creative act in computational design. While AI generates possibilities, human curation injects lived
+              experience and intentional meaning.
+            </li>
+          </ul>
+        </aside>
+      </section>
+
+      <!-- 16b. THE INVERTED QUOTE -->
+      <section class="slide slide--section">
+        <div class="slide__main row">
+          <figure class="narrow">
+            <div class="media media--bleed">
+              <img src="./assets/ai-isnt-going-to-make-art-title.webp" alt="Why A.I. Isn't Going to Make Art" style="border: var(--rule) solid #fff" />
+            </div>
+          </figure>
+          <div style="display: flex; flex-direction: column; justify-content: center; gap: 1em">
+            <h2 class="headline">“What I did not <span class="invert" style="background: #fff; color: #000">decide,</span></h2>
+            <h2 class="headline">I cannot create.”</h2>
+          </div>
+        </div>
+        <aside class="notes">
+          <ul>
+            <li>Inverting Richard Feynman’s famous chalkboard dictum: “What I did not decide, I cannot create.”</li>
+            <li>Resolving the cliffhanger: The designer is authentically present wherever deliberate human choices and curation occur.</li>
+          </ul>
+        </aside>
+      </section>
+
+      <!-- 17a. EXERCISE: PROMPT -->
+      <section class="slide">
+        <div class="slide__main">
+          <p class="kicker">Part 4 · Hands‑on · groups of 3</p>
+          <h2 class="headline">Design a novel way for humans to communicate with AI.</h2>
+          <p class="lede fragment"><span class="invert">Not</span> a chatbot.</p>
+        </div>
+        <aside class="notes">
+          <ul>
+            <li>Workshop brief: Design an innovative, non-chatbot interaction paradigm for human-AI communication.</li>
+            <li>Focus on alternative interaction models: spatial, physical, tangible, continuous canvas, or gestural systems.</li>
+          </ul>
+        </aside>
+      </section>
+
+      <!-- 17b. EXERCISE: TECHNIQUES + QR -->
+      <section class="slide">
+        <div class="slide__main row">
+          <div style="display: flex; flex-direction: column; justify-content: center">
+            <p class="kicker">Practice one or more</p>
+            <ol class="biglist">
+              <li class="fragment">Self‑interview <small>reverse prompting from lived experience</small></li>
+              <li class="fragment">Algorithmic literature review <small>find the whitespace</small></li>
+              <li class="fragment">Quantify &amp; evaluate <small>score, rank, iterate</small></li>
+              <li class="fragment">Prototype &amp; showcase <small>virtual prototype + landing page</small></li>
+            </ol>
+            <p class="lede fragment" style="margin-top: 1em; font-size: clamp(12px, 1.2vw, 16px); font-family: var(--mono)">
+              Recommended tools:
+              <a href="https://antigravity.google/" target="_blank" rel="noopener" style="text-decoration: underline">Google Antigravity</a>,
+              <a href="https://openai.com/index/openai-codex/" target="_blank" rel="noopener" style="text-decoration: underline">OpenAI Codex</a>, or
+              <a href="https://docs.anthropic.com/en/docs/agents-and-tools/claude-code" target="_blank" rel="noopener" style="text-decoration: underline"
+                >Anthropic Claude Code</a
+              >
+            </p>
+          </div>
+          <figure class="narrow fragment">
+            <div class="media">
+              <img src="./assets/figjam-qr.svg" alt="QR code to FigJam board" />
+            </div>
+            <figcaption>Share your designs · FigJam</figcaption>
+          </figure>
+        </div>
+        <nav class="links">
+          <a href="https://www.figma.com/figjam/">FigJam board</a>
+          <a href="https://antigravity.google/">Google Antigravity</a>
+          <a href="https://openai.com/index/openai-codex/">OpenAI Codex</a>
+          <a href="https://docs.anthropic.com/en/docs/agents-and-tools/claude-code">Anthropic Claude Code</a>
+        </nav>
+        <aside class="notes">
+          <ul>
+            <li>Choose one or more techniques to structure your design exploration.</li>
+            <li>
+              Recommended agentic tools: Google Antigravity (deep agentic customization & workflows), OpenAI Codex (integrated code execution), and Anthropic
+              Claude Code (agentic terminal pair programming).
+            </li>
+            <li>Post your prototypes, prompts, and interface explorations to the FigJam board for sharing.</li>
+          </ul>
+        </aside>
+      </section>
+
+      <!-- 18a. CONTRIBUTIONS -->
+      <section class="slide">
+        <div class="slide__main">
+          <p class="kicker">Contributions</p>
+          <ol class="biglist">
+            <li class="fragment">Surveyed five frontiers <small>semantic rendering · affective voice · reality editing · world models · edge vision</small></li>
+            <li class="fragment">Examined three disciplines <small>more‑than‑human · spatial/physical · direct agency</small></li>
+            <li class="fragment">Generate → Evaluate → Curate</li>
+            <li class="fragment">Built something, together</li>
+          </ol>
+        </div>
+        <aside class="notes">
+          <ul>
+            <li>Workshop summary:</li>
+            <li>1) Surveyed 5 frontiers (semantic rendering, affective voice, reality editing, world models, local vision).</li>
+            <li>2) Explored 3 disciplines (more-than-human design, spatial AI, direct agency).</li>
+            <li>3) Practiced the Generate → Evaluate → Curate framework.</li>
+          </ul>
+        </aside>
+      </section>
+
+      <!-- 18b. SALUTE -->
+      <section class="slide slide--section">
+        <div class="slide__main">
+          <h2 class="display">I salute you.</h2>
+          <p class="lede lede--wide fragment">For your attention — and for the work you’re about to make.</p>
+        </div>
+        <aside class="notes">
+          <ul>
+            <li>A salute to everyone for your focus, creativity, and exploration today.</li>
+            <li>Go forth and build expressive, human-centered, more-than-human computational tools.</li>
+          </ul>
+        </aside>
+      </section>
+    </main>
+
+    <!-- Notes panel renders the active slide's <aside class="notes"> -->
+    <aside class="notes is-active" id="notesPanel"></aside>
+
+    <!-- =====================================================================
+     BEHAVIOR LAYER (JS)
+     ===================================================================== -->
+    <script>
+      (() => {
+        const slides = [...document.querySelectorAll("#deck .slide")];
+        const hud = document.getElementById("hud");
+        const notesPanel = document.getElementById("notesPanel");
+        let cur = -1;
+
+        /* --- favicons: inject into every link inside .links and .cards --- */
+        document.querySelectorAll(".links a, .cards a").forEach((a) => {
+          try {
+            const host = new URL(a.href).hostname;
+            const img = document.createElement("img");
+            img.src = `https://www.google.com/s2/favicons?domain=${host}&sz=32`;
+            img.alt = "";
+            a.prepend(img);
+            a.target = "_blank";
+            a.rel = "noopener";
+          } catch (_) {}
+        });
+
+        /* --- helpers --- */
+        const fragmentsOf = (s) => [...s.querySelectorAll(".fragment")];
+        const visibleCount = (s) => fragmentsOf(s).filter((f) => f.classList.contains("is-visible")).length;
+        const isRevealed = (el) => !el.closest(".fragment") || el.closest(".fragment").classList.contains("is-visible");
+
+        function syncMedia(slide) {
+          slide.querySelectorAll("video").forEach((v) => {
+            if (isRevealed(v)) v.play().catch(() => {});
+            else {
+              v.pause();
+              v.currentTime = 0;
+            }
+          });
+          slide.querySelectorAll("iframe[data-src]").forEach((f) => {
+            if (isRevealed(f) && !f.src) f.src = f.dataset.src;
+          });
+        }
+        function stopMedia(slide) {
+          slide.querySelectorAll("video").forEach((v) => {
+            v.pause();
+          });
+          slide.querySelectorAll("iframe").forEach((f) => {
+            if (f.src) f.removeAttribute("src");
+          });
+        }
+
+        function fitSlide(s) {
+          if (!s) return;
+          const main = s.querySelector(".slide__main");
+          if (!main) return;
+          main.style.transform = "";
+          main.style.transformOrigin = "";
+
+          const scrollH = main.scrollHeight;
+          const clientH = main.clientHeight;
+          const scrollW = main.scrollWidth;
+          const clientW = main.clientWidth;
+
+          let scale = 1;
+          if (scrollH > clientH + 2 && clientH > 0) {
+            scale = Math.min(scale, clientH / scrollH);
+          }
+          if (scrollW > clientW + 2 && clientW > 0) {
+            scale = Math.min(scale, clientW / scrollW);
+          }
+          if (scale < 0.999) {
+            main.style.transformOrigin = "center center";
+            main.style.transform = `scale(${Math.max(0.65, scale).toFixed(4)})`;
+          }
+        }
+
+        function render() {
+          const s = slides[cur];
+          hud.textContent = `${String(cur + 1).padStart(2, "0")} / ${String(slides.length).padStart(2, "0")}  ·  ${visibleCount(s)}/${fragmentsOf(s).length}`;
+          const notes = s.querySelector(".notes");
+          notesPanel.innerHTML = notes ? notes.innerHTML : "<ul><li>(no notes)</li></ul>";
+          const chart = s.querySelector(".chart");
+          if (chart) {
+            const jimmyVisible = s.querySelector(".chart__row--overflow.is-visible");
+            chart.classList.toggle("chart--scaled", !!jimmyVisible);
+          }
+          location.replace(`#${cur + 1}.${visibleCount(s)}`);
+          syncMedia(s);
+          fitSlide(s);
+        }
+
+        window.addEventListener("resize", () => {
+          if (cur >= 0 && slides[cur]) fitSlide(slides[cur]);
+        });
+
+        function goTo(index, fragCount = 0) {
+          index = Math.max(0, Math.min(slides.length - 1, index));
+          if (cur >= 0 && cur !== index) {
+            slides[cur].classList.remove("is-active");
+            stopMedia(slides[cur]);
+          }
+          cur = index;
+          const s = slides[cur];
+          s.classList.add("is-active");
+          fragmentsOf(s).forEach((f, i) => f.classList.toggle("is-visible", i < fragCount));
+          render();
+        }
+
+        function next() {
+          const s = slides[cur],
+            fr = fragmentsOf(s),
+            n = visibleCount(s);
+          if (n < fr.length) {
+            fr[n].classList.add("is-visible");
+            render();
+          } else if (cur < slides.length - 1) {
+            goTo(cur + 1, 0);
+          }
+        }
+        function prev() {
+          const s = slides[cur],
+            fr = fragmentsOf(s),
+            n = visibleCount(s);
+          if (n > 0) {
+            fr[n - 1].classList.remove("is-visible");
+            render();
+          } else if (cur > 0) {
+            const prevSlide = slides[cur - 1];
+            goTo(cur - 1, fragmentsOf(prevSlide).length);
+          }
+        }
+
+        let lastRepeatNav = 0;
+        function nextSlide() {
+          const now = Date.now();
+          if (now - lastRepeatNav < 120) return;
+          lastRepeatNav = now;
+          if (cur < slides.length - 1) {
+            goTo(cur + 1, 0);
+          }
+        }
+        function prevSlide() {
+          const now = Date.now();
+          if (now - lastRepeatNav < 120) return;
+          lastRepeatNav = now;
+          if (cur > 0) {
+            goTo(cur - 1, 0);
+          }
+        }
+
+        window.addEventListener("keyup", () => {
+          lastRepeatNav = 0;
+        });
+
+        document.addEventListener("keydown", (e) => {
+          if (e.target.matches("input, textarea")) return;
+          switch (e.key) {
+            case "ArrowRight":
+            case "ArrowDown":
+            case "PageDown":
+              e.preventDefault();
+              if (e.repeat) {
+                nextSlide();
+              } else {
+                next();
+              }
+              break;
+            case " ":
+              e.preventDefault();
+              next();
+              break;
+            case "ArrowLeft":
+            case "ArrowUp":
+            case "PageUp":
+              e.preventDefault();
+              if (e.repeat) {
+                prevSlide();
+              } else {
+                prev();
+              }
+              break;
+            case "Home":
+              goTo(0);
+              break;
+            case "End":
+              goTo(slides.length - 1);
+              break;
+            case "n":
+            case "N":
+              document.body.classList.toggle("show-notes");
+              break;
+          }
+        });
+
+        /* --- start from URL hash: #slide.fragments --- */
+        const m = location.hash.match(/#(\d+)(?:\.(\d+))?/);
+        goTo(m ? +m[1] - 1 : 0, m && m[2] ? +m[2] : 0);
+      })();
+    </script>
   </body>
 </html>
