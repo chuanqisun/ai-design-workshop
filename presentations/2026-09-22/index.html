@@ -1146,8 +1146,8 @@
             <figcaption>Bayles &amp; Orland · Art &amp; Fear · 1993</figcaption>
           </figure>
           <div style="display: flex; flex-direction: column; justify-content: center; gap: 1em">
-            <h2 class="headline">Quantity over <span class="invert">quality.</span></h2>
-            <p class="lede fragment">The ceramics class: the group graded on volume produced the best pots.</p>
+            <h2 class="headline">Quantity before quality.</h2>
+            <p class="lede fragment">The ceramics class: the group graded on <span class="invert">volume</span> produced the best pots.</p>
           </div>
         </div>
         <nav class="links">
@@ -1465,22 +1465,26 @@
               >
             </p>
           </div>
-          <figure class="narrow fragment" style="flex: 0 0 clamp(340px, 42%, 620px)">
+          <div
+            class="narrow fragment"
+            style="flex: 0 0 clamp(360px, 44%, 640px); display: flex; flex-direction: column; justify-content: center; gap: clamp(20px, 3.5vh, 38px)"
+          >
             <div
               class="media media--framed"
               style="
+                flex: 0 0 auto;
                 flex-direction: column;
                 justify-content: center;
                 align-items: flex-start;
-                padding: clamp(24px, 3.5vmin, 44px);
-                gap: clamp(14px, 2vh, 22px);
+                padding: clamp(20px, 3vmin, 36px);
+                gap: clamp(12px, 1.6vh, 18px);
                 background: var(--paper);
               "
             >
               <p class="kicker">Share your designs · FigJam</p>
               <div style="display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.6em 1.2em; width: 100%">
                 <a
-                  href="https://tinyurl.com/redesign-workshop"
+                  href="https://tinyurl.com/redesign-board"
                   target="_blank"
                   rel="noopener"
                   style="
@@ -1493,7 +1497,7 @@
                     text-underline-offset: 4px;
                     word-break: break-all;
                   "
-                  >https://tinyurl.com/redesign-workshop</a
+                  >https://tinyurl.com/redesign-board</a
                 >
                 <span
                   style="
@@ -1510,11 +1514,44 @@
                 </span>
               </div>
             </div>
-            <figcaption>Share your designs · FigJam</figcaption>
-          </figure>
+
+            <div
+              class="media media--framed"
+              style="
+                flex: 0 0 auto;
+                flex-direction: column;
+                justify-content: center;
+                align-items: flex-start;
+                padding: clamp(20px, 3vmin, 36px);
+                gap: clamp(12px, 1.6vh, 18px);
+                background: var(--paper);
+              "
+            >
+              <p class="kicker">Review presentation · Deck</p>
+              <div style="display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.6em 1.2em; width: 100%">
+                <a
+                  href="https://tinyurl.com/redesign-deck"
+                  target="_blank"
+                  rel="noopener"
+                  style="
+                    font-family: var(--mono);
+                    font-size: clamp(16px, min(1.8vw, 2.4vh), 24px);
+                    font-weight: 800;
+                    letter-spacing: -0.02em;
+                    text-decoration: underline;
+                    text-decoration-thickness: 2px;
+                    text-underline-offset: 4px;
+                    word-break: break-all;
+                  "
+                  >https://tinyurl.com/redesign-deck</a
+                >
+              </div>
+            </div>
+          </div>
         </div>
         <nav class="links">
-          <a href="https://tinyurl.com/redesign-workshop" target="_blank" rel="noopener">FigJam board</a>
+          <a href="https://tinyurl.com/redesign-board" target="_blank" rel="noopener">FigJam board</a>
+          <a href="https://tinyurl.com/redesign-deck" target="_blank" rel="noopener">Slide deck</a>
           <a href="https://antigravity.google/">Google Antigravity</a>
           <a href="https://openai.com/index/openai-codex/">OpenAI Codex</a>
           <a href="https://docs.anthropic.com/en/docs/agents-and-tools/claude-code">Anthropic Claude Code</a>
@@ -1526,10 +1563,8 @@
               Recommended agentic tools: Google Antigravity (deep agentic customization & workflows), OpenAI Codex (integrated code execution), and Anthropic
               Claude Code (agentic terminal pair programming).
             </li>
-            <li>
-              Post your prototypes, prompts, and interface explorations to the FigJam board for sharing: https://tinyurl.com/redesign-workshop (Password:
-              tangible).
-            </li>
+            <li>Share designs on FigJam: https://tinyurl.com/redesign-board (Password: tangible).</li>
+            <li>Review presentation deck: https://tinyurl.com/redesign-deck.</li>
           </ul>
         </aside>
       </section>

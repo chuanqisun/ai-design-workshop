@@ -7,10 +7,10 @@
 5. Rewrite the notes in "N" as notes for students, not for the presenter. If content not relevant to student, remove it.
 6. During keyboard navigation, if the key is held, navigate by whole slide, bypass in-slide navigation. This helps user quickly jump back and forth by holding the arrow keys. Otherwise, tapping the key would still trigger in-slide navigation.
 7. Swap Slide 12 with wide format demo video.
+8. Fix FigJam board URL
+9. Check each ref link
+10. Quantity over quality. Pick the right highlight word
 
 # TBD
 
-1. Fix FigJam board URL
-2. Cycle aspect radio by "A" key, allow locking to 1:1, 4:3, 16:9 and responsive
-3. Check each ref link
-4. Quantity over quality. Pick the right highlight word
+2. Cycle aspect ratio by "A" key, allow locking to 1:1, 4:3, 16:9 and responsive
