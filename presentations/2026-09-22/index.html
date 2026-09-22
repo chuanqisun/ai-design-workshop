@@ -214,6 +214,17 @@
       .media--framed iframe {
         border: 0;
       }
+      .media--swap img:last-child {
+        display: none;
+      }
+      .slide:has(.is-visible) .media--swap img:first-child,
+      .slide.slide--swapped .media--swap img:first-child {
+        display: none;
+      }
+      .slide:has(.is-visible) .media--swap img:last-child,
+      .slide.slide--swapped .media--swap img:last-child {
+        display: block;
+      }
       figcaption {
         font-family: var(--mono);
         font-size: clamp(10px, min(1.1vw, 1.4vh), 14px);
@@ -790,7 +801,10 @@
             <p class="lede fragment">LoFi to HiFi, back to LoFi</p>
           </div>
           <figure>
-            <div class="media"><img src="./assets/industrial-sketch-01.webp" alt="Tangible puck workflow sketches" /></div>
+            <div class="media media--swap">
+              <img src="./assets/industrial-sketch-01-hifi.webp" alt="Tangible puck workflow render" />
+              <img src="./assets/industrial-sketch-01.webp" alt="Tangible puck workflow sketches" />
+            </div>
             <figcaption>sh.elf · real‑time image‑to‑image</figcaption>
           </figure>
         </div>
@@ -799,6 +813,7 @@
           <a href="https://openai.com/index/introducing-chatgpt-images-2-5/">ChatGPT Images 2.5</a>
           <a href="https://bfl.ai/">FLUX 3</a>
           <a href="https://www.krea.ai/realtime">Krea Realtime</a>
+          <a href="https://fal.ai/models/fal-ai/flux-2/klein/realtime">FLUX Klein Realtime</a>
           <a href="https://lucy.decart.ai/">Lucy 2.5 Realtime</a>
         </nav>
         <aside class="notes">
@@ -825,10 +840,7 @@
             <figcaption>After · rendered interaction modes</figcaption>
           </figure>
         </div>
-        <nav class="links">
-          <a href="https://code.chuanqisun.com/sh-elf/">sh.elf</a>
-          <a href="https://fal.ai/">FLUX Klein Realtime via fal.ai</a>
-        </nav>
+        <nav class="links"></nav>
         <aside class="notes">
           <ul>
             <li>
@@ -1578,6 +1590,10 @@
             const jimmyVisible = s.querySelector(".chart__row--overflow.is-visible");
             chart.classList.toggle("chart--scaled", !!jimmyVisible);
           }
+          const swap = s.querySelector(".media--swap");
+          if (swap) {
+            s.classList.toggle("slide--swapped", visibleCount(s) > 0);
+          }
           location.replace(`#${cur + 1}.${visibleCount(s)}`);
           syncMedia(s);
           fitSlide(s);
@@ -1591,6 +1607,7 @@
           index = Math.max(0, Math.min(slides.length - 1, index));
           if (cur >= 0 && cur !== index) {
             slides[cur].classList.remove("is-active");
+            slides[cur].classList.remove("slide--swapped");
             stopMedia(slides[cur]);
           }
           cur = index;
