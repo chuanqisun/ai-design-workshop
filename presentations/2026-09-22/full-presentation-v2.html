@@ -73,35 +73,44 @@
         gap: clamp(10px, 2vh, var(--gap));
         transition: transform 0.15s ease-out;
       }
-      .slide__main.row {
+      .slide__main.row,
+      .row {
+        display: flex;
         flex-direction: row;
         align-items: stretch;
+        gap: clamp(10px, 2vh, var(--gap));
       }
-      .slide__main.row > * {
+      .slide__main.row > *,
+      .row > * {
         flex: 1 1 0;
         min-width: 0;
         min-height: 0;
       }
-      .slide__main.row > .narrow {
+      .slide__main.row > .narrow,
+      .row > .narrow {
         flex: 0 0 35%;
       }
 
       /* Adaptive for portrait / narrow viewports */
       @media (max-aspect-ratio: 11/10), (max-width: 768px) {
-        .slide__main.row {
+        .slide__main.row,
+        .row {
           flex-direction: column;
           justify-content: center;
         }
-        .slide__main.row > * {
+        .slide__main.row > *,
+        .row > * {
           flex: 1 1 auto;
           min-height: 0;
         }
-        .slide__main.row > figure {
+        .slide__main.row > figure,
+        .row > figure {
           flex: 1 1 0;
           min-height: 0;
           max-height: 52vh;
         }
-        .slide__main.row > .narrow {
+        .slide__main.row > .narrow,
+        .row > .narrow {
           flex: 0 1 auto;
           max-height: 38vh;
         }
@@ -441,6 +450,11 @@
         inset: 0 auto 0 0;
         background: var(--ink);
         width: calc(var(--v) / 2000 * 100%);
+        transition: width 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+      .chart:has(.chart__row--overflow.is-visible) .chart__bar,
+      .chart.chart--scaled .chart__bar {
+        width: calc(var(--v) / 14000 * 100%);
       }
       .chart__row--overflow .chart__bar {
         background: repeating-linear-gradient(-45deg, var(--ink) 0 12px, var(--paper) 12px 24px);
@@ -570,8 +584,8 @@
         </div>
         <aside class="notes">
           <ul>
-            <li>Welcome. No laptops, no phones for the talk portion — you will need them for the workshop.</li>
-            <li>“Re:” as in reply, as in redo. We are redesigning design.</li>
+            <li>Re:design — exploring how generative and real-time AI reshapes the computational design process.</li>
+            <li>Core question: How do we move beyond conventional chatbots to build expressive, human-centered computational design tools?</li>
           </ul>
         </aside>
       </section>
@@ -590,9 +604,14 @@
         </nav>
         <aside class="notes">
           <ul>
-            <li>Let the image sit for a few seconds before revealing the caption.</li>
-            <li>Is performance art still art? Is generative design still design?</li>
-            <li>Cliffhanger: do not answer yet. We return to this at the end.</li>
+            <li>
+              Marina Abramović’s landmark 2010 MoMA performance, <em>The Artist Is Present</em>, foregrounds physical and emotional presence as the essence of
+              art.
+            </li>
+            <li>
+              In an era of instant generative synthesis, where is the designer present? What constitutes authentic creative authorship when execution is
+              automated?
+            </li>
           </ul>
         </aside>
       </section>
@@ -617,9 +636,10 @@
         </nav>
         <aside class="notes">
           <ul>
-            <li>Before AI, I lamented that designers were already absent from the industrial complex.</li>
-            <li>Brief bio. Then the number: 50+. That is the credibility for the promise on the next slide.</li>
-            <li>Optional: swap in a personal photo in the left figure.</li>
+            <li>Speaker background: Chuanqi Sun (software engineering, design research, 2nd-year master’s student).</li>
+            <li>
+              Shipped 50+ rapid design projects in one year by treating AI not as an autonomous agent, but as an interactive accelerator for human intent.
+            </li>
           </ul>
         </aside>
       </section>
@@ -633,8 +653,8 @@
         </div>
         <aside class="notes">
           <ul>
-            <li>Empowerment promise (Winston): what you will know at the end that you don’t know now.</li>
-            <li>Roadmap: 1) New frontiers 2) Emerging disciplines 3) New (old) ways to design 4) Hands‑on.</li>
+            <li>Key takeaway: You will acquire the frameworks, intuition, and software primitives to design custom AI-empowered creative workflows.</li>
+            <li>Roadmap: 1) New Frontiers (labs & technology) 2) Emerging Disciplines 3) Framework (Generate → Evaluate → Curate) 4) Hands-on practice.</li>
           </ul>
         </aside>
       </section>
@@ -654,8 +674,8 @@
         </div>
         <aside class="notes">
           <ul>
-            <li>Look beyond chatbots: what frontier labs are actually building.</li>
-            <li>Enumerate the five trends as verbal punctuation.</li>
+            <li>Five technological shifts moving AI beyond conversational text chat:</li>
+            <li>1) Semantic rendering 2) Affective voice 3) Reality editing 4) Interactive world models 5) Local edge vision.</li>
           </ul>
         </aside>
       </section>
@@ -711,7 +731,7 @@
               <span>Chat Jimmy</span>
               <div class="chart__track">
                 <div class="chart__bar" style="--v: 14000"></div>
-                <span class="chart__value">14,000 tps →</span>
+                <span class="chart__value">14,000 tps</span>
               </div>
             </div>
           </div>
@@ -726,10 +746,11 @@
         <aside class="notes">
           <ul>
             <li>
-              Reveal bars one by one. STOP before Chat Jimmy — switch to the live demo first, then reveal the 14,000 bar (it breaks the chart on purpose).
+              Speed is a qualitative shift: when inference reaches 10,000+ tps (e.g. Chat Jimmy), roundtrip latency falls below human sensory perception
+              (<50ms).
             </li>
-            <li>When frontier models are truly real‑time, systems render full semantic interfaces on every keystroke instead of streaming a chat reply.</li>
-            <li>Ask: what would you build if the model answered before you finished typing? (7‑second pause.)</li>
+            <li>Rather than streaming conversational replies, models can render complete interactive interfaces and documents on every keystroke.</li>
+            <li>Designing for instantaneous models requires thinking in continuous reactive state rather than turn-taking chat.</li>
           </ul>
         </aside>
       </section>
@@ -749,8 +770,10 @@
         </div>
         <aside class="notes">
           <ul>
-            <li>Beyond mechanical TTS/transcription: emotion, nuance, conversational cadence.</li>
-            <li>Demo Sesame live. Then MAI Transcribe: half‑duplex, near‑perfect real‑time transcription.</li>
+            <li>
+              Voice AI is progressing from robotic TTS to affective enactment—inflecting speech with emotion, hesitation, and natural conversational cadence.
+            </li>
+            <li>Low-latency transcription (e.g. MAI Transcribe) enables true half-duplex spoken dialogue without rigid turn-taking.</li>
           </ul>
         </aside>
       </section>
@@ -776,8 +799,8 @@
         </nav>
         <aside class="notes">
           <ul>
-            <li>Demo my Shelf Builder: real‑time i2i on a live canvas.</li>
-            <li>Low‑fi images are more useful with GPT‑image 2.5 and FLUX; the sketch is the control signal.</li>
+            <li>Real-time image-to-image (i2i) synthesis turns the design canvas into a continuous reactive surface.</li>
+            <li>Low-fidelity sketches and gestural inputs act as high-bandwidth spatial control signals, directing models much faster than text prompts.</li>
           </ul>
         </aside>
       </section>
@@ -804,8 +827,11 @@
         </nav>
         <aside class="notes">
           <ul>
-            <li>Left: two real puck photos + hand sketch. Reveal right: low‑fidelity rendering of interaction modes.</li>
-            <li>Live FLUX Klein Realtime on fal.ai — pre‑recorded video as backup.</li>
+            <li>
+              Multimodal sketching: combining physical objects, hand drawings, and generative rendering (e.g. FLUX Klein Realtime) to explore physical
+              interaction design rapidly.
+            </li>
+            <li>Enables designers to test form and affordances before committing to physical prototyping.</li>
           </ul>
         </aside>
       </section>
@@ -834,8 +860,8 @@
         </nav>
         <aside class="notes">
           <ul>
-            <li>Video generation used to be slow, resource‑heavy, batch. Now mainstream, interactive, spatial.</li>
-            <li>Videos autoplay muted when revealed. Narrate over them.</li>
+            <li>Generative video has evolved from slow batch generation into interactive, real-time spatial simulation.</li>
+            <li>Allows designers to prototype spatial flows, cinematic treatments, and environmental behaviors directly.</li>
           </ul>
         </aside>
       </section>
@@ -858,7 +884,8 @@
         </nav>
         <aside class="notes">
           <ul>
-            <li>Names only — logos in the favicons. One sentence each.</li>
+            <li>World models (Google Genie, World Labs Marble, Tencent HY World 2.0) build internal simulations of 3D geometry and physical dynamics.</li>
+            <li>Shifts design from rendering static frames to steering interactive, persistent virtual worlds.</li>
           </ul>
         </aside>
       </section>
@@ -881,8 +908,8 @@
         </nav>
         <aside class="notes">
           <ul>
-            <li>Models are moving onto edge devices. Show TouchDesigner collage via the Instagram link (hand‑tracking, gesture control).</li>
-            <li>Reveal my demo: real‑time hand + object segmentation.</li>
+            <li>Edge computer vision: lightweight models run locally on consumer GPUs and NPUs with zero network latency and complete privacy.</li>
+            <li>Enables high-frequency sensor loops (60+ FPS hand and object segmentation) for tangible, physical-digital interaction.</li>
           </ul>
         </aside>
       </section>
@@ -900,25 +927,30 @@
         </div>
         <aside class="notes">
           <ul>
-            <li>Three disciplines. Enumerate.</li>
+            <li>Three emerging design paradigms reshaping interaction beyond traditional HCI:</li>
+            <li>1) More-than-human design 2) Spatial, embodied, physical AI 3) Direct agency.</li>
           </ul>
         </aside>
       </section>
 
       <!-- 9b. MODEL WELFARE DEBATE -->
       <section class="slide">
-        <div class="slide__main row">
-          <figure class="fragment">
-            <div class="media"><img src="./assets/mustafa-suleyman.webp" alt="Mustafa Suleyman" /></div>
-            <figcaption>Mustafa Suleyman · Microsoft AI · “Seemingly conscious AI is a risk”</figcaption>
-          </figure>
-          <div class="narrow" style="display: flex; align-items: center; justify-content: center">
-            <span class="display fragment">VS</span>
+        <div class="slide__main">
+          <p class="kicker">More‑than‑human design</p>
+          <h2 class="headline">Do you say “please” and “thank you” to your AI?</h2>
+          <div class="row" style="flex: 1 1 auto; min-height: 0">
+            <figure class="fragment">
+              <div class="media"><img src="./assets/mustafa-suleyman.webp" alt="Mustafa Suleyman" /></div>
+              <figcaption>Mustafa Suleyman · Microsoft AI · “Seemingly conscious AI is a risk”</figcaption>
+            </figure>
+            <div class="narrow" style="display: flex; align-items: center; justify-content: center">
+              <span class="display fragment">VS</span>
+            </div>
+            <figure class="fragment">
+              <div class="media"><img src="./assets/kyle-fish.webp" alt="Kyle Fish" /></div>
+              <figcaption>Kyle Fish · Anthropic · Model welfare research</figcaption>
+            </figure>
           </div>
-          <figure class="fragment">
-            <div class="media"><img src="./assets/kyle-fish.webp" alt="Kyle Fish" /></div>
-            <figcaption>Kyle Fish · Anthropic · Model welfare research</figcaption>
-          </figure>
         </div>
         <nav class="links">
           <a href="https://microsoft.ai/code-of-conduct/">Microsoft AI code of conduct</a>
@@ -927,8 +959,12 @@
         </nav>
         <aside class="notes">
           <ul>
-            <li>Design paradigms that consider AI agency and non‑human perspectives.</li>
-            <li>Key debate: Suleyman (don’t build seemingly‑conscious AI) vs Anthropic (take model welfare seriously).</li>
+            <li>Politeness toward AI highlights our instinctual attribution of agency and social dynamics to interactive models.</li>
+            <li>
+              Core debate: Mustafa Suleyman (Microsoft AI: avoid illusions of consciousness; AI should remain purely instrumental) vs. Kyle Fish (Anthropic:
+              research model welfare and machine sentience seriously).
+            </li>
+            <li>More-than-human design urges designers to engage non-human perspectives and machine agency.</li>
           </ul>
         </aside>
       </section>
@@ -950,8 +986,11 @@
         </nav>
         <aside class="notes">
           <ul>
-            <li>The comic: perceiving from two cameras far apart — clouds as small objects. A non‑human perceptual experience.</li>
-            <li>Designing for non‑human perspectives is a discipline, not a gimmick.</li>
+            <li>
+              XKCD 941 (Depth Perception): Illustrates non-human perceptual experience (cameras miles apart interpreting distant clouds as small nearby
+              objects).
+            </li>
+            <li>More-than-human design treats computational sensory apparatus (embeddings, disparity, latent spaces) as distinct design materials.</li>
           </ul>
         </aside>
       </section>
@@ -973,14 +1012,16 @@
           </figure>
         </div>
         <nav class="links">
-          <a href="https://www.openai.com/astra">OpenAI Astra</a>
+          <a href="https://openai.com/index/gpt-6-astra/">OpenAI Astra</a>
           <a href="https://youtu.be/RyBEUyEtxQo">Put That There (1980)</a>
           <a href="https://dl.acm.org/doi/10.1145/3802974.3810894">Tangible Co‑ideation · Quincy &amp; Lucy</a>
         </nav>
         <aside class="notes">
           <ul>
-            <li>Play 30–60 seconds of Bolt’s demo. Multimodal perception is old — it just became cheap.</li>
-            <li>Astra announcement video via link. Quincy and Lucy’s Tangible Prompting project.</li>
+            <li>Richard Bolt’s 1980 MIT Architecture Machine Group demo ("Put-That-There") founded multimodal spatial input combining voice and pointing.</li>
+            <li>
+              Modern frontiers like OpenAI Astra and Tangible Prompting extend this foundation: physical affordances merge with real-time spatial AI perception.
+            </li>
           </ul>
         </aside>
       </section>
@@ -999,8 +1040,11 @@
         </nav>
         <aside class="notes">
           <ul>
-            <li>Fencing: my idea sits between two poles — direct manipulation (Shneiderman) and delegation to agents (Maes).</li>
-            <li>Direct agency = the control of DM with the leverage of agents.</li>
+            <li>
+              The classic HCI debate: Direct Manipulation (Ben Shneiderman — continuous representation, immediate feedback, user control) vs. Autonomous Agents
+              (Pattie Maes — delegation, background automation).
+            </li>
+            <li>Direct Agency synthesizes the two: retaining tactile, continuous control while wielding the power of generative agentic models.</li>
           </ul>
         </aside>
       </section>
@@ -1019,7 +1063,8 @@
         </div>
         <aside class="notes">
           <ul>
-            <li>Leave as a conceptual cliffhanger. Do not explain the mechanism.</li>
+            <li>Semantic Sculpting: Applying direct manipulation techniques to high-dimensional latent and semantic spaces.</li>
+            <li>Allows designers to feel and steer generative parameters with continuous controls instead of text prompts.</li>
           </ul>
         </aside>
       </section>
@@ -1036,8 +1081,8 @@
         </div>
         <aside class="notes">
           <ul>
-            <li>Transition from theory/technology to methodology.</li>
-            <li>The loop: Generate → Evaluate → Curate. Say it three times over the next slides (cycling).</li>
+            <li>The core computational design loop: Generate → Evaluate → Curate.</li>
+            <li>Provides a repeatable method for pairing human creative intent with generative algorithmic engines.</li>
           </ul>
         </aside>
       </section>
@@ -1054,8 +1099,8 @@
         </nav>
         <aside class="notes">
           <ul>
-            <li>Parametric, combinatorial exploration. 10,000 punks from a handful of attributes.</li>
-            <li>Divergence forces the model to explore a wider aperture.</li>
+            <li>Combinatorial exploration (exemplified by CryptoPunks): exploring vast design spaces by combining discrete attributes and generative rules.</li>
+            <li>Broad divergence forces generative models outside their narrow default assumptions.</li>
           </ul>
         </aside>
       </section>
@@ -1077,8 +1122,11 @@
         </nav>
         <aside class="notes">
           <ul>
-            <li>Historical precedent: the quantity group made the best work because they iterated.</li>
-            <li>Generation is cheap now. Divergence first.</li>
+            <li>
+              Bayles & Orland’s ceramics parable from <em>Art & Fear</em>: The group graded solely on quantity produced higher quality work because they learned
+              iteratively through rapid output.
+            </li>
+            <li>With generative AI, generation cost approaches zero—use volume and rapid variation to discover unexpected solutions.</li>
           </ul>
         </aside>
       </section>
@@ -1102,8 +1150,11 @@
         </nav>
         <aside class="notes">
           <ul>
-            <li>“Granola grounding”: raw audio + hand‑drawn sketches → structured, interactive study guide.</li>
-            <li>Grounding beats prompting. Hallucination becomes a feature when scaffolded.</li>
+            <li>
+              "Granola grounding": Grounding models with raw, multi-modal personal data (handwritten notes, lecture audio) rather than relying on abstract
+              prompts.
+            </li>
+            <li>Anchors generation in authentic personal context, transforming generative synthesis into a structured learning artifact.</li>
           </ul>
         </aside>
       </section>
@@ -1116,8 +1167,8 @@
         </div>
         <aside class="notes">
           <ul>
-            <li>Systematic annotated bibliography, generated then verified.</li>
-            <li>Use to find whitespace, not to skip reading.</li>
+            <li>Algorithmic literature review: systematically mapping research landscapes and generating annotated bibliographies.</li>
+            <li>Use AI to index, cross-reference, and surface unaddressed whitespace—not to bypass deep critical reading.</li>
           </ul>
         </aside>
       </section>
@@ -1141,8 +1192,11 @@
         </nav>
         <aside class="notes">
           <ul>
-            <li>Recap the six techniques (cycling #2 of the framework).</li>
-            <li>Demo mugen.ai live. Reverse prompting avoids blank‑page syndrome and extracts implicit knowledge.</li>
+            <li>
+              Key generation techniques: Combinatorial exploration, Geometric grounding, Reverse prompting (self-interview questionnaires to overcome writer’s
+              block), and Experiential simulation.
+            </li>
+            <li>Self-interviews extract implicit, lived experience to seed models with genuine originality.</li>
           </ul>
         </aside>
       </section>
@@ -1161,7 +1215,10 @@
         </nav>
         <aside class="notes">
           <ul>
-            <li>Diverge on problem, converge; diverge on solution, converge. We just diverged — now we converge with rigor.</li>
+            <li>
+              The Double Diamond design framework (Guilford & Osborn): Alternating divergence (broad ideation) with convergence (rigorous evaluation and focus).
+            </li>
+            <li>Having diverged in generation, evaluation provides the critical filter needed to refine concepts.</li>
           </ul>
         </aside>
       </section>
@@ -1183,8 +1240,10 @@
         </nav>
         <aside class="notes">
           <ul>
-            <li>Rubrics make qualitative criteria numeric. Embeddings plot ideas along spectra automatically.</li>
-            <li>Time Travel Radio: software prototype validated before fabrication.</li>
+            <li>Evaluation techniques:</li>
+            <li>1) Quantification: translating design rubrics into numerical scores to rank and filter candidates.</li>
+            <li>2) Semantic distance: using embeddings to map ideas across conceptual spectra (e.g. practical vs. speculative).</li>
+            <li>3) Virtual prototyping: building quick software simulations (e.g. Time Travel Radio) to validate interactions before physical fabrication.</li>
           </ul>
         </aside>
       </section>
@@ -1200,7 +1259,7 @@
         </nav>
         <aside class="notes">
           <ul>
-            <li>Live demo. If the embed is blocked, open the link in a new tab.</li>
+            <li>Live demonstration: Answering Machine evaluating multimodal feedback heuristics and ranking responses interactively.</li>
           </ul>
         </aside>
       </section>
@@ -1215,7 +1274,8 @@
         </div>
         <aside class="notes">
           <ul>
-            <li>Curation is not a leftover step — it’s where lived experience enters the work.</li>
+            <li>Etymology: <em>Curate</em> originates from the Latin <em>curare</em>, meaning "to care for."</li>
+            <li>Curation is where personal judgment, taste, ethics, and lived experience guide the final design outcome.</li>
           </ul>
         </aside>
       </section>
@@ -1239,7 +1299,8 @@
         </nav>
         <aside class="notes">
           <ul>
-            <li>Cycling #3: Generate → Evaluate → Curate. Curation closes the loop and feeds the next generation.</li>
+            <li>Curation techniques: Embedding-based deduplication and clustering, grounded theory synthesis, and human-in-the-loop annotation.</li>
+            <li>Curation closes the loop: human selections and annotations feed directly into subsequent generative iterations.</li>
           </ul>
         </aside>
       </section>
@@ -1258,7 +1319,10 @@
         </div>
         <aside class="notes">
           <ul>
-            <li>Pick one or two to demo live depending on time. Idea Garden is the crowd favorite.</li>
+            <li>
+              Curation tools in practice: Memo, Graph Idea Generator, Annotator, and Idea Garden (evolutionary loop combining automated clustering with human
+              curation).
+            </li>
           </ul>
         </aside>
       </section>
@@ -1290,11 +1354,17 @@
         </nav>
         <aside class="notes">
           <ul>
-            <li>Chiang: generation bypasses the micro‑decisions that make art.</li>
-            <li>Ingold: you don’t know what you’ll make until you make it — relational, generative dialogue with material.</li>
             <li>
-              Synthesis: curation is the supreme creative act — it embeds lived experience. Art = affective expression; design = problem‑solving coupled with
-              resonance.
+              Ted Chiang (<em>Why AI Isn’t Going to Make Art</em>): Art is defined by thousands of intentional choices; automating generation bypasses those
+              crucial micro-decisions.
+            </li>
+            <li>
+              Tim Ingold (<em>The Textility of Making</em>): Making is an ongoing dialogue with materials—you discover your intent through the process of
+              making.
+            </li>
+            <li>
+              Synthesis: Curation is the ultimate creative act in computational design. While AI generates possibilities, human curation injects lived
+              experience and intentional meaning.
             </li>
           </ul>
         </aside>
@@ -1315,8 +1385,8 @@
         </div>
         <aside class="notes">
           <ul>
-            <li>Feynman inverted for generative AI. Pause after “decide”.</li>
-            <li>Answer to the cliffhanger: the designer is present exactly where the decisions are.</li>
+            <li>Inverting Richard Feynman’s famous chalkboard dictum: “What I did not decide, I cannot create.”</li>
+            <li>Resolving the cliffhanger: The designer is authentically present wherever deliberate human choices and curation occur.</li>
           </ul>
         </aside>
       </section>
@@ -1330,7 +1400,8 @@
         </div>
         <aside class="notes">
           <ul>
-            <li>Form groups of three. Read the prompt twice.</li>
+            <li>Workshop brief: Design an innovative, non-chatbot interaction paradigm for human-AI communication.</li>
+            <li>Focus on alternative interaction models: spatial, physical, tangible, continuous canvas, or gestural systems.</li>
           </ul>
         </aside>
       </section>
@@ -1346,6 +1417,14 @@
               <li class="fragment">Quantify &amp; evaluate <small>score, rank, iterate</small></li>
               <li class="fragment">Prototype &amp; showcase <small>virtual prototype + landing page</small></li>
             </ol>
+            <p class="lede fragment" style="margin-top: 1em; font-size: clamp(12px, 1.2vw, 16px); font-family: var(--mono)">
+              Recommended tools:
+              <a href="https://antigravity.google/" target="_blank" rel="noopener" style="text-decoration: underline">Google Antigravity</a>,
+              <a href="https://openai.com/index/openai-codex/" target="_blank" rel="noopener" style="text-decoration: underline">OpenAI Codex</a>, or
+              <a href="https://docs.anthropic.com/en/docs/agents-and-tools/claude-code" target="_blank" rel="noopener" style="text-decoration: underline"
+                >Anthropic Claude Code</a
+              >
+            </p>
           </div>
           <figure class="narrow fragment">
             <div class="media">
@@ -1356,10 +1435,18 @@
         </div>
         <nav class="links">
           <a href="https://www.figma.com/figjam/">FigJam board</a>
+          <a href="https://antigravity.google/">Google Antigravity</a>
+          <a href="https://openai.com/index/openai-codex/">OpenAI Codex</a>
+          <a href="https://docs.anthropic.com/en/docs/agents-and-tools/claude-code">Anthropic Claude Code</a>
         </nav>
         <aside class="notes">
           <ul>
-            <li>Reveal techniques one by one, then the QR. Time‑box: 40 minutes build, 15 minutes share.</li>
+            <li>Choose one or more techniques to structure your design exploration.</li>
+            <li>
+              Recommended agentic tools: Google Antigravity (deep agentic customization & workflows), OpenAI Codex (integrated code execution), and Anthropic
+              Claude Code (agentic terminal pair programming).
+            </li>
+            <li>Post your prototypes, prompts, and interface explorations to the FigJam board for sharing.</li>
           </ul>
         </aside>
       </section>
@@ -1377,7 +1464,10 @@
         </div>
         <aside class="notes">
           <ul>
-            <li>Final slide lists contributions, not collaborators, not “thank you”.</li>
+            <li>Workshop summary:</li>
+            <li>1) Surveyed 5 frontiers (semantic rendering, affective voice, reality editing, world models, local vision).</li>
+            <li>2) Explored 3 disciplines (more-than-human design, spatial AI, direct agency).</li>
+            <li>3) Practiced the Generate → Evaluate → Curate framework.</li>
           </ul>
         </aside>
       </section>
@@ -1390,7 +1480,8 @@
         </div>
         <aside class="notes">
           <ul>
-            <li>Not “thank you”. A salute: I appreciate the attention and look forward to the visionary work you create for this class.</li>
+            <li>A salute to everyone for your focus, creativity, and exploration today.</li>
+            <li>Go forth and build expressive, human-centered, more-than-human computational tools.</li>
           </ul>
         </aside>
       </section>
@@ -1478,6 +1569,11 @@
           hud.textContent = `${String(cur + 1).padStart(2, "0")} / ${String(slides.length).padStart(2, "0")}  ·  ${visibleCount(s)}/${fragmentsOf(s).length}`;
           const notes = s.querySelector(".notes");
           notesPanel.innerHTML = notes ? notes.innerHTML : "<ul><li>(no notes)</li></ul>";
+          const chart = s.querySelector(".chart");
+          if (chart) {
+            const jimmyVisible = s.querySelector(".chart__row--overflow.is-visible");
+            chart.classList.toggle("chart--scaled", !!jimmyVisible);
+          }
           location.replace(`#${cur + 1}.${visibleCount(s)}`);
           syncMedia(s);
           fitSlide(s);
@@ -1524,13 +1620,42 @@
           }
         }
 
+        let lastRepeatNav = 0;
+        function nextSlide() {
+          const now = Date.now();
+          if (now - lastRepeatNav < 120) return;
+          lastRepeatNav = now;
+          if (cur < slides.length - 1) {
+            goTo(cur + 1, 0);
+          }
+        }
+        function prevSlide() {
+          const now = Date.now();
+          if (now - lastRepeatNav < 120) return;
+          lastRepeatNav = now;
+          if (cur > 0) {
+            goTo(cur - 1, 0);
+          }
+        }
+
+        window.addEventListener("keyup", () => {
+          lastRepeatNav = 0;
+        });
+
         document.addEventListener("keydown", (e) => {
           if (e.target.matches("input, textarea")) return;
           switch (e.key) {
             case "ArrowRight":
             case "ArrowDown":
-            case " ":
             case "PageDown":
+              e.preventDefault();
+              if (e.repeat) {
+                nextSlide();
+              } else {
+                next();
+              }
+              break;
+            case " ":
               e.preventDefault();
               next();
               break;
@@ -1538,7 +1663,11 @@
             case "ArrowUp":
             case "PageUp":
               e.preventDefault();
-              prev();
+              if (e.repeat) {
+                prevSlide();
+              } else {
+                prev();
+              }
               break;
             case "Home":
               goTo(0);

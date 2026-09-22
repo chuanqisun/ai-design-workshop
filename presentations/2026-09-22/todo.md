@@ -9,4 +9,6 @@
 
 # TBD
 
-3. Fix FigJam board URL
+1. Fix FigJam board URL
+2. Cycle aspect radio by "A" key, allow locking to 1:1, 4:3, 16:9 and responsive
+3. Swap Slide 12 with wide format demo video.
