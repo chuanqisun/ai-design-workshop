@@ -1,9 +1,10 @@
 # AI Design Workshop
 
+[Presentation](https://tinyurl.com/redesign-deck)
+
 <details>
   <summary>Previous version</summary>
 
-  
 # Vibe Coding Worshop
 
 In this workshop, you will participate in a role-playing game to gain first-hand experience designing with generative AI.
@@ -92,4 +93,5 @@ Make sure your group has at least one person with LLM coding experience. If your
 ## Breaking the Fourth Wall
 
 If the group gets stuck, it’s okay to break the fourth wall. Step out of your character, discuss with your group, and help each other get back on track.
+
 </details>
