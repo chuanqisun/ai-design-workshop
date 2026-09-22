@@ -329,10 +329,10 @@
         width: 32px;
         height: 32px;
         image-rendering: pixelated;
-        filter: grayscale(1) contrast(2);
+        filter: grayscale(1);
       }
       .cards a:hover img {
-        filter: grayscale(1) contrast(2) invert(1);
+        filter: grayscale(1) invert(1);
       }
       .cards a span {
         font-family: var(--mono);
@@ -407,11 +407,11 @@
       .links a img {
         width: 16px;
         height: 16px;
-        filter: grayscale(1) contrast(2);
+        filter: grayscale(1);
       }
       .slide--section .links a img,
       .slide--splash .links a img {
-        filter: grayscale(1) contrast(2) invert(1);
+        filter: grayscale(1) invert(1);
       }
       .links a:hover {
         text-decoration: underline;
@@ -471,7 +471,7 @@
     </style>
   </head>
   <body>
-    <div class="help">↑↓ SLIDES · ←→ REVEAL · N NOTES</div>
+    <div class="help">←→ / ↑↓ NAVIGATE · N NOTES</div>
     <div class="hud" id="hud"></div>
 
     <!-- =====================================================================
@@ -1403,7 +1403,9 @@
           if (n < fr.length) {
             fr[n].classList.add("is-visible");
             render();
-          } // no wrap
+          } else if (cur < slides.length - 1) {
+            goTo(cur + 1, 0);
+          }
         }
         function prev() {
           const s = slides[cur],
@@ -1412,30 +1414,27 @@
           if (n > 0) {
             fr[n - 1].classList.remove("is-visible");
             render();
-          } // no wrap
+          } else if (cur > 0) {
+            const prevSlide = slides[cur - 1];
+            goTo(cur - 1, fragmentsOf(prevSlide).length);
+          }
         }
 
         document.addEventListener("keydown", (e) => {
           if (e.target.matches("input, textarea")) return;
           switch (e.key) {
             case "ArrowRight":
+            case "ArrowDown":
             case " ":
+            case "PageDown":
               e.preventDefault();
               next();
               break;
             case "ArrowLeft":
-              e.preventDefault();
-              prev();
-              break;
-            case "ArrowDown":
-            case "PageDown":
-              e.preventDefault();
-              if (cur < slides.length - 1) goTo(cur + 1);
-              break;
             case "ArrowUp":
             case "PageUp":
               e.preventDefault();
-              if (cur > 0) goTo(cur - 1);
+              prev();
               break;
             case "Home":
               goTo(0);

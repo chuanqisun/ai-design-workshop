@@ -6,14 +6,13 @@
 6. Links should be prefixed with favicon, served from google, src="https://www.google.com/s2/favicons?domain=example.com&sz=32"
 7. Carefully reason about asset image aspect ratio. Use contain if needed but avoid overcropping.
 8. Optimize for aspect radio between 4:3 and 16:9
-9. Left and right arrow to progressive reveal content within a slide. Do NOT wrap around. Use progressive reveal to control the delivery of content with good cadence. Don't reveal anything before the audience is ready to see it.
-10. Up and down arrow to navigate between slides. Do NOT wrap around.
-11. "N" to toggle presentor nodes (high level bullet points only)
-12. The should code should be well structured, separate presentation from content.
-13. Presentation should be components that are consistent with each other
-14. Content should be in HTML, easy to edit.
-15. Generally, media and demos should be displayed or playable directly in the slides. If their dimension is too big, split additional content into a new slide. Avoid scrolling within a slide.
-16. Rule of thumb: avoid detailed text. Hide details in the speaker notes
+9. Left/Up and right/Down arrow navigate the slides. Break content into multiple steps if progressive disclosure is necessary to keep audience focused. Do NOT use too many sub steps though.
+10. "N" to toggle presentor nodes (high level bullet points only)
+11. The should code should be well structured, separate presentation from content.
+12. Presentation should be components that are consistent with each other
+13. Content should be in HTML, easy to edit.
+14. Generally, media and demos should be displayed or playable directly in the slides. If their dimension is too big, split additional content into a new slide. Avoid scrolling within a slide.
+15. Rule of thumb: avoid detailed text. Hide details in the speaker notes
 
 Reference:
 
