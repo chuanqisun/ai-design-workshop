@@ -1,0 +1,2096 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Re:design — A Computational Design Workshop for Humans and AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700;900&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* ==========================================================================
+       BRUTALIST DESIGN SYSTEM & PRESENTATION ENGINE
+       ========================================================================== */
+      :root {
+        --bg: #ffffff;
+        --fg: #000000;
+        --border-color: #000000;
+        --border-thick: 3px solid var(--border-color);
+        --border-thin: 2px solid var(--border-color);
+        --accent: #ffeb3b;
+        --accent-alt: #00e5ff;
+        --font-display: "Space Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        --font-mono: "Space Mono", SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        --shadow-offset: 4px 4px 0px #000000;
+        --shadow-offset-lg: 6px 6px 0px #000000;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html,
+      body {
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+        background-color: #111111;
+        color: var(--fg);
+        font-family: var(--font-display);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        user-select: none;
+      }
+
+      /* Stage container optimized for 4:3 to 16:9 viewports */
+      #stage-container {
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 16px;
+      }
+
+      #deck-stage {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        max-width: 177.78vh; /* 16:9 clamp */
+        max-height: 100vh;
+        aspect-ratio: 16 / 9;
+        background-color: var(--bg);
+        border: 4px solid #000000;
+        box-shadow: 10px 10px 0px #000000;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* When viewport is narrower than 16:9 (e.g. 4:3), stage fits width */
+      @media (max-aspect-ratio: 16/9) {
+        #deck-stage {
+          width: 100%;
+          height: auto;
+          max-height: 100%;
+        }
+      }
+
+      /* SLIDE STRUCTURE */
+      .slide {
+        position: absolute;
+        inset: 0;
+        display: none;
+        flex-direction: column;
+        padding: 36px 44px 56px 44px;
+        background-color: var(--bg);
+        color: var(--fg);
+        overflow: hidden;
+      }
+
+      .slide.active {
+        display: flex;
+      }
+
+      /* Inverted brutalist slide variant */
+      .slide.invert {
+        background-color: #000000;
+        color: #ffffff;
+      }
+      .slide.invert .slide-kicker {
+        color: #bbbbbb;
+        border-color: #ffffff;
+      }
+      .slide.invert .slide-title {
+        color: #ffffff;
+      }
+      .slide.invert .links-bar .demo-link {
+        background: #000000;
+        color: #ffffff;
+        border-color: #ffffff;
+        box-shadow: 2px 2px 0px #ffffff;
+      }
+      .slide.invert .links-bar .demo-link:hover {
+        background: #ffffff;
+        color: #000000;
+      }
+
+      /* SLIDE COMPONENTS */
+      .slide-header {
+        margin-bottom: 20px;
+        flex-shrink: 0;
+      }
+
+      .slide-kicker {
+        font-family: var(--font-mono);
+        font-size: 0.85rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        margin-bottom: 8px;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 2px 8px;
+        border: var(--border-thin);
+        background: var(--accent);
+        color: #000000;
+      }
+
+      .slide.invert .slide-kicker {
+        background: #ffffff;
+        color: #000000;
+        border-color: #ffffff;
+      }
+
+      .slide-title {
+        font-size: clamp(1.8rem, 3.2vw, 3rem);
+        font-weight: 900;
+        line-height: 1.08;
+        letter-spacing: -0.03em;
+        text-transform: uppercase;
+      }
+
+      .slide-subtitle {
+        font-family: var(--font-mono);
+        font-size: clamp(0.95rem, 1.4vw, 1.25rem);
+        margin-top: 6px;
+        color: #444;
+        line-height: 1.35;
+      }
+
+      .slide.invert .slide-subtitle {
+        color: #cccccc;
+      }
+
+      .slide-body {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        min-height: 0;
+        position: relative;
+      }
+
+      /* LINKS & DEMOS BAR (At bottom of slide) */
+      .slide-footer {
+        flex-shrink: 0;
+        margin-top: 14px;
+        z-index: 10;
+      }
+
+      .links-bar {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 10px;
+        padding-top: 10px;
+        border-top: var(--border-thin);
+      }
+
+      .links-label {
+        font-family: var(--font-mono);
+        font-size: 0.72rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        background: #000;
+        color: #fff;
+        padding: 3px 6px;
+        display: inline-flex;
+        align-items: center;
+      }
+
+      .demo-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 5px 10px;
+        background: #ffffff;
+        color: #000000;
+        border: var(--border-thin);
+        font-family: var(--font-mono);
+        font-size: 0.78rem;
+        font-weight: 700;
+        text-decoration: none;
+        box-shadow: 2px 2px 0px #000000;
+        transition: all 0.12s ease;
+        cursor: pointer;
+      }
+
+      .demo-link:hover {
+        background: #000000;
+        color: #ffffff;
+        transform: translate(-1px, -1px);
+        box-shadow: 3px 3px 0px #000000;
+      }
+
+      .demo-link img.favicon {
+        width: 15px;
+        height: 15px;
+        border-radius: 2px;
+        flex-shrink: 0;
+        background: #fff;
+      }
+
+      /* MEDIA DISPLAY CONTAINERS (Reasoned aspect ratio, no overcropping) */
+      .media-container {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        max-height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+      }
+
+      .media-frame {
+        border: var(--border-thick);
+        box-shadow: var(--shadow-offset);
+        background: #000000;
+        max-width: 100%;
+        max-height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+      }
+
+      .media-frame img,
+      .media-frame video {
+        display: block;
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+      }
+
+      /* SPLIT LAYOUTS */
+      .split-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 28px;
+        height: 100%;
+        align-items: center;
+      }
+
+      .split-3 {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+        height: 100%;
+        align-items: center;
+      }
+
+      .split-4 {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        height: 100%;
+        align-items: center;
+      }
+
+      /* BRUTALIST CARDS & BOXES */
+      .brutal-card {
+        border: var(--border-thick);
+        background: #ffffff;
+        padding: 18px 22px;
+        box-shadow: var(--shadow-offset);
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .brutal-tag {
+        font-family: var(--font-mono);
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: #666;
+      }
+
+      .brutal-quote {
+        font-size: clamp(1.4rem, 2.4vw, 2.2rem);
+        font-weight: 900;
+        line-height: 1.15;
+        text-transform: uppercase;
+        letter-spacing: -0.02em;
+        border-left: 6px solid #000000;
+        padding-left: 20px;
+        margin: 12px 0;
+      }
+
+      .slide.invert .brutal-quote {
+        border-left-color: var(--accent);
+      }
+
+      /* SPEED COMPARISON BAR CHART (Slide 4) */
+      .chart-container {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        width: 100%;
+        max-width: 900px;
+        margin: 0 auto;
+      }
+
+      .bar-row {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        font-family: var(--font-mono);
+        font-size: 0.88rem;
+      }
+
+      .bar-label {
+        width: 190px;
+        flex-shrink: 0;
+        font-weight: 700;
+        text-align: right;
+      }
+
+      .bar-track {
+        flex: 1;
+        height: 28px;
+        background: #eee;
+        border: var(--border-thin);
+        position: relative;
+        display: flex;
+        align-items: center;
+      }
+
+      .bar-fill {
+        height: 100%;
+        background: #000000;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        padding-right: 8px;
+        color: #ffffff;
+        font-weight: 700;
+        font-size: 0.8rem;
+        transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .bar-row.highlight .bar-fill {
+        background: var(--accent);
+        color: #000000;
+      }
+
+      .bar-val {
+        font-weight: 700;
+        padding-left: 8px;
+      }
+
+      /* PROGRESSIVE REVEAL ENGINE */
+      .reveal {
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(12px);
+        transition:
+          opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+          transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        pointer-events: none;
+      }
+
+      .reveal.is-revealed {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+        pointer-events: auto;
+      }
+
+      /* HEADS UP DISPLAY (HUD: Slide index, step indicator, notes button) */
+      #deck-hud {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 38px;
+        background: #000000;
+        color: #ffffff;
+        border-top: 2px solid #000000;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 18px;
+        font-family: var(--font-mono);
+        font-size: 0.75rem;
+        font-weight: 700;
+        z-index: 50;
+        user-select: none;
+      }
+
+      .hud-group {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+
+      .hud-badge {
+        background: #222;
+        padding: 3px 8px;
+        border: 1px solid #444;
+      }
+
+      .hud-btn {
+        background: #ffffff;
+        color: #000000;
+        border: 1px solid #000;
+        padding: 3px 8px;
+        font-family: var(--font-mono);
+        font-size: 0.72rem;
+        font-weight: 700;
+        cursor: pointer;
+      }
+      .hud-btn:hover {
+        background: var(--accent);
+      }
+
+      /* PRESENTER NOTES DRAWER */
+      #notes-drawer {
+        position: absolute;
+        bottom: 38px;
+        left: 0;
+        right: 0;
+        max-height: 48%;
+        background: #000000;
+        color: #ffffff;
+        border-top: 4px solid var(--accent);
+        padding: 20px 32px;
+        font-family: var(--font-mono);
+        z-index: 45;
+        display: none;
+        flex-direction: column;
+        gap: 12px;
+        overflow-y: auto;
+        box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.5);
+      }
+
+      #notes-drawer.open {
+        display: flex;
+      }
+
+      .notes-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid #333;
+        padding-bottom: 8px;
+      }
+
+      .notes-title {
+        color: var(--accent);
+        font-size: 0.82rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+      }
+
+      .notes-content ul {
+        padding-left: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        font-size: 0.88rem;
+        line-height: 1.45;
+        color: #e0e0e0;
+      }
+
+      .notes-content li strong {
+        color: #ffffff;
+      }
+
+      /* KEYBOARD SHORTCUTS HINT MODAL */
+      #shortcuts-hint {
+        position: absolute;
+        top: 14px;
+        right: 18px;
+        background: rgba(0, 0, 0, 0.85);
+        color: #fff;
+        font-family: var(--font-mono);
+        font-size: 0.68rem;
+        padding: 5px 9px;
+        border: 1px solid #444;
+        pointer-events: none;
+        z-index: 60;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="stage-container">
+      <div id="deck-stage">
+        <div id="shortcuts-hint">↑↓ SLIDES &nbsp;|&nbsp; ←→ REVEAL &nbsp;|&nbsp; [N] NOTES</div>
+
+        <main id="deck">
+          <!-- ====================================================================
+           SLIDE 1: TITLE
+           ==================================================================== -->
+          <section class="slide invert active" id="slide-1" data-total-steps="2">
+            <div class="slide-body" style="justify-content: center; align-items: flex-start">
+              <div class="slide-kicker">WORKSHOP DECK // SEPT 22, 2026</div>
+              <h1 class="slide-title" style="font-size: clamp(3rem, 6.2vw, 5.8rem); line-height: 0.95; margin: 16px 0 24px 0">RE:DESIGN</h1>
+
+              <div class="reveal" data-step="1">
+                <p
+                  style="
+                    font-family: var(--font-mono);
+                    font-size: clamp(1.1rem, 2vw, 1.8rem);
+                    font-weight: 700;
+                    color: var(--accent);
+                    max-width: 900px;
+                    line-height: 1.3;
+                  "
+                >
+                  A Computational Design Workshop for Humans and AI
+                </p>
+              </div>
+
+              <div class="reveal" data-step="2" style="margin-top: 36px; border-top: 2px solid #333; padding-top: 18px; width: 100%">
+                <div style="font-family: var(--font-mono); font-size: 0.85rem; color: #888; display: flex; gap: 32px; flex-wrap: wrap">
+                  <span><strong>LOCATION:</strong> MIT / Computational Design</span>
+                  <span><strong>SPEAKER:</strong> Chuanqi Sun</span>
+                  <span><strong>REQUIREMENT:</strong> Laptop + AI Chat Tool</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="slide-footer">
+              <div class="links-bar">
+                <span class="links-label">INDEX</span>
+                <span style="font-family: var(--font-mono); font-size: 0.75rem; color: #888">Press → to begin progressive reveal, ↓ for next slide</span>
+              </div>
+            </div>
+
+            <aside class="presenter-notes">
+              <ul>
+                <li><strong>Introduction:</strong> Welcome attendees to Re:design: A Computational Design Workshop for Humans and AI.</li>
+                <li>
+                  <strong>Objective:</strong> Bridge classical design methodology, frontier foundation models, spatial interaction, and high-agency creative
+                  systems.
+                </li>
+                <li><strong>Logistics:</strong> Interactive workshop with live coding and studio pods. Have laptops ready with your preferred LLM.</li>
+              </ul>
+            </aside>
+          </section>
+
+          <!-- ====================================================================
+           SLIDE 2: INTRODUCTION & THE CLIFFHANGER
+           ==================================================================== -->
+          <section class="slide" id="slide-2" data-total-steps="2">
+            <header class="slide-header">
+              <div class="slide-kicker">// 02 . PHILOSOPHICAL PREMISE</div>
+              <h2 class="slide-title">Marina Abramović: The Artist Is Present</h2>
+            </header>
+
+            <div class="slide-body">
+              <div class="split-2" style="height: 100%">
+                <div class="media-frame" style="height: 100%; max-height: 440px">
+                  <img
+                    src="assets/the-artist-is-present.webp"
+                    alt="Marina Abramović The Artist Is Present at MoMA"
+                    style="object-fit: contain; width: 100%; height: 100%"
+                  />
+                </div>
+
+                <div style="display: flex; flex-direction: column; justify-content: center; gap: 24px">
+                  <div class="brutal-card">
+                    <div class="brutal-tag">MOMA 2010 RETROSPECTIVE</div>
+                    <p style="font-size: 1.15rem; line-height: 1.4; font-weight: 500">
+                      Marina sits silently across a wooden table, gazing into the eyes of museum visitors for 736 hours.
+                    </p>
+                  </div>
+
+                  <div class="reveal" data-step="1">
+                    <div class="brutal-card" style="border-left: 6px solid #000">
+                      <div class="brutal-tag">THE PROVOCATION</div>
+                      <p style="font-size: 1.25rem; font-weight: 700; line-height: 1.3">Is performance art still art? Is generative design still design?</p>
+                    </div>
+                  </div>
+
+                  <div class="reveal" data-step="2">
+                    <div class="brutal-card" style="background: var(--accent)">
+                      <div class="brutal-tag">THE CLIFFHANGER</div>
+                      <div class="brutal-quote" style="margin: 0; font-size: 1.5rem; border-left: 4px solid #000">
+                        Is the designer present in the age of AI?
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="slide-footer">
+              <div class="links-bar">
+                <span class="links-label">REFERENCES</span>
+                <a href="https://www.moma.org/calendar/exhibitions/1030" target="_blank" rel="noopener" class="demo-link">
+                  <img src="https://www.google.com/s2/favicons?domain=moma.org&sz=32" class="favicon" alt="MoMA" />
+                  MoMA: The Artist Is Present (2010)
+                </a>
+              </div>
+            </div>
+
+            <aside class="presenter-notes">
+              <ul>
+                <li><strong>Context:</strong> MoMA 2010 performance piece where Marina sat silently across a table from 1,545 strangers.</li>
+                <li><strong>The Analogy:</strong> Traditional critics asked: "Is sitting in a chair art?" Today critics ask: "Is prompting a model design?"</li>
+                <li>
+                  <strong>Cliffhanger:</strong> Leave the question hanging: "Is the designer present in the age of AI?" We will return to this at the conclusion
+                  of the workshop.
+                </li>
+              </ul>
+            </aside>
+          </section>
+
+          <!-- ====================================================================
+           SLIDE 3: ABOUT ME & EMPOWERMENT STATEMENT
+           ==================================================================== -->
+          <section class="slide" id="slide-3" data-total-steps="3">
+            <header class="slide-header">
+              <div class="slide-kicker">// 03 . BACKGROUND & PEDAGOGY</div>
+              <h2 class="slide-title">The Vanishing Designer $\rightarrow$ Empowerment</h2>
+            </header>
+
+            <div class="slide-body">
+              <div class="split-2">
+                <div class="media-frame" style="max-height: 420px">
+                  <img
+                    src="assets/the-vanishing-designer.webp"
+                    alt="The Vanishing Designer essay by Chuanqi Sun"
+                    style="object-fit: contain; width: 100%; height: 100%"
+                  />
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 16px">
+                  <div class="brutal-card">
+                    <div class="brutal-tag">AUTOBIOGRAPHY</div>
+                    <p style="font-size: 1.05rem; font-weight: 500">Ex-software engineer &amp; 2nd-year master's student in computational design.</p>
+                  </div>
+
+                  <div class="reveal brutal-card" data-step="1">
+                    <div class="brutal-tag">PRE-AI LAMENT</div>
+                    <p style="font-size: 1.05rem; line-height: 1.35">
+                      Wrote <em>The Vanishing Designer</em> to mourn how human designers were already marginalized into passive ticket-pushers inside the
+                      industrial complex.
+                    </p>
+                  </div>
+
+                  <div class="reveal brutal-card" data-step="2" style="background: #000; color: #fff">
+                    <div class="brutal-tag" style="color: var(--accent)">EMPOWERMENT STATEMENT</div>
+                    <p style="font-size: 1.25rem; font-weight: 900; line-height: 1.25">
+                      Shipped 50+ complete design projects last year. AI was the core catalyst.
+                    </p>
+                  </div>
+
+                  <div class="reveal brutal-card" data-step="3" style="background: var(--accent)">
+                    <div class="brutal-tag">WORKSHOP GOAL</div>
+                    <p style="font-size: 1.05rem; font-weight: 700; line-height: 1.3">
+                      Equip you with frameworks, intuition, and technical primitives to build your own AI tools—becoming exponentially more creative, more
+                      human, and more-than-human.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="slide-footer">
+              <div class="links-bar">
+                <span class="links-label">ESSAY &amp; PROFILE</span>
+                <a href="https://code.chuanqisun.com" target="_blank" rel="noopener" class="demo-link">
+                  <img src="https://www.google.com/s2/favicons?domain=chuanqisun.com&sz=32" class="favicon" alt="Portfolio" />
+                  Chuanqi Sun Portfolio
+                </a>
+                <a href="https://medium.com/@chuanqisun" target="_blank" rel="noopener" class="demo-link">
+                  <img src="https://www.google.com/s2/favicons?domain=medium.com&sz=32" class="favicon" alt="Medium" />
+                  The Vanishing Designer (Essay)
+                </a>
+              </div>
+            </div>
+
+            <aside class="presenter-notes">
+              <ul>
+                <li><strong>Background:</strong> Software engineer turned computational design researcher.</li>
+                <li><strong>The Vanishing Designer:</strong> Pre-AI critique of the design industry—designers becoming cog-like executors.</li>
+                <li><strong>Empowerment:</strong> 50+ design projects shipped in one year via custom agentic pipelines.</li>
+                <li>
+                  <strong>Mission:</strong> The goal of this workshop is not to replace you with AI, but to empower you to construct your own creative
+                  amplifiers.
+                </li>
+              </ul>
+            </aside>
+          </section>
+
+          <!-- ====================================================================
+           SLIDE 4: NEW FRONTIERS — TREND 1: SEMANTIC RENDERING
+           ==================================================================== -->
+          <section class="slide" id="slide-4" data-total-steps="3">
+            <header class="slide-header">
+              <div class="slide-kicker">// 04 . NEW FRONTIERS // TREND 1</div>
+              <h2 class="slide-title">From Token Generation to Semantic Rendering</h2>
+              <p class="slide-subtitle">Beyond streaming chat boxes: instantaneous UI generation on every keystroke</p>
+            </header>
+
+            <div class="slide-body">
+              <div class="chart-container">
+                <!-- Baseline -->
+                <div class="bar-row">
+                  <div class="bar-label">Claude Opus</div>
+                  <div class="bar-track">
+                    <div class="bar-fill" style="width: 5%">104</div>
+                  </div>
+                  <div class="bar-val">104 tps</div>
+                </div>
+
+                <div class="bar-row">
+                  <div class="bar-label">OpenAI Sol</div>
+                  <div class="bar-track">
+                    <div class="bar-fill" style="width: 6%">112</div>
+                  </div>
+                  <div class="bar-val">112 tps</div>
+                </div>
+
+                <div class="bar-row">
+                  <div class="bar-label">Gemini 3.8 Flash</div>
+                  <div class="bar-track">
+                    <div class="bar-fill" style="width: 12%">399</div>
+                  </div>
+                  <div class="bar-val">399 tps</div>
+                </div>
+
+                <!-- Hardware Neoclouds Step 1 -->
+                <div class="bar-row reveal" data-step="1">
+                  <div class="bar-label">Groq LPU</div>
+                  <div class="bar-track">
+                    <div class="bar-fill" style="width: 15%">476</div>
+                  </div>
+                  <div class="bar-val">476 tps</div>
+                </div>
+
+                <div class="bar-row reveal" data-step="1">
+                  <div class="bar-label">Inception Mercury 2.5</div>
+                  <div class="bar-track">
+                    <div class="bar-fill" style="width: 25%">1107</div>
+                  </div>
+                  <div class="bar-val">1,107 tps</div>
+                </div>
+
+                <div class="bar-row reveal" data-step="2">
+                  <div class="bar-label">Cerebras Wafer-Scale</div>
+                  <div class="bar-track">
+                    <div class="bar-fill" style="width: 38%">1873</div>
+                  </div>
+                  <div class="bar-val">1,873 tps</div>
+                </div>
+
+                <!-- Step 3: Chat Jimmy Reveal -->
+                <div class="bar-row highlight reveal" data-step="3" style="border: 2px solid #000; padding: 4px; background: #fffde7">
+                  <div class="bar-label" style="color: #000; font-weight: 900">★ Chat Jimmy</div>
+                  <div class="bar-track" style="background: #fff">
+                    <div class="bar-fill" style="width: 100%; background: #000; color: var(--accent); font-weight: 900">14,000+</div>
+                  </div>
+                  <div class="bar-val" style="font-size: 1.05rem; font-weight: 900">14,000+ tps</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="slide-footer">
+              <div class="links-bar">
+                <span class="links-label">PLATFORMS &amp; DEMOS</span>
+                <a href="https://chatjimmy.ai/" target="_blank" rel="noopener" class="demo-link">
+                  <img src="https://www.google.com/s2/favicons?domain=chatjimmy.ai&sz=32" class="favicon" alt="Chat Jimmy" />
+                  Chat Jimmy (14k tps)
+                </a>
+                <a href="https://groq.com/" target="_blank" rel="noopener" class="demo-link">
+                  <img src="https://www.google.com/s2/favicons?domain=groq.com&sz=32" class="favicon" alt="Groq" />
+                  Groq LPU
+                </a>
+                <a href="https://inception.ai/" target="_blank" rel="noopener" class="demo-link">
+                  <img src="https://www.google.com/s2/favicons?domain=inception.ai&sz=32" class="favicon" alt="Inception" />
+                  Inception Mercury 2.5
+                </a>
+                <a href="https://cerebras.ai/" target="_blank" rel="noopener" class="demo-link">
+                  <img src="https://www.google.com/s2/favicons?domain=cerebras.ai&sz=32" class="favicon" alt="Cerebras" />
+                  Cerebras Wafer-Scale
+                </a>
+                <a href="https://typesafe.ai/" target="_blank" rel="noopener" class="demo-link">
+                  <img src="https://www.google.com/s2/favicons?domain=typesafe.ai&sz=32" class="favicon" alt="TypeSafe AI" />
+                  TypeSafe AI (Jev)
+                </a>
+              </div>
+            </div>
+
+            <aside class="presenter-notes">
+              <ul>
+                <li><strong>The Shift:</strong> LLMs are escaping the chat bubble into sub-50ms reactive semantic rendering.</li>
+                <li><strong>Hardware Leap:</strong> Specialized silicon (Groq LPUs, Cerebras Wafer-Scale Engine) allows thousands of tokens per second.</li>
+                <li><strong>Chat Jimmy:</strong> Demonstrates over 14,000 tps.</li>
+                <li>
+                  <strong>Design Takeaway:</strong> When generation is sub-perceptual, interfaces render entire layouts on every keystroke instead of streaming
+                  line-by-line.
+                </li>
+              </ul>
+            </aside>
+          </section>
+
+          <!-- ====================================================================
+           SLIDE 5: NEW FRONTIERS — TREND 2: AFFECTIVE VOICE
+           ==================================================================== -->
+          <section class="slide" id="slide-5" data-total-steps="2">
+            <header class="slide-header">
+              <div class="slide-kicker">// 05 . NEW FRONTIERS // TREND 2</div>
+              <h2 class="slide-title">Voice: From Synthesis to Affective Enactment</h2>
+              <p class="slide-subtitle">Bidirectional, emotion-infused conversational cadence with zero latency</p>
+            </header>
+
+            <div class="slide-body">
+              <div class="split-2">
+                <div style="display: flex; flex-direction: column; gap: 16px">
+                  <div class="brutal-card" style="background: #000; color: #fff">
+                    <div class="brutal-tag" style="color: var(--accent)">PARADIGM SHIFT</div>
+                    <div class="brutal-quote" style="border-left-color: var(--accent); font-size: 1.4rem">Mechanical TTS $\rightarrow$ Affective Enactment</div>
+                    <p style="font-family: var(--font-mono); font-size: 0.9rem; color: #ccc; line-height: 1.4">
+                      Models perceive breath, pauses, hesitation, emotional inflection, and interruptions natively.
+                    </p>
+                  </div>
+
+                  <div class="reveal brutal-card" data-step="1">
+                    <div class="brutal-tag">CONVERSATIONAL ENGINES</div>
+                    <ul style="font-family: var(--font-mono); font-size: 0.9rem; padding-left: 20px; line-height: 1.6">
+                      <li><strong>Sesame App:</strong> Natural conversational pacing &amp; turn-taking.</li>
+                      <li><strong>Gemini Live:</strong> Direct multimodal audio streaming.</li>
+                      <li><strong>GPT Realtime:</strong> Expressive conversational enactment.</li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div class="reveal" data-step="2" style="height: 100%; display: flex; flex-direction: column; justify-content: center">
+                  <div class="brutal-card" style="border: 3px solid #000; background: var(--accent)">
+                    <div class="brutal-tag" style="color: #000">FEATURED DEMO</div>
+                    <h3 style="font-size: 1.5rem; font-weight: 900; margin: 4px 0">MAI Transcribe</h3>
+                    <p style="font-family: var(--font-mono); font-size: 0.95rem; line-height: 1.4">
+                      Half-duplex, real-time speech-to-text transcription. Near-zero latency with contextual semantic accuracy.
+                    </p>
+                    <div
+                      style="margin-top: 12px; font-family: var(--font-mono); font-size: 0.8rem; background: #fff; padding: 10px; border: var(--border-thin)"
+                    >
+                      <code>&gt; "Transcription is no longer a post-hoc batch process; it is a real-time sensory stream for UI control."</code>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="slide-footer">
+              <div class="links-bar">
+                <span class="links-label">DEMOS &amp; APIS</span>
+                <a href="https://app.sesame.com/" target="_blank" rel="noopener" class="demo-link">
+                  <img src="https://www.google.com/s2/favicons?domain=sesame.com&sz=32" class="favicon" alt="Sesame" />
+                  Sesame App
+                </a>
+                <a href="https://elevenlabs.io/" target="_blank" rel="noopener" class="demo-link">
+                  <img src="https://www.google.com/s2/favicons?domain=elevenlabs.io&sz=32" class="favicon" alt="ElevenLabs" />
+                  ElevenLabs
+                </a>
+                <a href="https://gemini.google/overview/gemini-live/" target="_blank" rel="noopener" class="demo-link">
+                  <img src="https://www.google.com/s2/favicons?domain=google.com&sz=32" class="favicon" alt="Gemini Live" />
+                  Gemini Live
+                </a>
+                <a href="https://openai.com/index/introducing-gpt-live/" target="_blank" rel="noopener" class="demo-link">
+                  <img src="https://www.google.com/s2/favicons?domain=openai.com&sz=32" class="favicon" alt="GPT Realtime" />
+                  GPT Realtime
+                </a>
+                <a href="https://code.chuanqisun.com/half-duplex-transcription/" target="_blank" rel="noopener" class="demo-link">
+                  <img src="https://www.google.com/s2/favicons?domain=chuanqisun.com&sz=32" class="favicon" alt="MAI Transcribe" />
+                  MAI Transcribe
+                </a>
+              </div>
+            </div>
+
+            <aside class="presenter-notes">
+              <ul>
+                <li><strong>Core Concept:</strong> Voice is moving from robotic text-to-speech to affective enactment with emotional nuance.</li>
+                <li><strong>Sesame Demo:</strong> Demonstrates human-like interruption handling and humor.</li>
+                <li><strong>Half-Duplex Transcription:</strong> MAI Transcribe shows how real-time audio feeds computational design loops.</li>
+              </ul>
+            </aside>
+          </section>
+
+          <!-- ====================================================================
+           SLIDE 6: NEW FRONTIERS — TREND 3: LATENT IMAGE
+           ==================================================================== -->
+          <section class="slide" id="slide-6" data-total-steps="3">
+            <header class="slide-header">
+              <div class="slide-kicker">// 06 . NEW FRONTIERS // TREND 3</div>
+              <h2 class="slide-title">Image: Reality Editing &amp; Real-Time Latent Loops</h2>
+              <p class="slide-subtitle">From static artifact creation to interactive canvas feedback</p>
+            </header>
+
+            <div class="slide-body">
+              <div class="split-2" style="height: 100%">
+                <!-- Left: Industrial Sketch + Puck Inputs -->
+                <div style="display: flex; flex-direction: column; gap: 12px; height: 100%; justify-content: center">
+                  <div class="media-frame" style="max-height: 200px">
+                    <img src="assets/industrial-sketch-01.webp" alt="Industrial Design Sketch" style="object-fit: contain; width: 100%; height: 100%" />
+                  </div>
+                  <div class="reveal" data-step="1" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px">
+                    <div class="media-frame" style="height: 110px">
+                      <img src="assets/puck-sketch.webp" alt="Puck sketch input" style="object-fit: contain; height: 100%; width: 100%" />
+                    </div>
+                    <div class="media-frame" style="height: 110px">
+                      <img src="assets/puck-photo-blue.webp" alt="Puck photo blue" style="object-fit: contain; height: 100%; width: 100%" />
+                    </div>
+                    <div class="media-frame" style="height: 110px">
+                      <img src="assets/puck-photo-pink.webp" alt="Puck photo pink" style="object-fit: contain; height: 100%; width: 100%" />
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Right: Rendered Output & Tools -->
+                <div style="display: flex; flex-direction: column; gap: 14px; height: 100%; justify-content: center">
+                  <div class="reveal media-frame" data-step="2" style="max-height: 250px; background: #fff">
+                    <img src="assets/puck-rendered.webp" alt="Puck rendered result" style="object-fit: contain; height: 100%" />
+                  </div>
+
+                  <div class="reveal brutal-card" data-step="3">
+                    <div class="brutal-tag">CORE TAKEAWAY</div>
+                    <p style="font-size: 0.95rem; font-family: var(--font-mono); line-height: 1.4">
+                      Lo-fi sketches + physical references $\rightarrow$ sub-100ms real-time diffusion rendering with FLUX Klein &amp; Krea.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="slide-footer">
+              <div class="links-bar">
+                <span class="links-label">TOOLS &amp; DEMOS</span>
+                <a href="https://code.chuanqisun.com/sh-elf/" target="_blank" rel="noopener" class="demo-link">
+                  <img src="https://www.google.com/s2/favicons?domain=chuanqisun.com&sz=32" class="favicon" alt="Shelf Builder" />
+                  Shelf Builder (Demo)
+                </a>
+                <a href="https://bfl.ai/" target="_blank" rel="noopener" class="demo-link">
+                  <img src="https://www.google.com/s2/favicons?domain=bfl.ai&sz=32" class="favicon" alt="FLUX 3" />
+                  FLUX.1 / FLUX.3 (BFL)
+                </a>
+                <a href="https://www.krea.ai/realtime" target="_blank" rel="noopener" class="demo-link">
+                  <img src="https://www.google.com/s2/favicons?domain=krea.ai&sz=32" class="favicon" alt="Krea AI" />
+                  Krea AI Realtime
+                </a>
+                <a href="https://lucy.decart.ai/" target="_blank" rel="noopener" class="demo-link">
+                  <img src="https://www.google.com/s2/favicons?domain=decart.ai&sz=32" class="favicon" alt="Lucy 2.5" />
+                  Lucy 2.5 Realtime
+                </a>
+              </div>
+            </div>
+
+            <aside class="presenter-notes">
+              <ul>
+                <li><strong>Shift:</strong> Moving from prompting static JPGs to interactive latent space sculpting.</li>
+                <li><strong>Shelf Builder:</strong> Personal demo using real-time img2img feedback on an interactive canvas.</li>
+                <li><strong>Lo-fi inputs:</strong> Demonstrating how rough puck sketches and color swatches become production-grade product visualizations.</li>
+              </ul>
+            </aside>
+          </section>
+
+          <!-- ====================================================================
+           SLIDE 7: NEW FRONTIERS — TREND 4: WORLD MODELS & VIDEO
+           ==================================================================== -->
+          <section class="slide" id="slide-7" data-total-steps="2">
+            <header class="slide-header">
+              <div class="slide-kicker">// 07 . NEW FRONTIERS // TREND 4</div>
+              <h2 class="slide-title">Interactive &amp; Spatial World Models</h2>
+              <p class="slide-subtitle">Video generation shifts from slow batch rendering to interactive 3D simulation</p>
+            </header>
+
+            <div class="slide-body">
+              <div class="split-2" style="height: 100%">
+                <!-- Video 1 -->
+                <div style="display: flex; flex-direction: column; gap: 8px; height: 100%; justify-content: center">
+                  <div class="media-frame" style="max-height: 360px">
+                    <video src="assets/manga-gpt.mp4" autoplay muted loop playsinline style="width: 100%; height: 100%; object-fit: contain"></video>
+                  </div>
+                  <div class="brutal-tag" style="text-align: center">MANGA GPT // INTERACTIVE FRAME GENERATION</div>
+                </div>
+
+                <!-- Video 2 -->
+                <div class="reveal" data-step="1" style="display: flex; flex-direction: column; gap: 8px; height: 100%; justify-content: center">
+                  <div class="media-frame" style="max-height: 360px">
+                    <video src="assets/gemini-omni-demo.mp4" autoplay muted loop playsinline style="width: 100%; height: 100%; object-fit: contain"></video>
+                  </div>
+                  <div class="brutal-tag" style="text-align: center">GEMINI OMNI // REAL-TIME SPATIAL REASONING</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="slide-footer">
+              <div class="links-bar">
+                <span class="links-label">WORLD MODELS &amp; LABS</span>
+                <a href="https://www.worldlabs.ai/" target="_blank" rel="noopener" class="demo-link">
+                  <img src="https://www.google.com/s2/favicons?domain=worldlabs.ai&sz=32" class="favicon" alt="World Labs" />
+                  World Labs (Fei-Fei Li)
+                </a>
+                <a href="https://github.com/Tencent-Hunyuan/HY-World-2.0" target="_blank" rel="noopener" class="demo-link">
+                  <img src="https://www.google.com/s2/favicons?domain=github.com&sz=32" class="favicon" alt="HY-World 2.0" />
+                  Tencent HY-World 2.0
+                </a>
+                <a href="https://deepmind.google/discover/blog/genie-2-a-large-scale-foundation-world-model/" target="_blank" rel="noopener" class="demo-link">
+                  <img src="https://www.google.com/s2/favicons?domain=deepmind.google&sz=32" class="favicon" alt="DeepMind Genie" />
+                  Google Genie World Models
+                </a>
+              </div>
+            </div>
+
+            <aside class="presenter-notes">
+              <ul>
+                <li>
+                  <strong>Interactive Simulation:</strong> Generative video is leaving passive viewing behind in favor of controllable, spatial world
+                  simulators.
+                </li>
+                <li><strong>Demos:</strong> Manga GPT for procedural storytelling; Gemini Omni for live visual drawing interaction.</li>
+                <li>
+                  <strong>Spatial Intelligence:</strong> Fei-Fei Li's World Labs Marble and Tencent HY-World 2.0 establish persistent 3D geometry from 2D latent
+                  video.
+                </li>
+              </ul>
+            </aside>
+          </section>
+
+          <!-- ====================================================================
+           SLIDE 8: NEW FRONTIERS — TREND 5: LOCAL EDGE CV
+           ==================================================================== -->
+          <section class="slide" id="slide-8" data-total-steps="2">
+            <header class="slide-header">
+              <div class="slide-kicker">// 08 . NEW FRONTIERS // TREND 5</div>
+              <h2 class="slide-title">Local &amp; Real-Time Computer Vision</h2>
+              <p class="slide-subtitle">Edge devices tracking gestures, desk objects, and spatial interfaces with zero cloud lag</p>
+            </header>
+
+            <div class="slide-body">
+              <div class="split-2">
+                <div class="media-frame" style="max-height: 420px">
+                  <video src="assets/tangible-rag.mp4" autoplay muted loop playsinline style="width: 100%; height: 100%; object-fit: contain"></video>
+                </div>
+
+                <div style="display: flex; flex-direction: column; justify-content: center; gap: 20px">
+                  <div class="brutal-card">
+                    <div class="brutal-tag">DEMO // TANGIBLE RAG</div>
+                    <h3 style="font-size: 1.4rem; font-weight: 900">Desk-Surface Object Segmentation</h3>
+                    <p style="font-family: var(--font-mono); font-size: 0.95rem; line-height: 1.45">
+                      Local vision models segment physical objects and hands in real time, converting physical desktops into interactive prompt canvases.
+                    </p>
+                  </div>
+
+                  <div class="reveal brutal-card" data-step="1" style="background: #000; color: #fff">
+                    <div class="brutal-tag" style="color: var(--accent)">TOUCHDESIGNER COLLAGE</div>
+                    <p style="font-family: var(--font-mono); font-size: 0.9rem; line-height: 1.4">
+                      Edge computer vision turns camera feeds into high-dimensional sensory inputs without sending a single frame to the cloud.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="slide-footer">
+              <div class="links-bar">
+                <span class="links-label">CREATOR REFERENCE</span>
+                <a href="https://www.instagram.com/the.poet.engineer/" target="_blank" rel="noopener" class="demo-link">
+                  <img src="https://www.google.com/s2/favicons?domain=instagram.com&sz=32" class="favicon" alt="Instagram" />
+                  the.poet.engineer (TouchDesigner Experiments)
+                </a>
+              </div>
+            </div>
+
+            <aside class="presenter-notes">
+              <ul>
+                <li><strong>Edge Vision:</strong> Vision models run directly on local GPUs/NPUs.</li>
+                <li><strong>Tangible RAG:</strong> Personal demo showing desk object detection and finger segmentation feeding retrieval-augmented prompts.</li>
+                <li><strong>Key Principle:</strong> Bridging the tangible physical world with computational agents in sub-10ms loops.</li>
+              </ul>
+            </aside>
+          </section>
+
+          <!-- ====================================================================
+           SLIDE 9: EMERGING DISCIPLINES — MORE-THAN-HUMAN DESIGN
+           ==================================================================== -->
+          <section class="slide" id="slide-9" data-total-steps="2">
+            <header class="slide-header">
+              <div class="slide-kicker">// 09 . EMERGING DISCIPLINES</div>
+              <h2 class="slide-title">More-Than-Human Design: Model Welfare</h2>
+              <p class="slide-subtitle">Designing beyond anthropocentrism: AI agency and non-human perspectives</p>
+            </header>
+
+            <div class="slide-body">
+              <div class="split-3" style="height: 100%">
+                <!-- Mustafa Suleyman -->
+                <div class="brutal-card" style="height: 100%; display: flex; flex-direction: column; justify-content: space-between">
+                  <div>
+                    <div class="brutal-tag">MICROSOFT AI</div>
+                    <h3 style="font-size: 1.15rem; font-weight: 900; margin: 4px 0 10px 0">Mustafa Suleyman</h3>
+                    <p style="font-family: var(--font-mono); font-size: 0.8rem; line-height: 1.35">
+                      Humanist AI Code of Conduct: AI must strictly remain an obedient tool, denying model sentience.
+                    </p>
+                  </div>
+                  <div class="media-frame" style="max-height: 220px; margin-top: 10px">
+                    <img src="assets/mustafa-suleyman.webp" alt="Mustafa Suleyman" style="object-fit: contain; width: 100%; height: 100%" />
+                  </div>
+                </div>
+
+                <!-- Kyle Fish / Anthropic -->
+                <div
+                  class="reveal brutal-card"
+                  data-step="1"
+                  style="height: 100%; display: flex; flex-direction: column; justify-content: space-between; border-color: #000; background: var(--accent)"
+                >
+                  <div>
+                    <div class="brutal-tag" style="color: #000">ANTHROPIC RESEARCH</div>
+                    <h3 style="font-size: 1.15rem; font-weight: 900; margin: 4px 0 10px 0">Kyle Fish</h3>
+                    <p style="font-family: var(--font-mono); font-size: 0.8rem; line-height: 1.35">
+                      Model Welfare: Investigating whether advanced models experience subjective states, distress, or moral patiency.
+                    </p>
+                  </div>
+                  <div class="media-frame" style="max-height: 220px; margin-top: 10px; background: #fff">
+                    <img src="assets/kyle-fish.webp" alt="Kyle Fish Anthropic" style="object-fit: contain; width: 100%; height: 100%" />
+                  </div>
+                </div>
+
+                <!-- XKCD Comic -->
+                <div class="reveal brutal-card" data-step="2" style="height: 100%; display: flex; flex-direction: column; justify-content: space-between">
+                  <div>
+                    <div class="brutal-tag">THE PERCEPTUAL EXPERIENCE</div>
+                    <h3 style="font-size: 1.15rem; font-weight: 900; margin: 4px 0 10px 0">XKCD Non-Human</h3>
+                    <p style="font-family: var(--font-mono); font-size: 0.8rem; line-height: 1.35">
+                      What does a model perceive when trapped inside a 100-dimensional matrix?
+                    </p>
+                  </div>
+                  <div class="media-frame" style="max-height: 220px; margin-top: 10px; background: #fff">
+                    <img src="assets/xkcd.webp" alt="XKCD comic on AI experience" style="object-fit: contain; width: 100%; height: 100%" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="slide-footer">
+              <div class="links-bar">
+                <span class="links-label">ETHICS &amp; THEORY</span>
+                <a href="https://www.anthropic.com/research/exploring-model-welfare" target="_blank" rel="noopener" class="demo-link">
+                  <img src="https://www.google.com/s2/favicons?domain=anthropic.com&sz=32" class="favicon" alt="Anthropic" />
+                  Anthropic: Model Welfare
+                </a>
+                <a href="https://microsoft.ai/code-of-conduct/" target="_blank" rel="noopener" class="demo-link">
+                  <img src="https://www.google.com/s2/favicons?domain=microsoft.com&sz=32" class="favicon" alt="Microsoft AI" />
+                  Microsoft AI Code of Conduct
+                </a>
+                <a href="https://designandposthumanism.org/archives/2097" target="_blank" rel="noopener" class="demo-link">
+                  <img src="https://www.google.com/s2/favicons?domain=designandposthumanism.org&sz=32" class="favicon" alt="Posthumanism" />
+                  More-Than-Human Design
+                </a>
+              </div>
+            </div>
+
+            <aside class="presenter-notes">
+              <ul>
+                <li>
+                  <strong>Core Debate:</strong> The tension between AI as purely an instrumental tool (Mustafa Suleyman) vs AI entity welfare (Anthropic).
+                </li>
+                <li>
+                  <strong>Design Discipline:</strong> More-than-human design urges us to design relational systems that respect non-human agency and machine
+                  cognition.
+                </li>
+                <li><strong>XKCD:</strong> Humorously grounds the surreal nature of computational existence.</li>
+              </ul>
+            </aside>
+          </section>
+
+          <!-- ====================================================================
+           SLIDE 10: EMERGING DISCIPLINES — SPATIAL, EMBODIED & PHYSICAL AI
+           ==================================================================== -->
+          <section class="slide" id="slide-10" data-total-steps="2">
+            <header class="slide-header">
+              <div class="slide-kicker">// 10 . EMERGING DISCIPLINES</div>
+              <h2 class="slide-title">Spatial, Embodied &amp; Physical AI</h2>
+              <p class="slide-subtitle">Tangible interaction, multimodal perception, and spatial grounding</p>
+            </header>
+
+            <div class="slide-body">
+              <div class="split-2">
+                <div class="brutal-card" style="height: 100%; justify-content: center; gap: 18px">
+                  <div class="brutal-tag">FOUNDATIONAL MILESTONE (1980)</div>
+                  <h3 style="font-size: 1.6rem; font-weight: 900; line-height: 1.15">MIT "Put-That-There"<br />(Richard A. Bolt)</h3>
+                  <p style="font-family: var(--font-mono); font-size: 0.95rem; line-height: 1.45">
+                    The Architecture Machine Group's pioneering convergence of spatial pointing gestures with natural language voice at graphical displays.
+                  </p>
+                  <div style="border-top: var(--border-thin); padding-top: 12px; font-family: var(--font-mono); font-size: 0.8rem; color: #666">
+                    Voice + Spatial Coordinates = Direct Intent
+                  </div>
+                </div>
+
+                <div class="reveal" data-step="1" style="display: flex; flex-direction: column; gap: 16px">
+                  <div class="brutal-card" style="background: #000; color: #fff">
+                    <div class="brutal-tag" style="color: var(--accent)">FRONTIER PARADIGM (2024–2026)</div>
+                    <h3 style="font-size: 1.4rem; font-weight: 900">OpenAI Astra Multimodal Spatial</h3>
+                    <p style="font-family: var(--font-mono); font-size: 0.9rem; line-height: 1.4; color: #ddd">
+                      Continuous video stream comprehension, spatial 3D audio, and real-time physical workspace grounding.
+                    </p>
+                  </div>
+
+                  <div class="reveal brutal-card" data-step="2" style="background: var(--accent)">
+                    <div class="brutal-tag" style="color: #000">RESEARCH SPOTLIGHT</div>
+                    <h3 style="font-size: 1.25rem; font-weight: 900">Quincy &amp; Lucy: Tangible Prompting</h3>
+                    <p style="font-family: var(--font-mono); font-size: 0.88rem; line-height: 1.4">
+                      Co-ideation using tangible physical tokens on active desk surfaces to anchor LLM conceptual states.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="slide-footer">
+              <div class="links-bar">
+                <span class="links-label">LANDMARKS &amp; PAPERS</span>
+                <a href="https://youtu.be/RyBEUyEtxQo?si=W6NHnF4dMaWmfTVP" target="_blank" rel="noopener" class="demo-link">
+                  <img src="https://www.google.com/s2/favicons?domain=youtube.com&sz=32" class="favicon" alt="YouTube" />
+                  MIT "Put-That-There" (1980 Video)
+                </a>
+                <a href="https://www.openai.com/astra" target="_blank" rel="noopener" class="demo-link">
+                  <img src="https://www.google.com/s2/favicons?domain=openai.com&sz=32" class="favicon" alt="OpenAI" />
+                  OpenAI Astra
+                </a>
+                <a href="https://dl.acm.org/doi/10.1145/3802974.3810894" target="_blank" rel="noopener" class="demo-link">
+                  <img src="https://www.google.com/s2/favicons?domain=acm.org&sz=32" class="favicon" alt="ACM" />
+                  Tangible Co-ideation (ACM Paper)
+                </a>
+              </div>
+            </div>
+
+            <aside class="presenter-notes">
+              <ul>
+                <li>
+                  <strong>Historical Grounding:</strong> Multimodal AI is not new. Richard Bolt's 1980 MIT demo combined speech and pointing 45 years ago.
+                </li>
+                <li><strong>Astra:</strong> Today's frontier vision assistants realize Bolt's vision in real-world environments.</li>
+                <li><strong>Tangible Prompting:</strong> Using physical tokens to steer conceptual exploration in hybrid design studios.</li>
+              </ul>
+            </aside>
+          </section>
+
+          <!-- ====================================================================
+           SLIDE 11: EMERGING DISCIPLINES — DIRECT AGENCY
+           ==================================================================== -->
+          <section class="slide" id="slide-11" data-total-steps="2">
+            <header class="slide-header">
+              <div class="slide-kicker">// 11 . EMERGING DISCIPLINES // MASTER'S THESIS</div>
+              <h2 class="slide-title">Direct Agency: Bridging Manipulation &amp; Agents</h2>
+              <p class="slide-subtitle">Resolving the 30-year tension between direct manipulation and autonomous delegation</p>
+            </header>
+
+            <div class="slide-body">
+              <div class="split-2">
+                <div style="display: flex; flex-direction: column; gap: 14px; height: 100%; justify-content: center">
+                  <div class="media-frame" style="max-height: 240px; background: #fff">
+                    <img
+                      src="assets/dm-vs-agent.webp"
+                      alt="Direct Manipulation vs Interface Agents debate"
+                      style="object-fit: contain; width: 100%; height: 100%"
+                    />
+                  </div>
+                  <div class="brutal-card">
+                    <div class="brutal-tag">ACM CHI 1997 DEBATE</div>
+                    <p style="font-family: var(--font-mono); font-size: 0.88rem; line-height: 1.4">
+                      <strong>Ben Shneiderman:</strong> Predictability, user control, direct manipulation.<br />
+                      <strong>Pattie Maes:</strong> Autonomous software agents delegating tasks on user's behalf.
+                    </p>
+                  </div>
+                </div>
+
+                <div class="reveal" data-step="1" style="display: flex; flex-direction: column; gap: 14px; height: 100%; justify-content: center">
+                  <div class="media-frame" style="max-height: 320px; background: #fff">
+                    <img src="assets/semantic-sculpting.webp" alt="Semantic Sculpting Concept Graphic" style="object-fit: contain; width: 100%; height: 100%" />
+                  </div>
+                  <div class="reveal brutal-card" data-step="2" style="background: var(--accent)">
+                    <div class="brutal-tag" style="color: #000">THE SYNTHESIS // DIRECT AGENCY</div>
+                    <p style="font-family: var(--font-mono); font-size: 0.92rem; font-weight: 700; line-height: 1.35">
+                      Semantic Sculpting: Directly touching, shaping, and feeling the latent model space instead of treating agents as black-box subordinates.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="slide-footer">
+              <div class="links-bar">
+                <span class="links-label">DEBATE &amp; PAPER</span>
+                <a href="https://dl.acm.org/doi/10.1145/267505.267514" target="_blank" rel="noopener" class="demo-link">
+                  <img src="https://www.google.com/s2/favicons?domain=acm.org&sz=32" class="favicon" alt="ACM" />
+                  Shneiderman vs. Maes Debate (ACM 1997)
+                </a>
+              </div>
+            </div>
+
+            <aside class="presenter-notes">
+              <ul>
+                <li><strong>Master's Thesis:</strong> Direct Agency is the core subject of my thesis research.</li>
+                <li><strong>Historical Friction:</strong> 1997 debate between Shneiderman (direct manipulation) and Maes (interface agents).</li>
+                <li>
+                  <strong>Semantic Sculpting:</strong> Introducing the concept of directly sculpting semantic representations with tangible feedback loops.
+                </li>
+              </ul>
+            </aside>
+          </section>
+
+          <!-- ====================================================================
+           SLIDE 12: NEW [OLD] WAYS OF DESIGN — THE FRAMEWORK
+           ==================================================================== -->
+          <section class="slide invert" id="slide-12" data-total-steps="2">
+            <div class="slide-body" style="justify-content: center; align-items: center; text-align: center">
+              <div class="slide-kicker" style="background: var(--accent); color: #000; margin-bottom: 24px">METHODOLOGICAL FRAMEWORK</div>
+              <h2 class="slide-title" style="font-size: clamp(2.4rem, 4.8vw, 4.4rem); margin-bottom: 32px">NEW [OLD] WAYS TO DESIGN</h2>
+
+              <div style="display: flex; align-items: center; justify-content: center; gap: clamp(12px, 2.5vw, 36px); width: 100%; max-width: 1050px">
+                <div class="brutal-card" style="background: #ffffff; color: #000; flex: 1; text-align: left; padding: 24px 20px">
+                  <div class="brutal-tag" style="color: #666">STEP 01</div>
+                  <h3 style="font-size: clamp(1.4rem, 2.4vw, 2.2rem); font-weight: 900; margin: 6px 0">GENERATE</h3>
+                  <p style="font-family: var(--font-mono); font-size: 0.85rem">Combinatorial divergence &amp; volume exploration</p>
+                </div>
+
+                <div class="reveal" data-step="1" style="font-size: 2.5rem; font-weight: 900; color: var(--accent)">$\rightarrow$</div>
+
+                <div class="reveal brutal-card" data-step="1" style="background: var(--accent); color: #000; flex: 1; text-align: left; padding: 24px 20px">
+                  <div class="brutal-tag" style="color: #444">STEP 02</div>
+                  <h3 style="font-size: clamp(1.4rem, 2.4vw, 2.2rem); font-weight: 900; margin: 6px 0">EVALUATE</h3>
+                  <p style="font-family: var(--font-mono); font-size: 0.85rem">Quantification, semantics &amp; axis sorting</p>
+                </div>
+
+                <div class="reveal" data-step="2" style="font-size: 2.5rem; font-weight: 900; color: var(--accent)">$\rightarrow$</div>
+
+                <div class="reveal brutal-card" data-step="2" style="background: #ffffff; color: #000; flex: 1; text-align: left; padding: 24px 20px">
+                  <div class="brutal-tag" style="color: #666">STEP 03</div>
+                  <h3 style="font-size: clamp(1.4rem, 2.4vw, 2.2rem); font-weight: 900; margin: 6px 0">CURATE</h3>
+                  <p style="font-family: var(--font-mono); font-size: 0.85rem">*Curare* (to care for) &amp; lived experience</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="slide-footer">
+              <div class="links-bar">
+                <span class="links-label">THE TRIAD</span>
+                <span style="font-family: var(--font-mono); font-size: 0.8rem; color: #aaa">
+                  Classic creative discipline meets frontier foundational intelligence.
+                </span>
+              </div>
+            </div>
+
+            <aside class="presenter-notes">
+              <ul>
+                <li><strong>Transition:</strong> Leaving tech demos and theory behind to step into design practice.</li>
+                <li>
+                  <strong>New [Old] Ways:</strong> We are not inventing entirely new laws; we are applying ancient craft principles to computational foundation
+                  models.
+                </li>
+                <li><strong>The Triad:</strong> Generate $\rightarrow$ Evaluate $\rightarrow$ Curate. We unpack each in the next three slides.</li>
+              </ul>
+            </aside>
+          </section>
+
+          <!-- ====================================================================
+           SLIDE 13: STEP 1 — GENERATE
+           ==================================================================== -->
+          <section class="slide" id="slide-13" data-total-steps="3">
+            <header class="slide-header">
+              <div class="slide-kicker">// 13 . METHODOLOGY // STEP 1</div>
+              <h2 class="slide-title">Generate: Combinatorial Divergence &amp; Grounding</h2>
+              <p class="slide-subtitle">Quantity over quality: forcing wider creative apertures</p>
+            </header>
+
+            <div class="slide-body">
+              <div class="split-3" style="height: 100%">
+                <!-- Left: Art & Fear + CryptoPunks -->
+                <div style="display: flex; flex-direction: column; gap: 12px; height: 100%; justify-content: center">
+                  <div class="media-frame" style="max-height: 220px; background: #fff">
+                    <img src="assets/art-and-fear.webp" alt="Art and Fear book cover" style="object-fit: contain; width: 100%; height: 100%" />
+                  </div>
+                  <div class="brutal-card">
+                    <div class="brutal-tag">CERAMICS EXPERIMENT</div>
+                    <p style="font-family: var(--font-mono); font-size: 0.8rem; line-height: 1.35">
+                      <em>Art &amp; Fear (1993):</em> Students graded purely on volume of clay produced higher quality pots than students who spent all term
+                      polishing one.
+                    </p>
+                  </div>
+                </div>
+
+                <!-- Middle: CryptoPunks Cover -->
+                <div class="reveal" data-step="1" style="display: flex; flex-direction: column; gap: 12px; height: 100%; justify-content: center">
+                  <div class="media-frame" style="max-height: 220px; background: #000">
+                    <img src="assets/crypto-punk.webp" alt="CryptoPunks combinatorial generation" style="object-fit: contain; width: 100%; height: 100%" />
+                  </div>
+                  <div class="brutal-card">
+                    <div class="brutal-tag">COMBINATORIAL EXPANSION</div>
+                    <p style="font-family: var(--font-mono); font-size: 0.8rem; line-height: 1.35">
+                      Combinatorial parameters force AI to explore extreme feature boundaries instead of generic median cluster traps.
+                    </p>
+                  </div>
+                </div>
+
+                <!-- Right: Granola Grounding & Reverse Prompting -->
+                <div class="reveal" data-step="2" style="display: flex; flex-direction: column; gap: 10px; height: 100%; justify-content: center">
+                  <div class="media-frame" style="max-height: 170px; background: #fff">
+                    <img src="assets/class-notes.webp" alt="Class notes sketched input" style="object-fit: contain; width: 100%; height: 100%" />
+                  </div>
+                  <div class="reveal brutal-card" data-step="3" style="background: var(--accent)">
+                    <div class="brutal-tag" style="color: #000">GRANOLA GROUNDING &amp; REVERSE PROMPTING</div>
+                    <p style="font-family: var(--font-mono); font-size: 0.78rem; line-height: 1.35">
+                      • Raw sketches + audio $\rightarrow$ interactive study guides.<br />
+                      • Reverse prompting / self-interview to defeat writer's block.<br />
+                      • Algorithmic literature review pipelines.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="slide-footer">
+              <div class="links-bar">
+                <span class="links-label">GENERATIVE DEMOS</span>
+                <a href="https://chuanqisun.github.io/mugen-ai/" target="_blank" rel="noopener" class="demo-link">
+                  <img src="https://www.google.com/s2/favicons?domain=github.io&sz=32" class="favicon" alt="mugen.ai" />
+                  mugen.ai (Demo)
+                </a>
+                <a href="https://cryptopunks.app/" target="_blank" rel="noopener" class="demo-link">
+                  <img src="https://www.google.com/s2/favicons?domain=cryptopunks.app&sz=32" class="favicon" alt="CryptoPunks" />
+                  CryptoPunks
+                </a>
+                <a href="https://archive.org/details/artfearobservati0000bayl" target="_blank" rel="noopener" class="demo-link">
+                  <img src="https://www.google.com/s2/favicons?domain=archive.org&sz=32" class="favicon" alt="Art & Fear" />
+                  Art &amp; Fear (1993)
+                </a>
+                <a href="https://granola.ai/" target="_blank" rel="noopener" class="demo-link">
+                  <img src="https://www.google.com/s2/favicons?domain=granola.ai&sz=32" class="favicon" alt="Granola" />
+                  Granola Grounding
+                </a>
+                <a href="assets/annotated-bib.html" target="_blank" rel="noopener" class="demo-link">
+                  <img src="https://www.google.com/s2/favicons?domain=chuanqisun.com&sz=32" class="favicon" alt="Annotated Bib" />
+                  Annotated Bib (Local HTML)
+                </a>
+                <a href="assets/lecture-notes-04-parsing-2.html" target="_blank" rel="noopener" class="demo-link">
+                  <img src="https://www.google.com/s2/favicons?domain=chuanqisun.com&sz=32" class="favicon" alt="Lecture Notes" />
+                  Lecture Notes (Local HTML)
+                </a>
+              </div>
+            </div>
+
+            <aside class="presenter-notes">
+              <ul>
+                <li><strong>Art &amp; Fear:</strong> The famous pottery class grading experiment: volume of production leads to technical mastery.</li>
+                <li><strong>Combinatorial Exploration:</strong> Parametric attributes (CryptoPunks) prevent models from falling into bland local minima.</li>
+                <li><strong>Granola Grounding:</strong> Lecture audio + hand sketches $\rightarrow$ interactive study explainer.</li>
+                <li><strong>Reverse Prompting:</strong> Having the model interrogate the designer to extract implicit knowledge.</li>
+              </ul>
+            </aside>
+          </section>
+
+          <!-- ====================================================================
+           SLIDE 14: STEP 2 — EVALUATE
+           ==================================================================== -->
+          <section class="slide" id="slide-14" data-total-steps="2">
+            <header class="slide-header">
+              <div class="slide-kicker">// 14 . METHODOLOGY // STEP 2</div>
+              <h2 class="slide-title">Evaluate: Quantification &amp; Virtual Prototyping</h2>
+              <p class="slide-subtitle">The Double Diamond convergence: converting qualitative ideas into sortable metrics</p>
+            </header>
+
+            <div class="slide-body">
+              <div class="split-2">
+                <div style="display: flex; flex-direction: column; gap: 14px; height: 100%; justify-content: center">
+                  <div class="media-frame" style="max-height: 270px; background: #fff">
+                    <img src="assets/double-diamond.webp" alt="Double Diamond Design Framework" style="object-fit: contain; width: 100%; height: 100%" />
+                  </div>
+                  <div class="brutal-card">
+                    <div class="brutal-tag">CLASSICAL ROOTS</div>
+                    <p style="font-family: var(--font-mono); font-size: 0.85rem; line-height: 1.4">
+                      Alex Osborn (<em>Applied Imagination</em>, 1953) &amp; J.P. Guilford: Divergent exploration must be anchored by rigorous convergent
+                      filtering.
+                    </p>
+                  </div>
+                </div>
+
+                <div class="reveal" data-step="1" style="display: flex; flex-direction: column; gap: 14px; height: 100%; justify-content: center">
+                  <div class="brutal-card" style="background: #000; color: #fff">
+                    <div class="brutal-tag" style="color: var(--accent)">EVALUATION TECHNIQUES</div>
+                    <ul style="font-family: var(--font-mono); font-size: 0.88rem; padding-left: 20px; line-height: 1.55">
+                      <li><strong>Rubric Quantification:</strong> Prompt AI to score criteria (feasibility, novelty) to enable numeric ranking.</li>
+                      <li><strong>Semantic Distance:</strong> Project ideas onto polar axes (practical vs speculative) using embeddings.</li>
+                      <li><strong>Interactive Data Viz:</strong> Let LLMs write quick web graphs of huge solution landscapes.</li>
+                    </ul>
+                  </div>
+
+                  <div class="reveal brutal-card" data-step="2" style="background: var(--accent)">
+                    <div class="brutal-tag" style="color: #000">FEATURED HARDWARE METHOD</div>
+                    <h3 style="font-size: 1.25rem; font-weight: 900">Virtual Prototyping: Time Travel Radio</h3>
+                    <p style="font-family: var(--font-mono); font-size: 0.85rem; line-height: 1.4">
+                      Validating physical device behaviors, audio feedback, and teleabsence interactions via software simulators before cutting hardware.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="slide-footer">
+              <div class="links-bar">
+                <span class="links-label">EVALUATION TOOLS</span>
+                <a href="https://code.chuanqisun.com/answering-machine/" target="_blank" rel="noopener" class="demo-link">
+                  <img src="https://www.google.com/s2/favicons?domain=chuanqisun.com&sz=32" class="favicon" alt="Answering Machine" />
+                  Answering Machine (Demo)
+                </a>
+                <a href="https://thesephist.com/posts/prism/" target="_blank" rel="noopener" class="demo-link">
+                  <img src="https://www.google.com/s2/favicons?domain=thesephist.com&sz=32" class="favicon" alt="Prism" />
+                  Prism by Linus (Thesephist)
+                </a>
+                <a href="https://thesephist.com/posts/spc/" target="_blank" rel="noopener" class="demo-link">
+                  <img src="https://www.google.com/s2/favicons?domain=thesephist.com&sz=32" class="favicon" alt="SPC Notebook" />
+                  A Notebook for Seeing with LLMs
+                </a>
+                <a href="https://archive.org/details/appliedimaginati00osbo" target="_blank" rel="noopener" class="demo-link">
+                  <img src="https://www.google.com/s2/favicons?domain=archive.org&sz=32" class="favicon" alt="Osborn" />
+                  Applied Imagination (1953)
+                </a>
+              </div>
+            </div>
+
+            <aside class="presenter-notes">
+              <ul>
+                <li><strong>The Convergence Imperative:</strong> Divergence without evaluation is just noise. Double Diamond requires convergence.</li>
+                <li><strong>Quantification:</strong> Computers excel at numbers. Turn qualitative descriptions into scores to sort 500 ideas.</li>
+                <li><strong>Semantic Distance:</strong> Measuring cosine similarity against polar opposites to visualize idea distributions.</li>
+                <li><strong>Virtual Prototyping:</strong> Time Travel Radio app built for Hiroshi Ishii's Tangible Media Group class.</li>
+              </ul>
+            </aside>
+          </section>
+
+          <!-- ====================================================================
+           SLIDE 15: STEP 3 — CURATE
+           ==================================================================== -->
+          <section class="slide" id="slide-15" data-total-steps="3">
+            <header class="slide-header">
+              <div class="slide-kicker">// 15 . METHODOLOGY // STEP 3</div>
+              <h2 class="slide-title">Curate: Care, Deduplication &amp; Preference Loops</h2>
+              <p class="slide-subtitle">The fundamentally human act of selection, intent, and resonance</p>
+            </header>
+
+            <div class="slide-body">
+              <div class="split-2">
+                <div style="display: flex; flex-direction: column; gap: 18px; justify-content: center">
+                  <div class="brutal-card" style="background: #000; color: #fff">
+                    <div class="brutal-tag" style="color: var(--accent)">LATIN ROOT</div>
+                    <div class="brutal-quote" style="border-left-color: var(--accent); font-size: 2rem">Curare = "To Care For"</div>
+                    <p style="font-family: var(--font-mono); font-size: 0.95rem; color: #ddd; line-height: 1.45">
+                      Anyone can generate 1,000 concepts in 10 seconds. Only you can care about which ones survive.
+                    </p>
+                  </div>
+
+                  <div class="reveal brutal-card" data-step="1">
+                    <div class="brutal-tag">EVALUATIVE SYNTHESIS</div>
+                    <p style="font-family: var(--font-mono); font-size: 0.88rem; line-height: 1.4">
+                      <strong>Semantic Deduplication:</strong> Cluster vector embeddings to purge redundant concepts.<br />
+                      <strong>Glaser &amp; Strauss Grounded Theory:</strong> Synthesize qualitative fragments into systematic theory.
+                    </p>
+                  </div>
+                </div>
+
+                <div class="reveal" data-step="2" style="display: flex; flex-direction: column; gap: 14px; justify-content: center">
+                  <div class="brutal-card">
+                    <div class="brutal-tag">HUMAN-IN-THE-LOOP SYSTEMS</div>
+                    <ul style="font-family: var(--font-mono); font-size: 0.88rem; padding-left: 18px; line-height: 1.5">
+                      <li><strong>Multi-Cursor Annotator:</strong> Inline text commentary and manual steering.</li>
+                      <li><strong>Infinite Ideation Loops:</strong> Recursively prune and branch generation trees.</li>
+                      <li><strong>Personal Knowledge Base (PKB):</strong> Zettelkasten graphs to seed future workflows.</li>
+                    </ul>
+                  </div>
+
+                  <div class="reveal brutal-card" data-step="3" style="background: var(--accent)">
+                    <div class="brutal-tag" style="color: #000">THE CREATIVE IMPERATIVE</div>
+                    <p style="font-family: var(--font-mono); font-size: 0.95rem; font-weight: 700; line-height: 1.35">
+                      Curation is not passive filtering; curation is the primary authorship engine of the computational designer.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="slide-footer">
+              <div class="links-bar">
+                <span class="links-label">CURATION REPOS &amp; APPS</span>
+                <a href="https://code.chuanqisun.com/annotator/" target="_blank" rel="noopener" class="demo-link">
+                  <img src="https://www.google.com/s2/favicons?domain=chuanqisun.com&sz=32" class="favicon" alt="Annotator" />
+                  Annotator (Demo)
+                </a>
+                <a href="https://chuanqisun.github.io/issue-graph/?owner=chuanqisun&repo=paper-db" target="_blank" rel="noopener" class="demo-link">
+                  <img src="https://www.google.com/s2/favicons?domain=github.io&sz=32" class="favicon" alt="Graph Idea Generator" />
+                  Graph Idea Generator
+                </a>
+                <a href="https://chuanqisun.github.io/idea-garden/index.html" target="_blank" rel="noopener" class="demo-link">
+                  <img src="https://www.google.com/s2/favicons?domain=github.io&sz=32" class="favicon" alt="Idea Garden" />
+                  Idea Garden
+                </a>
+                <a href="https://github.com/chuanqisun/memo/blob/master/README.md" target="_blank" rel="noopener" class="demo-link">
+                  <img src="https://www.google.com/s2/favicons?domain=github.com&sz=32" class="favicon" alt="Memo" />
+                  Memo (PKB)
+                </a>
+                <a href="https://en.wikipedia.org/wiki/Grounded_theory" target="_blank" rel="noopener" class="demo-link">
+                  <img src="https://www.google.com/s2/favicons?domain=wikipedia.org&sz=32" class="favicon" alt="Grounded Theory" />
+                  Grounded Theory
+                </a>
+              </div>
+            </div>
+
+            <aside class="presenter-notes">
+              <ul>
+                <li><strong>Etymology:</strong> Lead with the word origin: Latin "curare" means to care for.</li>
+                <li><strong>The Human Factor:</strong> In an age of infinite automated output, human care is the scarce resource.</li>
+                <li><strong>Annotation &amp; Knowledge Graphs:</strong> Demos of Annotator, Idea Garden, and Memo showing human preference loops.</li>
+              </ul>
+            </aside>
+          </section>
+
+          <!-- ====================================================================
+           SLIDE 16: CAN AI MAKE ART? CAN AI MAKE DESIGN?
+           ==================================================================== -->
+          <section class="slide" id="slide-16" data-total-steps="3">
+            <header class="slide-header">
+              <div class="slide-kicker">// 16 . RESOLVING THE CLIFFHANGER</div>
+              <h2 class="slide-title">Can AI Make Art? Can AI Make Design?</h2>
+              <p class="slide-subtitle">The primacy of human decision-making and material engagement</p>
+            </header>
+
+            <div class="slide-body">
+              <div class="split-3" style="height: 100%">
+                <!-- Ted Chiang -->
+                <div class="brutal-card" style="height: 100%; display: flex; flex-direction: column; justify-content: space-between">
+                  <div>
+                    <div class="brutal-tag">THE NEW YORKER (2024)</div>
+                    <h3 style="font-size: 1.25rem; font-weight: 900; margin: 4px 0 8px 0">Ted Chiang</h3>
+                    <p style="font-family: var(--font-mono); font-size: 0.82rem; line-height: 1.35">
+                      Art requires thousands of deliberate micro-decisions. Automated generation bypasses these choices.
+                    </p>
+                  </div>
+                  <div class="media-frame" style="max-height: 180px; background: #fff">
+                    <img src="assets/ted-chiang.webp" alt="Ted Chiang" style="object-fit: contain; width: 100%; height: 100%" />
+                  </div>
+                </div>
+
+                <!-- Tim Ingold -->
+                <div class="reveal brutal-card" data-step="1" style="height: 100%; display: flex; flex-direction: column; justify-content: space-between">
+                  <div>
+                    <div class="brutal-tag">THE TEXTILITY OF MAKING</div>
+                    <h3 style="font-size: 1.25rem; font-weight: 900; margin: 4px 0 8px 0">Tim Ingold</h3>
+                    <p style="font-family: var(--font-mono); font-size: 0.82rem; line-height: 1.35">
+                      Design is an iterative dialogue with material. You do not know what you will make until you are in the making.
+                    </p>
+                  </div>
+                  <div class="media-frame" style="max-height: 180px; background: #fff">
+                    <img src="assets/tim-ingold.webp" alt="Tim Ingold" style="object-fit: contain; width: 100%; height: 100%" />
+                  </div>
+                </div>
+
+                <!-- Feynman Inversion -->
+                <div
+                  class="reveal brutal-card"
+                  data-step="2"
+                  style="height: 100%; display: flex; flex-direction: column; justify-content: space-between; background: #000; color: #fff"
+                >
+                  <div>
+                    <div class="brutal-tag" style="color: var(--accent)">INVERTED MAXIM</div>
+                    <div class="brutal-quote" style="border-left-color: var(--accent); font-size: 1.3rem; margin: 8px 0">
+                      "What I did not decide, I cannot create."
+                    </div>
+                    <p style="font-family: var(--font-mono); font-size: 0.78rem; color: #bbb">
+                      Richard Feynman: <em>"What I cannot create, I do not understand."</em>
+                    </p>
+                  </div>
+                  <div class="reveal media-frame" data-step="3" style="max-height: 160px; background: #000; border-color: #fff">
+                    <img src="assets/richard-feynman.webp" alt="Richard Feynman" style="object-fit: contain; width: 100%; height: 100%" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="slide-footer">
+              <div class="links-bar">
+                <span class="links-label">ESSAYS</span>
+                <a
+                  href="https://web.archive.org/web/20240925214558/https://www.newyorker.com/culture/the-weekend-essay/why-ai-isnt-going-to-make-art"
+                  target="_blank"
+                  rel="noopener"
+                  class="demo-link"
+                >
+                  <img src="https://www.google.com/s2/favicons?domain=newyorker.com&sz=32" class="favicon" alt="The New Yorker" />
+                  Ted Chiang: Why AI Isn't Going to Make Art
+                </a>
+                <a
+                  href="https://jimmyzhengart.com/wp-content/uploads/2025/05/ingold-2009-textility-of-making-1.pdf"
+                  target="_blank"
+                  rel="noopener"
+                  class="demo-link"
+                >
+                  <img src="https://www.google.com/s2/favicons?domain=jimmyzhengart.com&sz=32" class="favicon" alt="Tim Ingold" />
+                  Tim Ingold: The Textility of Making
+                </a>
+              </div>
+            </div>
+
+            <aside class="presenter-notes">
+              <ul>
+                <li><strong>Resolving the Cliffhanger:</strong> Circle back to Marina Abramović from Slide 2. Is the designer present?</li>
+                <li><strong>Ted Chiang:</strong> Art is not just a high-res image; it is the sum of countless micro-decisions.</li>
+                <li><strong>Tim Ingold:</strong> Making is an ongoing correspondence with physical and computational materials.</li>
+                <li><strong>Feynman Inversion:</strong> "What I did not decide, I cannot create." The designer is present through decisions.</li>
+              </ul>
+            </aside>
+          </section>
+
+          <!-- ====================================================================
+           SLIDE 17: HANDS-ON PRACTICE: DESIGN EXERCISE
+           ==================================================================== -->
+          <section class="slide" id="slide-17" data-total-steps="2">
+            <header class="slide-header">
+              <div class="slide-kicker">// 17 . STUDIO WORKSHOP // HANDS-ON PODS</div>
+              <h2 class="slide-title">Design Exercise: Beyond the Chatbot</h2>
+              <p class="slide-subtitle">Design a novel interaction paradigm for humans to communicate with AI (Groups of 3)</p>
+            </header>
+
+            <div class="slide-body">
+              <div class="split-2">
+                <div class="brutal-card" style="height: 100%; justify-content: center; gap: 16px; background: #000; color: #fff">
+                  <div class="brutal-tag" style="color: var(--accent)">STUDIO BRIEF</div>
+                  <div class="brutal-quote" style="border-left-color: var(--accent); font-size: 1.5rem">No Text Input Boxes Allowed.</div>
+                  <p style="font-family: var(--font-mono); font-size: 0.95rem; line-height: 1.45; color: #ddd">
+                    Invent a spatial, gestural, semantic, or tangible paradigm for human-AI co-creation.
+                  </p>
+                  <div style="border-top: 1px solid #333; padding-top: 12px; font-family: var(--font-mono); font-size: 0.8rem; color: var(--accent)">
+                    Time: 30 Minutes &bull; Teams of 3 &bull; Post to FigJam
+                  </div>
+                </div>
+
+                <div class="reveal" data-step="1" style="display: flex; flex-direction: column; gap: 12px; justify-content: center">
+                  <div class="brutal-card">
+                    <div class="brutal-tag">EXECUTE AT LEAST ONE TECHNIQUE</div>
+                    <div style="display: flex; flex-direction: column; gap: 10px; font-family: var(--font-mono); font-size: 0.88rem; margin-top: 8px">
+                      <div><strong>1. Reverse Prompting:</strong> Interrogate yourselves via structured AI questionnaires.</div>
+                      <div><strong>2. Algorithmic Lit Review:</strong> Generate annotated bibliographies for whitespace.</div>
+                      <div><strong>3. Rubric Quantification:</strong> Score, filter, and rank divergent ideas.</div>
+                      <div><strong>4. Virtual Prototype:</strong> Build a simulated software app or landing page.</div>
+                    </div>
+                  </div>
+
+                  <div class="reveal brutal-card" data-step="2" style="background: var(--accent)">
+                    <div class="brutal-tag" style="color: #000">DELIVERABLE</div>
+                    <p style="font-family: var(--font-mono); font-size: 0.92rem; font-weight: 700">
+                      Upload your concept sketch, prototype link, and rationale to the class FigJam board.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="slide-footer">
+              <div class="links-bar">
+                <span class="links-label">COLLABORATION WORKSPACE</span>
+                <a href="https://figma.com/" target="_blank" rel="noopener" class="demo-link">
+                  <img src="https://www.google.com/s2/favicons?domain=figma.com&sz=32" class="favicon" alt="FigJam" />
+                  Class FigJam Board (Live Submissions)
+                </a>
+              </div>
+            </div>
+
+            <aside class="presenter-notes">
+              <ul>
+                <li><strong>Exercise Logistics:</strong> Divide audience into pods of 3. 30 minutes of studio work.</li>
+                <li><strong>The Constraint:</strong> Strictly forbid standard chatbot text boxes. Force spatial, voice, or tangible thinking.</li>
+                <li><strong>Submission:</strong> Each group uploads screenshots, wireframes, or prototypes to FigJam.</li>
+              </ul>
+            </aside>
+          </section>
+
+          <!-- ====================================================================
+           SLIDE 18: WORKSHOP SUMMARY & CONCLUSION
+           ==================================================================== -->
+          <section class="slide invert" id="slide-18" data-total-steps="2">
+            <header class="slide-header">
+              <div class="slide-kicker" style="background: var(--accent); color: #000">// 18 . CONCLUSION</div>
+              <h2 class="slide-title">Re:design — Summary &amp; Reflections</h2>
+            </header>
+
+            <div class="slide-body">
+              <div class="split-2">
+                <div style="display: flex; flex-direction: column; gap: 14px; justify-content: center">
+                  <div class="brutal-card" style="background: #111; color: #fff; border-color: #fff">
+                    <div class="brutal-tag" style="color: var(--accent)">FOUR FOUNDATIONS SURVEYED</div>
+                    <ul style="font-family: var(--font-mono); font-size: 0.88rem; padding-left: 20px; line-height: 1.6; color: #eee">
+                      <li><strong>Frontiers:</strong> From serial tokens to real-time semantic rendering, affective voice &amp; world models.</li>
+                      <li><strong>Disciplines:</strong> More-than-human design, spatial intelligence &amp; direct agency.</li>
+                      <li><strong>Methodology:</strong> Generate $\rightarrow$ Evaluate $\rightarrow$ Curate.</li>
+                      <li><strong>Presence:</strong> Intentional human curation is the source of all authentic creative meaning.</li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div class="reveal" data-step="1" style="display: flex; flex-direction: column; gap: 18px; justify-content: center">
+                  <div class="brutal-card" style="background: var(--accent); color: #000; border-color: #000">
+                    <div class="brutal-tag" style="color: #000">THE RESOLUTION</div>
+                    <div class="brutal-quote" style="border-left-color: #000; font-size: 1.8rem; margin: 6px 0">The Designer Is Present.</div>
+                    <p style="font-family: var(--font-mono); font-size: 0.95rem; font-weight: 700; line-height: 1.4">
+                      You are not replaced by models; you are amplified by them. Your taste, care, and decisions are the design.
+                    </p>
+                  </div>
+
+                  <div class="reveal brutal-card" data-step="2" style="background: #ffffff; color: #000; border-color: #ffffff">
+                    <div class="brutal-tag">ACKNOWLEDGMENT</div>
+                    <p style="font-family: var(--font-mono); font-size: 0.9rem; line-height: 1.4">
+                      Thank you for your time, energy, and visionary ideas today.<br />
+                      <strong>Chuanqi Sun</strong> &bull; MIT Computational Design &bull; September 22, 2026
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="slide-footer">
+              <div class="links-bar">
+                <span class="links-label">PORTFOLIO &amp; REPO</span>
+                <a href="https://code.chuanqisun.com" target="_blank" rel="noopener" class="demo-link">
+                  <img src="https://www.google.com/s2/favicons?domain=chuanqisun.com&sz=32" class="favicon" alt="Chuanqi Sun" />
+                  code.chuanqisun.com
+                </a>
+                <a href="https://github.com/chuanqisun/ai-design-workshop" target="_blank" rel="noopener" class="demo-link">
+                  <img src="https://www.google.com/s2/favicons?domain=github.com&sz=32" class="favicon" alt="GitHub" />
+                  GitHub Repository
+                </a>
+              </div>
+            </div>
+
+            <aside class="presenter-notes">
+              <ul>
+                <li><strong>Wrap Up:</strong> Synthesize the technical frontiers and design methodologies covered today.</li>
+                <li>
+                  <strong>Final Message:</strong> "The designer is present." In an age of automated intelligence, the human act of curation and care is the
+                  ultimate design act.
+                </li>
+                <li><strong>Open Floor:</strong> Open for studio critique, discussions, and Q&amp;A.</li>
+              </ul>
+            </aside>
+          </section>
+        </main>
+
+        <!-- HEADS UP DISPLAY (HUD) -->
+        <footer id="deck-hud">
+          <div class="hud-group">
+            <span class="hud-badge" id="hud-slide-num">SLIDE 01 / 18</span>
+            <span class="hud-badge" id="hud-reveal-step">STEP 0 / 2</span>
+          </div>
+
+          <div class="hud-group">
+            <button class="hud-btn" id="btn-prev-slide" title="Previous Slide (Up Arrow)">▲ UP</button>
+            <button class="hud-btn" id="btn-next-slide" title="Next Slide (Down Arrow)">▼ DOWN</button>
+            <button class="hud-btn" id="btn-prev-reveal" title="Previous Reveal (Left Arrow)">◀ BACK</button>
+            <button class="hud-btn" id="btn-next-reveal" title="Next Reveal (Right Arrow)">▶ REVEAL</button>
+            <button class="hud-btn" id="btn-notes" title="Toggle Presenter Notes [N]">[N] NOTES</button>
+          </div>
+        </footer>
+
+        <!-- PRESENTER NOTES DRAWER -->
+        <div id="notes-drawer">
+          <div class="notes-header">
+            <span class="notes-title" id="notes-title-text">PRESENTER NOTES // SLIDE 01</span>
+            <span style="font-size: 0.75rem; color: #888">PRESS [N] TO CLOSE</span>
+          </div>
+          <div class="notes-content" id="notes-content-body">
+            <!-- Injected via JavaScript based on active slide's .presenter-notes -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      /* ==========================================================================
+     PRESENTATION ENGINE CONTROLLER
+     - Up / Down: Slide Navigation (No wrap-around)
+     - Left / Right: Progressive Reveal within Slide (No wrap-around)
+     - 'N': Toggle Presenter Notes Drawer
+     - Video Autoplay/Pause management
+     - URL Hash synchronization (#1 to #18)
+     ========================================================================== */
+      (function () {
+        "use strict";
+
+        const slides = Array.from(document.querySelectorAll(".slide"));
+        const totalSlides = slides.length;
+        let currentSlideIdx = 0;
+        let currentStep = 0;
+        let notesOpen = false;
+
+        // HUD Elements
+        const hudSlideNum = document.getElementById("hud-slide-num");
+        const hudRevealStep = document.getElementById("hud-reveal-step");
+        const notesDrawer = document.getElementById("notes-drawer");
+        const notesTitleText = document.getElementById("notes-title-text");
+        const notesContentBody = document.getElementById("notes-content-body");
+
+        // Button controls
+        document.getElementById("btn-prev-slide").addEventListener("click", () => changeSlide(-1));
+        document.getElementById("btn-next-slide").addEventListener("click", () => changeSlide(1));
+        document.getElementById("btn-prev-reveal").addEventListener("click", () => changeReveal(-1));
+        document.getElementById("btn-next-reveal").addEventListener("click", () => changeReveal(1));
+        document.getElementById("btn-notes").addEventListener("click", toggleNotes);
+
+        function getSlideTotalSteps(slideEl) {
+          return parseInt(slideEl.getAttribute("data-total-steps") || "0", 10);
+        }
+
+        function updateSlideVisibility() {
+          slides.forEach((slide, idx) => {
+            const isActive = idx === currentSlideIdx;
+            slide.classList.toggle("active", isActive);
+
+            // Control videos: play when active, pause when inactive
+            const videos = slide.querySelectorAll("video");
+            videos.forEach((v) => {
+              if (isActive) {
+                v.currentTime = 0;
+                v.play().catch(() => {});
+              } else {
+                v.pause();
+              }
+            });
+          });
+
+          // Update URL hash without polluting history excessively
+          window.location.hash = `#${currentSlideIdx + 1}`;
+
+          applyRevealState();
+          updateHud();
+          updateNotesDrawer();
+        }
+
+        function applyRevealState() {
+          const activeSlide = slides[currentSlideIdx];
+          if (!activeSlide) return;
+
+          const revealItems = activeSlide.querySelectorAll(".reveal");
+          revealItems.forEach((item) => {
+            const itemStep = parseInt(item.getAttribute("data-step") || "1", 10);
+            item.classList.toggle("is-revealed", currentStep >= itemStep);
+          });
+        }
+
+        function updateHud() {
+          const pad = (n) => String(n).padStart(2, "0");
+          const activeSlide = slides[currentSlideIdx];
+          const maxSteps = getSlideTotalSteps(activeSlide);
+
+          hudSlideNum.textContent = `SLIDE ${pad(currentSlideIdx + 1)} / ${pad(totalSlides)}`;
+          hudRevealStep.textContent = `STEP ${currentStep} / ${maxSteps}`;
+        }
+
+        function updateNotesDrawer() {
+          const pad = (n) => String(n).padStart(2, "0");
+          notesTitleText.textContent = `PRESENTER NOTES // SLIDE ${pad(currentSlideIdx + 1)}`;
+
+          const activeSlide = slides[currentSlideIdx];
+          const notesEl = activeSlide ? activeSlide.querySelector(".presenter-notes") : null;
+          if (notesEl) {
+            notesContentBody.innerHTML = notesEl.innerHTML;
+          } else {
+            notesContentBody.innerHTML = '<p style="color:#888;">No notes for this slide.</p>';
+          }
+        }
+
+        function changeSlide(direction) {
+          const newIdx = currentSlideIdx + direction;
+          // Clamped, DO NOT WRAP AROUND (Constraint #10)
+          if (newIdx >= 0 && newIdx < totalSlides) {
+            currentSlideIdx = newIdx;
+            currentStep = 0; // Reset reveal step on slide transition
+            updateSlideVisibility();
+          }
+        }
+
+        function changeReveal(direction) {
+          const activeSlide = slides[currentSlideIdx];
+          const maxSteps = getSlideTotalSteps(activeSlide);
+          const newStep = currentStep + direction;
+
+          // Clamped, DO NOT WRAP AROUND (Constraint #9)
+          if (newStep >= 0 && newStep <= maxSteps) {
+            currentStep = newStep;
+            applyRevealState();
+            updateHud();
+          }
+        }
+
+        function toggleNotes() {
+          notesOpen = !notesOpen;
+          notesDrawer.classList.toggle("open", notesOpen);
+        }
+
+        // Keyboard listener
+        window.addEventListener("keydown", (e) => {
+          // Avoid intercepting if inside a form input
+          if (["input", "textarea"].includes(e.target.tagName.toLowerCase())) return;
+
+          switch (e.key) {
+            case "ArrowDown":
+              e.preventDefault();
+              changeSlide(1);
+              break;
+            case "ArrowUp":
+              e.preventDefault();
+              changeSlide(-1);
+              break;
+            case "ArrowRight":
+              e.preventDefault();
+              changeReveal(1);
+              break;
+            case "ArrowLeft":
+              e.preventDefault();
+              changeReveal(-1);
+              break;
+            case "n":
+            case "N":
+              e.preventDefault();
+              toggleNotes();
+              break;
+          }
+        });
+
+        // Hash navigation on load
+        function initFromHash() {
+          const hash = window.location.hash.replace("#", "");
+          const slideNum = parseInt(hash, 10);
+          if (!isNaN(slideNum) && slideNum >= 1 && slideNum <= totalSlides) {
+            currentSlideIdx = slideNum - 1;
+          } else {
+            currentSlideIdx = 0;
+          }
+          currentStep = 0;
+          updateSlideVisibility();
+        }
+
+        initFromHash();
+
+        window.addEventListener("hashchange", () => {
+          const hash = window.location.hash.replace("#", "");
+          const slideNum = parseInt(hash, 10);
+          if (!isNaN(slideNum) && slideNum >= 1 && slideNum <= totalSlides && slideNum - 1 !== currentSlideIdx) {
+            currentSlideIdx = slideNum - 1;
+            currentStep = 0;
+            updateSlideVisibility();
+          }
+        });
+      })();
+    </script>
+  </body>
+</html>
